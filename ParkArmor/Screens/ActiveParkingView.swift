@@ -83,7 +83,12 @@ struct ActiveParkingView: View {
                         .foregroundStyle(DesignTokens.parkCyan)
                 }
             }
-            .sheet(item: $selectedPhotoData.asBound) { _ in
+            .sheet(
+                isPresented: Binding(
+                    get: { selectedPhotoData != nil },
+                    set: { if !$0 { selectedPhotoData = nil } }
+                )
+            ) {
                 if let data = selectedPhotoData, let ui = UIImage(data: data) {
                     Image(uiImage: ui)
                         .resizable()
@@ -291,16 +296,5 @@ struct ActiveParkingView: View {
         } message: {
             Text("This will move your parking spot to history.")
         }
-    }
-}
-
-// MARK: - Optional Binding Helper
-
-extension Optional {
-    var asBound: Binding<Wrapped?> {
-        Binding(
-            get: { self },
-            set: { _ in }
-        )
     }
 }

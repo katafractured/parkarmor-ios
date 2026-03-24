@@ -1,6 +1,8 @@
+import Foundation
 import PhotosUI
 import UIKit
 import Observation
+import SwiftUI
 
 @Observable final class PhotoManager {
     var isLoading = false

@@ -1,6 +1,7 @@
 import CoreLocation
 import MapKit
 import Observation
+import SwiftUI
 
 @Observable final class MapViewModel {
     var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)

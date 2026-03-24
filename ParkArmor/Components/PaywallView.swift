@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 
 struct PaywallView: View {
@@ -62,52 +63,54 @@ struct PaywallView: View {
 
                 // Purchase CTA
                 VStack(spacing: 12) {
-                    if storeKit.isLoading {
-                        ProgressView()
-                            .tint(DesignTokens.parkCyan)
-                    } else {
-                        Button {
-                            Task { try? await storeKit.purchase() }
-                        } label: {
-                            HStack {
+                    Button {
+                        Task { try? await storeKit.purchase() }
+                    } label: {
+                        HStack {
+                            if storeKit.isLoading {
+                                ProgressView()
+                                    .tint(DesignTokens.parkNavy)
+                            } else {
                                 Text("Get ParkArmor Pro")
                                     .font(.headline)
                                 Spacer()
                                 Text(storeKit.proProduct?.displayPrice ?? "$2.99")
                                     .font(.headline)
                             }
-                            .padding(.horizontal, 24)
-                            .frame(height: 54)
-                            .background(DesignTokens.parkCyan)
-                            .foregroundStyle(DesignTokens.parkNavy)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 24)
+                        .frame(height: 54)
+                        .background(DesignTokens.parkCyan)
+                        .foregroundStyle(DesignTokens.parkNavy)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                    .disabled(storeKit.isLoading)
+                    .padding(.horizontal, 20)
 
-                        if let errorMsg = storeKit.purchaseError {
-                            Text(errorMsg)
-                                .font(.caption)
-                                .foregroundStyle(DesignTokens.parkDestructive)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 20)
+                    if let errorMsg = storeKit.purchaseError {
+                        Text(errorMsg)
+                            .font(.caption)
+                            .foregroundStyle(DesignTokens.parkDestructive)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    }
+
+                    HStack(spacing: 24) {
+                        Button("Restore Purchase") {
+                            Task { await storeKit.restorePurchases() }
                         }
+                        .font(.footnote)
+                        .foregroundStyle(DesignTokens.parkTextSecondary)
+                        .disabled(storeKit.isLoading)
 
-                        HStack(spacing: 24) {
-                            Button("Restore Purchase") {
-                                Task { await storeKit.restorePurchases() }
-                            }
+                        Button("Not Now") { onDismiss() }
                             .font(.footnote)
                             .foregroundStyle(DesignTokens.parkTextSecondary)
-
-                            Button("Not Now") { onDismiss() }
-                                .font(.footnote)
-                                .foregroundStyle(DesignTokens.parkTextSecondary)
-                        }
-
-                        Text("One-time purchase • No subscription")
-                            .font(.caption2)
-                            .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.5))
                     }
+
+                    Text("One-time purchase • No subscription")
+                        .font(.caption2)
+                        .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.5))
                 }
                 .padding(.bottom, 40)
             }

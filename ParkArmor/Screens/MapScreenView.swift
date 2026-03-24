@@ -32,7 +32,7 @@ struct MapScreenView: View {
             }
             .mapControls {
                 MapUserLocationButton()
-                MapCompassButton()
+                MapCompass()
                 MapScaleView()
             }
             .ignoresSafeArea()

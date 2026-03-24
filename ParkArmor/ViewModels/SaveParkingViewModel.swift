@@ -1,6 +1,8 @@
 import CoreLocation
+import Foundation
 import PhotosUI
 import Observation
+import SwiftUI
 
 @Observable final class SaveParkingViewModel {
     var address = ""
