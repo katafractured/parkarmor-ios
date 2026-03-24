@@ -6,12 +6,20 @@ import SwiftUI
 
 enum DesignTokens {
     static let parkNavy = Color(uiColor: .systemBackground)
+    static let parkBlue = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.22, green: 0.60, blue: 0.76, alpha: 1.0)
+            }
+            return UIColor(red: 0.10, green: 0.34, blue: 0.49, alpha: 1.0)
+        }
+    )
     static let parkCyan = Color(
         uiColor: UIColor { traits in
             if traits.userInterfaceStyle == .dark {
-                return UIColor(red: 0.18, green: 0.87, blue: 0.95, alpha: 1.0)
+                return UIColor(red: 0.36, green: 0.79, blue: 0.90, alpha: 1.0)
             }
-            return UIColor(red: 0.00, green: 0.37, blue: 0.51, alpha: 1.0)
+            return UIColor(red: 0.18, green: 0.55, blue: 0.66, alpha: 1.0)
         }
     )
     static let parkAccentForeground = Color(
@@ -25,17 +33,33 @@ enum DesignTokens {
     static let parkAccentText = Color(
         uiColor: UIColor { traits in
             if traits.userInterfaceStyle == .dark {
-                return UIColor(red: 0.54, green: 0.92, blue: 0.97, alpha: 1.0)
+                return UIColor(red: 0.66, green: 0.86, blue: 0.93, alpha: 1.0)
             }
-            return UIColor(red: 0.00, green: 0.29, blue: 0.40, alpha: 1.0)
+            return UIColor(red: 0.14, green: 0.35, blue: 0.47, alpha: 1.0)
         }
     )
     static let parkAccentSurface = Color(
         uiColor: UIColor { traits in
             if traits.userInterfaceStyle == .dark {
-                return UIColor(red: 0.10, green: 0.20, blue: 0.26, alpha: 1.0)
+                return UIColor(red: 0.11, green: 0.18, blue: 0.24, alpha: 1.0)
             }
-            return UIColor(red: 0.90, green: 0.96, blue: 0.98, alpha: 1.0)
+            return UIColor(red: 0.92, green: 0.96, blue: 0.98, alpha: 1.0)
+        }
+    )
+    static let parkTabBarBackground = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.07, green: 0.11, blue: 0.18, alpha: 1.0)
+            }
+            return UIColor(red: 0.13, green: 0.21, blue: 0.30, alpha: 1.0)
+        }
+    )
+    static let parkTabBarAccent = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.63, green: 0.84, blue: 0.92, alpha: 1.0)
+            }
+            return UIColor(red: 0.71, green: 0.84, blue: 0.92, alpha: 1.0)
         }
     )
     static let parkSurface = Color(uiColor: .secondarySystemBackground)

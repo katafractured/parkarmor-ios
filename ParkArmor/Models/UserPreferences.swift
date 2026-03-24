@@ -34,6 +34,40 @@ enum TimerAlertMode: String, CaseIterable {
     }
 }
 
+enum HistoryRetentionOption: String, CaseIterable {
+    case sevenDays = "7_days"
+    case thirtyDays = "30_days"
+    case ninetyDays = "90_days"
+    case forever = "forever"
+
+    var title: String {
+        switch self {
+        case .sevenDays:
+            return "7 days"
+        case .thirtyDays:
+            return "30 days"
+        case .ninetyDays:
+            return "90 days"
+        case .forever:
+            return "Forever"
+        }
+    }
+
+    var cutoffDate: Date? {
+        let calendar = Calendar.current
+        switch self {
+        case .sevenDays:
+            return calendar.date(byAdding: .day, value: -7, to: .now)
+        case .thirtyDays:
+            return calendar.date(byAdding: .day, value: -30, to: .now)
+        case .ninetyDays:
+            return calendar.date(byAdding: .day, value: -90, to: .now)
+        case .forever:
+            return nil
+        }
+    }
+}
+
 @Observable final class UserPreferences {
     private let defaults: UserDefaults
 
@@ -47,6 +81,14 @@ enum TimerAlertMode: String, CaseIterable {
 
     var notificationsEnabled: Bool {
         didSet { defaults.set(notificationsEnabled, forKey: "notificationsEnabled") }
+    }
+
+    var saveParkingHistory: Bool {
+        didSet { defaults.set(saveParkingHistory, forKey: "saveParkingHistory") }
+    }
+
+    var historyRetention: HistoryRetentionOption {
+        didSet { defaults.set(historyRetention.rawValue, forKey: "historyRetention") }
     }
 
     var timerAlertMode: TimerAlertMode {
@@ -70,6 +112,10 @@ enum TimerAlertMode: String, CaseIterable {
         self.timeFormat = TimeFormat(rawValue: timeFormatRaw) ?? .elapsed
 
         self.notificationsEnabled = defaults.object(forKey: "notificationsEnabled") as? Bool ?? true
+        self.saveParkingHistory = defaults.object(forKey: "saveParkingHistory") as? Bool ?? true
+
+        let historyRetentionRaw = defaults.string(forKey: "historyRetention") ?? HistoryRetentionOption.thirtyDays.rawValue
+        self.historyRetention = HistoryRetentionOption(rawValue: historyRetentionRaw) ?? .thirtyDays
 
         let timerAlertRaw = defaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
         self.timerAlertMode = TimerAlertMode(rawValue: timerAlertRaw) ?? .atExpiration

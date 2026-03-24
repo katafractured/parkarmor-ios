@@ -78,7 +78,6 @@ enum AppTab: Hashable {
 
 struct AppTabView: View {
     @Environment(AppViewModel.self) private var appViewModel
-    @State private var showingPaywall = false
 
     var body: some View {
         TabView(selection: Binding(
@@ -105,17 +104,9 @@ struct AppTabView: View {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
         }
-        .sheet(isPresented: $showingPaywall) {
-            PaywallView(storeKit: appViewModel.storeKitManager) {
-                showingPaywall = false
-            }
-        }
-        .onChange(of: appViewModel.selectedTab) { oldTab, newTab in
-            guard newTab != oldTab else { return }
-            if newTab == .history && appViewModel.requiresPro(feature: "history") {
-                appViewModel.selectedTab = oldTab
-                showingPaywall = true
-            }
-        }
+        .tint(DesignTokens.parkTabBarAccent)
+        .toolbarBackground(DesignTokens.parkTabBarBackground, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarColorScheme(.dark, for: .tabBar)
     }
 }

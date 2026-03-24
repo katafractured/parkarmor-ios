@@ -14,10 +14,11 @@ import Observation
         coordinate: CLLocationCoordinate2D,
         address: String,
         notes: String,
-        photoData: [Data] = []
+        photoData: [Data] = [],
+        preserveHistory: Bool = true
     ) throws -> ParkingLocation {
         // Deactivate any currently active locations
-        try deactivateAll()
+        try deactivateAll(preserveHistory: preserveHistory)
 
         let location = ParkingLocation(
             latitude: coordinate.latitude,
@@ -45,20 +46,27 @@ import Observation
         return try context.fetch(descriptor).first
     }
 
-    func fetchHistory() throws -> [ParkingLocation] {
+    func fetchHistory(includeActive: Bool = false) throws -> [ParkingLocation] {
         let descriptor = FetchDescriptor<ParkingLocation>(
+            predicate: #Predicate<ParkingLocation> { location in
+                includeActive || !location.isActive
+            },
             sortBy: [SortDescriptor(\.savedAt, order: .reverse)]
         )
         return try context.fetch(descriptor)
     }
 
-    func deactivateAll() throws {
+    func deactivateAll(preserveHistory: Bool = true) throws {
         let descriptor = FetchDescriptor<ParkingLocation>(
             predicate: #Predicate { $0.isActive }
         )
         let active = try context.fetch(descriptor)
         for location in active {
-            location.isActive = false
+            if preserveHistory {
+                location.isActive = false
+            } else {
+                context.delete(location)
+            }
         }
         if !active.isEmpty {
             try context.save()
@@ -72,6 +80,11 @@ import Observation
 
     func togglePin(_ location: ParkingLocation) throws {
         location.isPinned.toggle()
+        try context.save()
+    }
+
+    func toggleFavorite(_ location: ParkingLocation) throws {
+        location.isFavorite.toggle()
         try context.save()
     }
 
@@ -99,5 +112,32 @@ import Observation
         try deactivateAll()
         location.isActive = true
         try context.save()
+    }
+
+    func clearHistory() throws {
+        let history = try fetchHistory(includeActive: false)
+        for location in history {
+            context.delete(location)
+        }
+        if !history.isEmpty {
+            try context.save()
+        }
+    }
+
+    func pruneHistory(retention: HistoryRetentionOption) throws {
+        guard let cutoffDate = retention.cutoffDate else { return }
+
+        let history = try fetchHistory(includeActive: false)
+        let staleLocations = history.filter {
+            !$0.isFavorite && $0.savedAt < cutoffDate
+        }
+
+        for location in staleLocations {
+            context.delete(location)
+        }
+
+        if !staleLocations.isEmpty {
+            try context.save()
+        }
     }
 }

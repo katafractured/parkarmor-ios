@@ -10,6 +10,7 @@ struct HistoryScreenView: View {
 
     @State private var viewModel: HistoryViewModel?
     @State private var showingPaywall = false
+    @State private var showingClearConfirmation = false
 
     var body: some View {
         NavigationStack {
@@ -39,6 +40,46 @@ struct HistoryScreenView: View {
                             .foregroundStyle(DesignTokens.parkCyan)
                     }
                 }
+
+                if let vm = viewModel, !vm.locations.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            if appViewModel.isPro {
+                                Picker("History Filter", selection: Binding(
+                                    get: { vm.selectedFilter },
+                                    set: {
+                                        vm.selectedFilter = $0
+                                        vm.load()
+                                    }
+                                )) {
+                                    ForEach(HistoryFilter.allCases, id: \.self) { filter in
+                                        Text(filter.title).tag(filter)
+                                    }
+                                }
+                            }
+
+                            Button(role: .destructive) {
+                                showingClearConfirmation = true
+                            } label: {
+                                Label("Clear History", systemImage: "trash")
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                                .foregroundStyle(DesignTokens.parkAccentText)
+                        }
+                    }
+                }
+            }
+            .confirmationDialog(
+                "Clear parking history?",
+                isPresented: $showingClearConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Clear History", role: .destructive) {
+                    viewModel?.clearHistory()
+                }
+            } message: {
+                Text("This removes saved inactive parking history. Your current active parking spot stays available.")
             }
             .sheet(isPresented: $showingPaywall) {
                 PaywallView(storeKit: appViewModel.storeKitManager) {
@@ -47,7 +88,12 @@ struct HistoryScreenView: View {
             }
         }
         .task {
-            let vm = HistoryViewModel(repository: appViewModel.repository!, isPro: appViewModel.isPro)
+            guard let repository = appViewModel.repository else { return }
+            let vm = HistoryViewModel(
+                repository: repository,
+                preferences: appViewModel.preferences,
+                isPro: appViewModel.isPro
+            )
             viewModel = vm
             vm.load()
         }
@@ -59,11 +105,11 @@ struct HistoryScreenView: View {
                 .font(.system(size: 56))
                 .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.4))
 
-            Text("No Parking History")
+            Text(emptyTitle)
                 .font(.title3.bold())
                 .foregroundStyle(DesignTokens.parkTextPrimary)
 
-            Text("Your past parking spots will appear here.")
+            Text(emptyMessage)
                 .font(.subheadline)
                 .foregroundStyle(DesignTokens.parkTextSecondary)
                 .multilineTextAlignment(.center)
@@ -71,10 +117,28 @@ struct HistoryScreenView: View {
         }
     }
 
+    private var emptyTitle: String {
+        if !appViewModel.preferences.saveParkingHistory {
+            return "History Saving Is Off"
+        }
+        return "No Parking History"
+    }
+
+    private var emptyMessage: String {
+        if !appViewModel.preferences.saveParkingHistory {
+            return "Turn on parking history in Settings if you want past parking spots to stay available."
+        }
+        return "Your recent parking spots will appear here."
+    }
+
     @ViewBuilder
     private func historyList(vm: HistoryViewModel) -> some View {
         ScrollView {
             LazyVStack(spacing: 12) {
+                if !appViewModel.isPro && vm.availableHistoryCount > vm.locations.count {
+                    upgradeCard(hiddenCount: vm.availableHistoryCount - vm.locations.count)
+                }
+
                 ForEach(vm.locations) { location in
                     HistoryRowView(
                         location: location,
@@ -89,6 +153,7 @@ struct HistoryScreenView: View {
                             }
                         },
                         onDelete: { vm.delete(location) },
+                        onToggleFavorite: { vm.toggleFavorite(location) },
                         onUpgrade: { showingPaywall = true }
                     )
                 }
@@ -97,38 +162,35 @@ struct HistoryScreenView: View {
             .padding(.top, 12)
             .padding(.bottom, 40)
         }
-        .overlay(alignment: .bottom) {
-            if !vm.isPro && vm.locations.count > 1 {
-                proGateOverlay
-            }
-        }
     }
 
-    private var proGateOverlay: some View {
-        VStack(spacing: 12) {
-                Text("Unlock Full History with Pro")
-                    .font(.headline)
+    private func upgradeCard(hiddenCount: Int) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Free keeps your most recent parking spot.")
+                .font(.headline)
                 .foregroundStyle(DesignTokens.parkTextPrimary)
+
+            Text("Upgrade to unlock \(hiddenCount) more saved spot\(hiddenCount == 1 ? "" : "s"), favorites, and longer retention.")
+                .font(.subheadline)
+                .foregroundStyle(DesignTokens.parkTextSecondary)
 
             Button {
                 showingPaywall = true
             } label: {
-                Text("Upgrade — $2.99")
+                Text("Unlock Full History")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 50)
+                    .frame(height: 48)
                     .background(DesignTokens.parkCyan)
                     .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
-            .padding(.horizontal, 20)
         }
-        .padding(.vertical, 20)
-        .background(.ultraThinMaterial)
+        .padding(16)
+        .background(DesignTokens.parkSurface)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
-
-// MARK: - History Row
 
 private struct HistoryRowView: View {
     let location: ParkingLocation
@@ -137,6 +199,7 @@ private struct HistoryRowView: View {
     let isPro: Bool
     var onReactivate: () -> Void
     var onDelete: () -> Void
+    var onToggleFavorite: () -> Void
     var onUpgrade: () -> Void
 
     var distanceText: String? {
@@ -147,7 +210,6 @@ private struct HistoryRowView: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            // Icon
             ZStack {
                 Circle()
                     .fill(location.isActive ? DesignTokens.parkCyan.opacity(0.15) : DesignTokens.parkSurfaceElevated)
@@ -158,12 +220,19 @@ private struct HistoryRowView: View {
                     .foregroundStyle(location.isActive ? DesignTokens.parkCyan : DesignTokens.parkTextSecondary)
             }
 
-            // Info
             VStack(alignment: .leading, spacing: 4) {
-                Text(location.displayAddress)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(DesignTokens.parkTextPrimary)
-                    .lineLimit(1)
+                HStack(spacing: 6) {
+                    Text(location.displayAddress)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                        .lineLimit(1)
+
+                    if location.isFavorite {
+                        Image(systemName: "star.fill")
+                            .font(.caption)
+                            .foregroundStyle(DesignTokens.parkAccentText)
+                    }
+                }
 
                 HStack(spacing: 8) {
                     Text(location.savedAt.formatted(date: .abbreviated, time: .shortened))
@@ -196,28 +265,24 @@ private struct HistoryRowView: View {
                 Label("Delete", systemImage: "trash")
             }
         }
-        .swipeActions(edge: .leading) {
+        .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if !location.isActive {
+                if isPro {
+                    Button(action: onToggleFavorite) {
+                        Label(location.isFavorite ? "Unfavorite" : "Favorite", systemImage: location.isFavorite ? "star.slash" : "star")
+                    }
+                    .tint(.yellow)
+                } else {
+                    Button(action: onUpgrade) {
+                        Label("Pro", systemImage: "star")
+                    }
+                    .tint(DesignTokens.parkCyan)
+                }
+
                 Button(action: onReactivate) {
                     Label("Set Active", systemImage: "car.fill")
                 }
-                .tint(DesignTokens.parkCyan)
-            }
-        }
-        .blur(radius: !isPro && !location.isActive ? 4 : 0)
-        .overlay {
-            if !isPro && !location.isActive {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(DesignTokens.parkNavy.opacity(0.5))
-                    .overlay {
-                        Button("Pro") { onUpgrade() }
-                            .font(.caption.bold())
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(DesignTokens.parkCyan)
-                            .foregroundStyle(DesignTokens.parkAccentForeground)
-                            .clipShape(Capsule())
-                    }
+                .tint(DesignTokens.parkAccentText)
             }
         }
     }

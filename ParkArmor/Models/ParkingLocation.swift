@@ -11,6 +11,7 @@ import SwiftData
     var savedAt: Date
     var isActive: Bool
     var isPinned: Bool
+    var isFavorite: Bool
 
     @Relationship(deleteRule: .cascade, inverse: \ParkingPhoto.location)
     var photos: [ParkingPhoto]
@@ -33,6 +34,7 @@ import SwiftData
         self.savedAt = Date()
         self.isActive = isActive
         self.isPinned = false
+        self.isFavorite = false
         self.photos = []
     }
 

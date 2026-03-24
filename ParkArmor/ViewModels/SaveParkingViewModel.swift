@@ -78,7 +78,8 @@ import SwiftUI
                     coordinate: coordinate,
                     address: address,
                     notes: notes,
-                    photoData: photoData
+                    photoData: photoData,
+                    preserveHistory: preferences.saveParkingHistory
                 )
 
                 if hasTimer && timerDate > Date() {
