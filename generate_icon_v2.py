@@ -288,38 +288,68 @@ draw.ellipse([PIN_CX - INNER_R, PIN_CY - INNER_R,
               PIN_CX + INNER_R, PIN_CY + INNER_R],
              fill=NAVY_DARK + (255,))
 
-# 10. Car icon inside the pin hole (3 simple Pillow-drawn rectangles = car silhouette)
-car_w  = int(INNER_R * 1.35)
-car_h  = int(INNER_R * 0.62)
-car_x  = PIN_CX - car_w // 2
-car_y  = PIN_CY - car_h // 2 + int(INNER_R * 0.05)
+# 10. Car silhouette — proper sedan side-profile polygon inside the pin hole
+car_w  = int(INNER_R * 1.28)
+car_h  = int(INNER_R * 0.58)
+car_cx = PIN_CX
+car_cy = PIN_CY + int(INNER_R * 0.06)   # shift slightly below centre
+car_x  = car_cx - car_w // 2
+car_y  = car_cy - car_h // 2
 
-# Car body — main rectangle
-draw.rounded_rectangle(
-    [car_x, car_y + car_h//3, car_x + car_w, car_y + car_h],
-    radius=int(car_h * 0.22),
-    fill=WHITE + (255,)
-)
-# Car cabin — upper trapezoidal shape as a polygon
-cabin_margin_x = int(car_w * 0.16)
-cabin_h = int(car_h * 0.50)
-cabin_pts = [
-    (car_x + cabin_margin_x + int(car_w*0.06),  car_y),
-    (car_x + car_w - cabin_margin_x - int(car_w*0.06), car_y),
-    (car_x + car_w - cabin_margin_x//2, car_y + cabin_h),
-    (car_x + cabin_margin_x//2,         car_y + cabin_h),
+def cp(rx, ry):
+    """Map relative [0–1] coords onto the car bounding box."""
+    return (car_x + rx * car_w, car_y + ry * car_h)
+
+# — Body silhouette (full white sedan outline) —
+body_pts = [
+    cp(0.04, 1.00),   # front bumper base
+    cp(0.00, 0.88),   # front bumper face
+    cp(0.00, 0.70),   # grille top
+    cp(0.04, 0.60),   # hood front ledge
+    cp(0.07, 0.42),   # hood surface
+    cp(0.25, 0.36),   # hood / windshield junction
+    cp(0.33, 0.02),   # windshield top — A-pillar
+    cp(0.64, 0.02),   # roof — C-pillar top
+    cp(0.75, 0.36),   # rear window base
+    cp(0.87, 0.34),   # trunk lid
+    cp(0.96, 0.52),   # trunk rear
+    cp(1.00, 0.72),   # rear bumper top
+    cp(1.00, 0.90),   # rear bumper face
+    cp(0.95, 1.00),   # rear bumper base
 ]
-draw.polygon(cabin_pts, fill=WHITE + (255,))
+draw.polygon(body_pts, fill=WHITE + (255,))
 
-# Wheels (dark circles)
-wheel_r = int(car_h * 0.22)
-wheel_y = car_y + car_h
-draw.ellipse([car_x + int(car_w*0.18) - wheel_r, wheel_y - wheel_r,
-              car_x + int(car_w*0.18) + wheel_r, wheel_y + wheel_r],
-             fill=NAVY_DARK + (255,))
-draw.ellipse([car_x + int(car_w*0.82) - wheel_r, wheel_y - wheel_r,
-              car_x + int(car_w*0.82) + wheel_r, wheel_y + wheel_r],
-             fill=NAVY_DARK + (255,))
+# — Windshield (front window glass, dark fill) —
+windshield_pts = [
+    cp(0.27, 0.34),   # base front
+    cp(0.34, 0.06),   # top front (A-pillar)
+    cp(0.44, 0.06),   # top rear (B-pillar)
+    cp(0.44, 0.34),   # base rear
+]
+draw.polygon(windshield_pts, fill=NAVY_DARK + (210,))
+
+# — Rear window glass, dark fill —
+rear_win_pts = [
+    cp(0.46, 0.34),   # base front (B-pillar)
+    cp(0.46, 0.06),   # top front
+    cp(0.63, 0.06),   # top rear (C-pillar)
+    cp(0.73, 0.34),   # base rear
+]
+draw.polygon(rear_win_pts, fill=NAVY_DARK + (210,))
+
+# — Wheels: tyre → alloy rim → hub —
+wr    = int(car_h * 0.26)   # tyre radius
+rim_r = int(wr * 0.54)      # alloy rim radius
+hub_r = int(wr * 0.22)      # hub cap radius
+whl_y = car_y + car_h - int(wr * 0.12)   # tyres sit at bottom of body
+for wx in [car_x + int(car_w * 0.20),
+           car_x + int(car_w * 0.80)]:
+    draw.ellipse([wx - wr,    whl_y - wr,    wx + wr,    whl_y + wr],
+                 fill=NAVY_DARK + (255,))
+    draw.ellipse([wx - rim_r, whl_y - rim_r, wx + rim_r, whl_y + rim_r],
+                 fill=(170, 180, 195, 255))
+    draw.ellipse([wx - hub_r, whl_y - hub_r, wx + hub_r, whl_y + hub_r],
+                 fill=NAVY_DARK + (255,))
 
 # 11. Pin tip highlight — tiny specular dot
 draw.ellipse([PIN_CX - int(HEAD_R*0.28), PIN_CY - int(HEAD_R*0.62),
