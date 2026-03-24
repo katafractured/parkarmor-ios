@@ -11,7 +11,7 @@ enum DesignTokens {
             if traits.userInterfaceStyle == .dark {
                 return UIColor(red: 0.18, green: 0.87, blue: 0.95, alpha: 1.0)
             }
-            return UIColor(red: 0.00, green: 0.47, blue: 0.64, alpha: 1.0)
+            return UIColor(red: 0.00, green: 0.37, blue: 0.51, alpha: 1.0)
         }
     )
     static let parkAccentForeground = Color(
@@ -27,7 +27,15 @@ enum DesignTokens {
             if traits.userInterfaceStyle == .dark {
                 return UIColor(red: 0.54, green: 0.92, blue: 0.97, alpha: 1.0)
             }
-            return UIColor(red: 0.00, green: 0.34, blue: 0.47, alpha: 1.0)
+            return UIColor(red: 0.00, green: 0.29, blue: 0.40, alpha: 1.0)
+        }
+    )
+    static let parkAccentSurface = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.10, green: 0.20, blue: 0.26, alpha: 1.0)
+            }
+            return UIColor(red: 0.90, green: 0.96, blue: 0.98, alpha: 1.0)
         }
     )
     static let parkSurface = Color(uiColor: .secondarySystemBackground)

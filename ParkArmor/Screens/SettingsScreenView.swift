@@ -69,16 +69,15 @@ struct SettingsScreenView: View {
                             Label("Distance", systemImage: "ruler")
                                 .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
-                            Picker("Distance", selection: Binding(
-                                get: { appViewModel.preferences.distanceUnit },
-                                set: { appViewModel.preferences.distanceUnit = $0 }
-                            )) {
+                            Menu {
                                 ForEach(DistanceUnit.allCases, id: \.self) { unit in
-                                    Text(unit.rawValue.capitalized).tag(unit)
+                                    Button(unit.rawValue.capitalized) {
+                                        appViewModel.preferences.distanceUnit = unit
+                                    }
                                 }
+                            } label: {
+                                settingsValueLabel(appViewModel.preferences.distanceUnit.rawValue.capitalized)
                             }
-                            .pickerStyle(.menu)
-                            .foregroundStyle(DesignTokens.parkAccentText)
                         }
 
                         HStack {
@@ -98,16 +97,15 @@ struct SettingsScreenView: View {
                                 Label("Timer Alerts", systemImage: "timer")
                                     .foregroundStyle(DesignTokens.parkTextPrimary)
                                 Spacer()
-                                Picker("Timer Alerts", selection: Binding(
-                                    get: { appViewModel.preferences.timerAlertMode },
-                                    set: { appViewModel.preferences.timerAlertMode = $0 }
-                                )) {
+                                Menu {
                                     ForEach(TimerAlertMode.allCases, id: \.self) { mode in
-                                        Text(mode.title).tag(mode)
+                                        Button(mode.title) {
+                                            appViewModel.preferences.timerAlertMode = mode
+                                        }
                                     }
+                                } label: {
+                                    settingsValueLabel(appViewModel.preferences.timerAlertMode.title)
                                 }
-                                .pickerStyle(.menu)
-                                .foregroundStyle(DesignTokens.parkAccentText)
                             }
                         } else {
                             Button {
@@ -193,5 +191,20 @@ struct SettingsScreenView: View {
                 }
             }
         }
+    }
+
+    private func settingsValueLabel(_ value: String) -> some View {
+        HStack(spacing: 6) {
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+            Image(systemName: "chevron.up.chevron.down")
+                .font(.caption2.weight(.bold))
+        }
+        .foregroundStyle(DesignTokens.parkAccentText)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(DesignTokens.parkAccentSurface)
+        .clipShape(Capsule())
     }
 }
