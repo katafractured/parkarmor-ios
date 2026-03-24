@@ -59,7 +59,9 @@ struct SaveParkingView: View {
                 mapKitHelper: appViewModel.mapKitHelper,
                 photoManager: appViewModel.photoManager,
                 repository: appViewModel.repository!,
-                notificationManager: appViewModel.notificationManager
+                notificationManager: appViewModel.notificationManager,
+                liveActivityManager: appViewModel.liveActivityManager,
+                preferences: appViewModel.preferences
             )
             viewModel = vm
             if let loc = appViewModel.locationManager.currentLocation {
@@ -84,7 +86,7 @@ struct SaveParkingView: View {
                 }
             } else {
                 TextField("Address", text: Binding(get: { vm.address }, set: { vm.address = $0 }))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(DesignTokens.parkTextPrimary)
                     .font(.body)
             }
         }
@@ -103,7 +105,7 @@ struct SaveParkingView: View {
             TextEditor(text: Binding(get: { vm.notes }, set: { vm.notes = $0 }))
                 .frame(minHeight: 80)
                 .scrollContentBackground(.hidden)
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
                 .font(.body)
                 .overlay(
                     Group {
@@ -200,8 +202,7 @@ struct SaveParkingView: View {
                     displayedComponents: [.date, .hourAndMinute]
                 )
                 .datePickerStyle(.compact)
-                .colorScheme(.dark)
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
             }
         }
         .padding(16)
@@ -218,7 +219,7 @@ struct SaveParkingView: View {
         } label: {
             if vm.isSaving {
                 ProgressView()
-                    .tint(DesignTokens.parkNavy)
+                    .tint(DesignTokens.parkAccentForeground)
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
                     .background(DesignTokens.parkCyan)
@@ -229,7 +230,7 @@ struct SaveParkingView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
                     .background(DesignTokens.parkCyan)
-                    .foregroundStyle(DesignTokens.parkNavy)
+                    .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
         }

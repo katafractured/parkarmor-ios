@@ -5,6 +5,7 @@ struct HistoryScreenView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.dismiss) private var dismiss
 
+    var showsDismissButton = true
     var onReactivated: ((ParkingLocation) -> Void)?
 
     @State private var viewModel: HistoryViewModel?
@@ -32,9 +33,11 @@ struct HistoryScreenView: View {
             .toolbarBackground(DesignTokens.parkNavy, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
-                        .foregroundStyle(DesignTokens.parkCyan)
+                if showsDismissButton {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Done") { dismiss() }
+                            .foregroundStyle(DesignTokens.parkCyan)
+                    }
                 }
             }
             .sheet(isPresented: $showingPaywall) {
@@ -58,7 +61,7 @@ struct HistoryScreenView: View {
 
             Text("No Parking History")
                 .font(.title3.bold())
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
 
             Text("Your past parking spots will appear here.")
                 .font(.subheadline)
@@ -81,7 +84,9 @@ struct HistoryScreenView: View {
                         onReactivate: {
                             vm.reactivate(location)
                             onReactivated?(location)
-                            dismiss()
+                            if showsDismissButton {
+                                dismiss()
+                            }
                         },
                         onDelete: { vm.delete(location) },
                         onUpgrade: { showingPaywall = true }
@@ -101,9 +106,9 @@ struct HistoryScreenView: View {
 
     private var proGateOverlay: some View {
         VStack(spacing: 12) {
-            Text("Unlock Full History with Pro")
-                .font(.headline)
-                .foregroundStyle(.white)
+                Text("Unlock Full History with Pro")
+                    .font(.headline)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
 
             Button {
                 showingPaywall = true
@@ -113,7 +118,7 @@ struct HistoryScreenView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
                     .background(DesignTokens.parkCyan)
-                    .foregroundStyle(DesignTokens.parkNavy)
+                    .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 20)
@@ -157,7 +162,7 @@ private struct HistoryRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(location.displayAddress)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(DesignTokens.parkTextPrimary)
                     .lineLimit(1)
 
                 HStack(spacing: 8) {
@@ -210,7 +215,7 @@ private struct HistoryRowView: View {
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(DesignTokens.parkCyan)
-                            .foregroundStyle(DesignTokens.parkNavy)
+                            .foregroundStyle(DesignTokens.parkAccentForeground)
                             .clipShape(Capsule())
                     }
             }

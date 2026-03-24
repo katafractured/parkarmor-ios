@@ -9,6 +9,7 @@ import Observation
     let notificationManager = NotificationManager()
     let photoManager = PhotoManager()
     let storeKitManager = StoreKitManager()
+    let liveActivityManager = LiveActivityManager()
     let preferences = UserPreferences()
 
     // Repository (injected after ModelContext is available)
@@ -16,8 +17,10 @@ import Observation
 
     // State
     var activeParking: ParkingLocation?
+    var selectedTab: AppTab = .map
     var showingPaywall = false
     var errorMessage: String?
+    var shouldPresentActiveParkingFromLiveActivity = false
 
     var isPro: Bool { storeKitManager.isPro }
     var hasSeenOnboarding: Bool {
@@ -40,6 +43,7 @@ import Observation
 
     func refreshActiveParking() {
         activeParking = try? repository?.fetchActive()
+        liveActivityManager.sync(with: activeParking)
     }
 
     func endParking() {
@@ -51,6 +55,7 @@ import Observation
         do {
             try repository?.deactivateAll()
             activeParking = nil
+            Task { await liveActivityManager.endCurrentActivity() }
         } catch {
             errorMessage = error.localizedDescription
         }

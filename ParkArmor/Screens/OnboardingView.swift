@@ -31,7 +31,7 @@ struct OnboardingView: View {
 
                         Text("ParkArmor")
                             .font(.system(size: 36, weight: .bold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(DesignTokens.parkTextPrimary)
 
                         Text("Never forget where you parked.")
                             .font(.title3)
@@ -54,7 +54,7 @@ struct OnboardingView: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(title)
                                         .font(.headline)
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(DesignTokens.parkTextPrimary)
                                     Text(description)
                                         .font(.subheadline)
                                         .foregroundStyle(DesignTokens.parkTextSecondary)
@@ -81,7 +81,7 @@ struct OnboardingView: View {
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 54)
                                 .background(DesignTokens.parkCyan)
-                                .foregroundStyle(DesignTokens.parkNavy)
+                                .foregroundStyle(DesignTokens.parkAccentForeground)
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
                         }
                         .padding(.horizontal, 20)

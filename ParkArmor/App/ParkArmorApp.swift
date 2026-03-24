@@ -1,5 +1,6 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
+import WidgetKit
 
 @main
 struct ParkArmorApp: App {
@@ -53,9 +54,7 @@ struct RootView: View {
     var body: some View {
         Group {
             if appViewModel.hasSeenOnboarding {
-                NavigationStack {
-                    MapScreenView()
-                }
+                AppTabView()
             } else {
                 OnboardingView()
             }
@@ -63,6 +62,60 @@ struct RootView: View {
         .task {
             appViewModel.configure(context: modelContext)
             await appViewModel.onAppLaunch()
+        }
+        .onContinueUserActivity(NSUserActivityTypeLiveActivity) { _ in
+            appViewModel.selectedTab = .map
+            appViewModel.shouldPresentActiveParkingFromLiveActivity = true
+        }
+    }
+}
+
+enum AppTab: Hashable {
+    case map
+    case history
+    case settings
+}
+
+struct AppTabView: View {
+    @Environment(AppViewModel.self) private var appViewModel
+    @State private var showingPaywall = false
+
+    var body: some View {
+        TabView(selection: Binding(
+            get: { appViewModel.selectedTab },
+            set: { appViewModel.selectedTab = $0 }
+        )) {
+            NavigationStack {
+                MapScreenView()
+            }
+            .tag(AppTab.map)
+            .tabItem {
+                Label("Map", systemImage: "map.fill")
+            }
+
+            HistoryScreenView(showsDismissButton: false)
+                .tag(AppTab.history)
+                .tabItem {
+                    Label("History", systemImage: "clock.arrow.circlepath")
+                }
+
+            SettingsScreenView(showsDismissButton: false)
+                .tag(AppTab.settings)
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+        }
+        .sheet(isPresented: $showingPaywall) {
+            PaywallView(storeKit: appViewModel.storeKitManager) {
+                showingPaywall = false
+            }
+        }
+        .onChange(of: appViewModel.selectedTab) { oldTab, newTab in
+            guard newTab != oldTab else { return }
+            if newTab == .history && appViewModel.requiresPro(feature: "history") {
+                appViewModel.selectedTab = oldTab
+                showingPaywall = true
+            }
         }
     }
 }

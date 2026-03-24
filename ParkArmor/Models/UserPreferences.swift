@@ -6,6 +6,34 @@ enum TimeFormat: String, CaseIterable {
     case clockTime = "clock"   // "Parked at 2:30 PM"
 }
 
+enum TimerAlertMode: String, CaseIterable {
+    case atExpiration = "at_expiration"
+    case fifteenMinutesBefore = "fifteen_minutes_before"
+    case fifteenMinutesAndExpiration = "fifteen_minutes_and_expiration"
+
+    var title: String {
+        switch self {
+        case .atExpiration:
+            return "At expiration"
+        case .fifteenMinutesBefore:
+            return "15 min before"
+        case .fifteenMinutesAndExpiration:
+            return "15 min before + expiration"
+        }
+    }
+
+    var offsets: [TimeInterval] {
+        switch self {
+        case .atExpiration:
+            return [0]
+        case .fifteenMinutesBefore:
+            return [15 * 60]
+        case .fifteenMinutesAndExpiration:
+            return [15 * 60, 0]
+        }
+    }
+}
+
 @Observable final class UserPreferences {
     private let defaults: UserDefaults
 
@@ -32,6 +60,14 @@ enum TimeFormat: String, CaseIterable {
     var notificationsEnabled: Bool {
         get { defaults.object(forKey: "notificationsEnabled") as? Bool ?? true }
         set { defaults.set(newValue, forKey: "notificationsEnabled") }
+    }
+
+    var timerAlertMode: TimerAlertMode {
+        get {
+            let raw = defaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
+            return TimerAlertMode(rawValue: raw) ?? .atExpiration
+        }
+        set { defaults.set(newValue.rawValue, forKey: "timerAlertMode") }
     }
 
     var hasSeenOnboarding: Bool {

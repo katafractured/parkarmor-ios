@@ -20,17 +20,23 @@ import SwiftUI
     private let photoManager: PhotoManager
     private let repository: ParkingRepository
     private let notificationManager: NotificationManager
+    private let liveActivityManager: LiveActivityManager
+    private let preferences: UserPreferences
 
     init(
         mapKitHelper: MapKitHelper,
         photoManager: PhotoManager,
         repository: ParkingRepository,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        liveActivityManager: LiveActivityManager,
+        preferences: UserPreferences
     ) {
         self.mapKitHelper = mapKitHelper
         self.photoManager = photoManager
         self.repository = repository
         self.notificationManager = notificationManager
+        self.liveActivityManager = liveActivityManager
+        self.preferences = preferences
     }
 
     func beginSave(coordinate: CLLocationCoordinate2D) {
@@ -73,13 +79,15 @@ import SwiftUI
                     let notificationId = try await notificationManager.scheduleNotification(
                         expiresAt: timerDate,
                         locationName: address,
-                        parkingId: location.id
+                        parkingId: location.id,
+                        alertMode: preferences.timerAlertMode
                     )
                     try repository.addTimer(
                         to: location,
                         expiresAt: timerDate,
                         notificationId: notificationId
                     )
+                    liveActivityManager.sync(with: location)
                 }
 
                 isSaving = false

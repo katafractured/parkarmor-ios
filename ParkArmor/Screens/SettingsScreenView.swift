@@ -92,6 +92,35 @@ struct SettingsScreenView: View {
                             .tint(DesignTokens.parkCyan)
                             .labelsHidden()
                         }
+
+                        if appViewModel.isPro {
+                            HStack {
+                                Label("Timer Alerts", systemImage: "timer")
+                                    .foregroundStyle(DesignTokens.parkTextPrimary)
+                                Spacer()
+                                Picker("Timer Alerts", selection: Binding(
+                                    get: { appViewModel.preferences.timerAlertMode },
+                                    set: { appViewModel.preferences.timerAlertMode = $0 }
+                                )) {
+                                    ForEach(TimerAlertMode.allCases, id: \.self) { mode in
+                                        Text(mode.title).tag(mode)
+                                    }
+                                }
+                                .pickerStyle(.menu)
+                                .foregroundStyle(DesignTokens.parkCyan)
+                            }
+                        } else {
+                            Button {
+                                showingPaywall = true
+                            } label: {
+                                HStack {
+                                    Label("Advanced Timer Alerts", systemImage: "timer")
+                                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                                    Spacer()
+                                    ProBadge()
+                                }
+                            }
+                        }
                     } header: {
                         Text("Preferences")
                             .foregroundStyle(DesignTokens.parkTextSecondary)

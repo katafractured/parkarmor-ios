@@ -26,7 +26,7 @@ struct OnboardingPermissionsView: View {
 
                     Text("Enable Location")
                         .font(.largeTitle.bold())
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
 
                     Text("ParkArmor uses GPS to save where you parked. Your location never leaves your device.")
                         .font(.body)
@@ -46,7 +46,7 @@ struct OnboardingPermissionsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("100% Private")
                             .font(.headline)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(DesignTokens.parkTextPrimary)
                         Text("No accounts. No cloud. No data collection whatsoever.")
                             .font(.caption)
                             .foregroundStyle(DesignTokens.parkTextSecondary)
@@ -69,7 +69,7 @@ struct OnboardingPermissionsView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 54)
                             .background(DesignTokens.parkCyan)
-                            .foregroundStyle(DesignTokens.parkNavy)
+                            .foregroundStyle(DesignTokens.parkAccentForeground)
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .padding(.horizontal, 20)

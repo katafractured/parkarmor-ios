@@ -10,8 +10,9 @@ struct PaywallView: View {
         ("checkmark.circle.fill", "Walking directions", true),
         ("checkmark.circle.fill", "Parking meter timer", true),
         ("xmark.circle.fill", "Parking history", false),
-        ("xmark.circle.fill", "Home screen widget", false),
         ("xmark.circle.fill", "Parking sign photos", false),
+        ("xmark.circle.fill", "Share parked location", false),
+        ("xmark.circle.fill", "Advanced timer alerts", false),
     ]
 
     var body: some View {
@@ -28,7 +29,7 @@ struct PaywallView: View {
 
                     Text("ParkArmor Pro")
                         .font(.largeTitle.bold())
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
 
                     Text("Never worry about parking again")
                         .font(.subheadline)
@@ -46,7 +47,7 @@ struct PaywallView: View {
                                 .frame(width: 24)
 
                             Text(label)
-                                .foregroundStyle(included ? .white : DesignTokens.parkTextSecondary.opacity(0.6))
+                                .foregroundStyle(included ? DesignTokens.parkTextPrimary : DesignTokens.parkTextSecondary.opacity(0.8))
                                 .font(.body)
 
                             Spacer()
@@ -69,7 +70,7 @@ struct PaywallView: View {
                         HStack {
                             if storeKit.isLoading {
                                 ProgressView()
-                                    .tint(DesignTokens.parkNavy)
+                                    .tint(DesignTokens.parkAccentForeground)
                             } else {
                                 Text("Get ParkArmor Pro")
                                     .font(.headline)
@@ -81,7 +82,7 @@ struct PaywallView: View {
                         .padding(.horizontal, 24)
                         .frame(height: 54)
                         .background(DesignTokens.parkCyan)
-                        .foregroundStyle(DesignTokens.parkNavy)
+                        .foregroundStyle(DesignTokens.parkAccentForeground)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .disabled(storeKit.isLoading)

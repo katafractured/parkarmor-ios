@@ -5,13 +5,28 @@ import SwiftUI
 // MARK: - Design Tokens
 
 enum DesignTokens {
-    static let parkNavy = Color(red: 0.039, green: 0.055, blue: 0.102)       // #0A0E1A
-    static let parkCyan = Color("AccentColor")                                  // #00F0FF
-    static let parkSurface = Color(red: 0.09, green: 0.11, blue: 0.18)        // #171C2E
-    static let parkSurfaceElevated = Color(red: 0.12, green: 0.15, blue: 0.24) // #1F2640
-    static let parkTextPrimary = Color.white
-    static let parkTextSecondary = Color.white.opacity(0.6)
-    static let parkDestructive = Color(red: 1.0, green: 0.27, blue: 0.27)     // #FF4545
+    static let parkNavy = Color(uiColor: .systemBackground)
+    static let parkCyan = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.18, green: 0.87, blue: 0.95, alpha: 1.0)
+            }
+            return UIColor(red: 0.00, green: 0.47, blue: 0.64, alpha: 1.0)
+        }
+    )
+    static let parkAccentForeground = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.04, green: 0.10, blue: 0.19, alpha: 1.0)
+            }
+            return .white
+        }
+    )
+    static let parkSurface = Color(uiColor: .secondarySystemBackground)
+    static let parkSurfaceElevated = Color(uiColor: .tertiarySystemBackground)
+    static let parkTextPrimary = Color(uiColor: .label)
+    static let parkTextSecondary = Color(uiColor: .secondaryLabel)
+    static let parkDestructive = Color(uiColor: .systemRed)
 }
 
 // MARK: - Double Extensions

@@ -41,7 +41,7 @@ struct ActiveParkingView: View {
                                     CompassArrow(bearingDegrees: vm.bearingDegrees, size: 50)
                                     Text("\(vm.compassCardinal) • \(vm.distanceText)")
                                         .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(DesignTokens.parkTextPrimary)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding(16)
@@ -125,7 +125,7 @@ struct ActiveParkingView: View {
 
             Text(parking.displayAddress)
                 .font(.title3.bold())
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
 
             Text(parking.savedAt.formatted(date: .abbreviated, time: .shortened))
                 .font(.caption)
@@ -143,7 +143,7 @@ struct ActiveParkingView: View {
                 .font(.caption)
                 .foregroundStyle(DesignTokens.parkTextSecondary)
             Text(parking.notes)
-                .foregroundStyle(.white)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
                 .font(.body)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -195,7 +195,7 @@ struct ActiveParkingView: View {
                         .font(.subheadline.bold())
                 } else {
                     Text(timer.expiresAt.timeRemainingString())
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
                         .font(.subheadline)
 
                     Button("Cancel Timer") {
@@ -203,6 +203,7 @@ struct ActiveParkingView: View {
                         appViewModel.notificationManager.cancelNotification(
                             identifier: timer.notificationIdentifier
                         )
+                        appViewModel.liveActivityManager.sync(with: parking)
                     }
                     .font(.subheadline)
                     .foregroundStyle(DesignTokens.parkDestructive)
@@ -216,7 +217,6 @@ struct ActiveParkingView: View {
                         displayedComponents: [.date, .hourAndMinute]
                     )
                     .datePickerStyle(.compact)
-                    .colorScheme(.dark)
 
                     HStack {
                         Button("Set Timer") {
@@ -225,9 +225,11 @@ struct ActiveParkingView: View {
                                     let id = try await appViewModel.notificationManager.scheduleNotification(
                                         expiresAt: timerDate,
                                         locationName: parking.displayAddress,
-                                        parkingId: parking.id
+                                        parkingId: parking.id,
+                                        alertMode: appViewModel.preferences.timerAlertMode
                                     )
                                     try appViewModel.repository?.addTimer(to: parking, expiresAt: timerDate, notificationId: id)
+                                    appViewModel.liveActivityManager.sync(with: parking)
                                     showingTimerPicker = false
                                 } catch {}
                             }
@@ -263,8 +265,45 @@ struct ActiveParkingView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
                     .background(DesignTokens.parkCyan)
-                    .foregroundStyle(DesignTokens.parkNavy)
+                    .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+
+            if appViewModel.isPro {
+                ShareLink(item: shareMessage, preview: SharePreview("Parked Car Location")) {
+                    Label("Share Parked Location", systemImage: "square.and.arrow.up")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(DesignTokens.parkSurface)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .strokeBorder(DesignTokens.parkCyan.opacity(0.35), lineWidth: 1)
+                        )
+                }
+            } else {
+                Button {
+                    appViewModel.showingPaywall = true
+                } label: {
+                    HStack {
+                        Label("Share Parked Location", systemImage: "square.and.arrow.up")
+                            .font(.headline)
+                        Spacer()
+                        ProBadge()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .padding(.horizontal, 16)
+                    .background(DesignTokens.parkSurface)
+                    .foregroundStyle(DesignTokens.parkTextPrimary)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .strokeBorder(DesignTokens.parkCyan.opacity(0.35), lineWidth: 1)
+                    )
+                }
             }
 
             Button(role: .destructive) {
@@ -290,11 +329,37 @@ struct ActiveParkingView: View {
         ) {
             Button("End Parking", role: .destructive) {
                 try? vm.endParking(parking: parking)
+                Task { await appViewModel.liveActivityManager.endCurrentActivity() }
                 onDismiss()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This will move your parking spot to history.")
         }
+    }
+
+    private var shareMessage: String {
+        var lines = [
+            "I parked here:",
+            parking.displayAddress,
+            appleMapsURL.absoluteString
+        ]
+
+        if !parking.notes.isEmpty {
+            lines.append("Notes: \(parking.notes)")
+        }
+
+        if let timer = parking.timer {
+            lines.append("Meter expires: \(timer.expiresAt.formatted(date: .omitted, time: .shortened))")
+        }
+
+        return lines.joined(separator: "\n")
+    }
+
+    private var appleMapsURL: URL {
+        let lat = parking.latitude
+        let lon = parking.longitude
+        let encodedAddress = parking.displayAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Parked Car"
+        return URL(string: "http://maps.apple.com/?ll=\(lat),\(lon)&q=\(encodedAddress)")!
     }
 }

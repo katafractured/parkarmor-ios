@@ -5,8 +5,6 @@ struct MapScreenView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @State private var mapVM = MapViewModel()
     @State private var showingSaveParking = false
-    @State private var showingHistory = false
-    @State private var showingSettings = false
     @State private var showingPaywall = false
     @State private var showingActiveParking = false
     @State private var allLocations: [ParkingLocation] = []
@@ -22,11 +20,24 @@ struct MapScreenView: View {
                         location.displayAddress,
                         coordinate: location.coordinate
                     ) {
-                        ParkingPinView(isActive: location.isActive)
-                            .onTapGesture {
-                                mapVM.centerOn(parking: location)
-                                showingActiveParking = location.isActive
+                        Button {
+                            if !location.isActive && appViewModel.requiresPro(feature: "history") {
+                                return
                             }
+                            mapVM.centerOn(parking: location)
+                            showingActiveParking = location.isActive
+                        } label: {
+                            ParkingPinView(isActive: location.isActive)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(location.isActive ? "Active parking location" : "Parking history location")
+                        .accessibilityHint(location.isActive ? "Opens your active parking details" : "Opens this saved parking location")
+                        .accessibilityValue(location.displayAddress)
+                        .simultaneousGesture(TapGesture().onEnded {
+                            if !location.isActive && appViewModel.requiresPro(feature: "history") {
+                                return
+                            }
+                        })
                     }
                 }
             }
@@ -64,38 +75,15 @@ struct MapScreenView: View {
                     .padding(.horizontal, 28)
                     .frame(height: 54)
                     .background(DesignTokens.parkCyan)
-                    .foregroundStyle(DesignTokens.parkNavy)
+                    .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(Capsule())
                     .shadow(color: DesignTokens.parkCyan.opacity(0.4), radius: 12, y: 4)
                 }
                 .padding(.bottom, 40)
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Text("ParkArmor")
-                    .font(.headline.bold())
-                    .foregroundStyle(DesignTokens.parkCyan)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack(spacing: 16) {
-                    Button {
-                        if appViewModel.requiresPro(feature: "history") { return }
-                        showingHistory = true
-                    } label: {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .foregroundStyle(.white)
-                    }
-
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundStyle(.white)
-                    }
-                }
-            }
-        }
+        .navigationTitle("ParkArmor")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(DesignTokens.parkNavy.opacity(0.85), for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .sheet(isPresented: $showingSaveParking) {
@@ -114,16 +102,6 @@ struct MapScreenView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingHistory) {
-            HistoryScreenView { location in
-                showingHistory = false
-                appViewModel.refreshActiveParking()
-                refreshLocations()
-            }
-        }
-        .sheet(isPresented: $showingSettings) {
-            SettingsScreenView()
-        }
         .sheet(isPresented: $showingPaywall) {
             PaywallView(storeKit: appViewModel.storeKitManager) {
                 showingPaywall = false
@@ -132,8 +110,22 @@ struct MapScreenView: View {
         .onChange(of: appViewModel.showingPaywall) { _, showing in
             showingPaywall = showing
         }
-        .task {
+        .onChange(of: appViewModel.shouldPresentActiveParkingFromLiveActivity) { _, shouldPresent in
+            guard shouldPresent else { return }
+            appViewModel.refreshActiveParking()
+            if appViewModel.activeParking != nil {
+                showingActiveParking = true
+            }
+            appViewModel.shouldPresentActiveParkingFromLiveActivity = false
+        }
+        .onAppear {
+            appViewModel.refreshActiveParking()
             refreshLocations()
+            if appViewModel.shouldPresentActiveParkingFromLiveActivity,
+               appViewModel.activeParking != nil {
+                showingActiveParking = true
+                appViewModel.shouldPresentActiveParkingFromLiveActivity = false
+            }
         }
     }
 
@@ -155,7 +147,7 @@ private struct ParkingPinView: View {
 
             Image(systemName: isActive ? "car.fill" : "clock.arrow.circlepath")
                 .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(isActive ? DesignTokens.parkNavy : .white)
+                .foregroundStyle(isActive ? DesignTokens.parkAccentForeground : DesignTokens.parkTextPrimary)
         }
         .shadow(color: isActive ? DesignTokens.parkCyan.opacity(0.5) : .clear, radius: 8)
     }
@@ -177,7 +169,7 @@ private struct ActiveParkingBanner: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(parking.displayAddress)
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
                         .lineLimit(1)
 
                     CompactTimerDisplay(savedAt: parking.savedAt)
