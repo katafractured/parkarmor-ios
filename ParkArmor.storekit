@@ -1,0 +1,51 @@
+{
+  "identifier" : "ParkArmorStoreKit",
+  "nonConsumableProducts" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "8C4F2A1B-3D7E-4F5C-9A2B-1E6D8F3C7A4B",
+      "localizations" : [
+        {
+          "description" : "Unlock unlimited parking history, home screen widget, and parking sign photos.",
+          "displayName" : "ParkArmor Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.katafract.ParkArmor.pro",
+      "referenceName" : "ParkArmor Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6760988040",
+    "_applicationUsername" : "",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      }
+    ]
+  },
+  "version" : {
+    "major" : 2,
+    "minor" : 0,
+    "patch" : 0
+  }
+}
