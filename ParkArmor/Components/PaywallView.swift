@@ -116,5 +116,10 @@ struct PaywallView: View {
                 .padding(.bottom, 40)
             }
         }
+        .onChange(of: storeKit.isPro) { _, isPro in
+            if isPro {
+                onDismiss()
+            }
+        }
     }
 }

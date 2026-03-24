@@ -21,11 +21,12 @@ import Observation
     var showingPaywall = false
     var errorMessage: String?
     var shouldPresentActiveParkingFromLiveActivity = false
+    var hasSeenOnboarding = false
 
     var isPro: Bool { storeKitManager.isPro }
-    var hasSeenOnboarding: Bool {
-        get { preferences.hasSeenOnboarding }
-        set { preferences.hasSeenOnboarding = newValue }
+
+    init() {
+        hasSeenOnboarding = preferences.hasSeenOnboarding
     }
 
     func configure(context: ModelContext) {
@@ -33,12 +34,18 @@ import Observation
     }
 
     func onAppLaunch() async {
+        hasSeenOnboarding = preferences.hasSeenOnboarding
         await storeKitManager.loadProducts()
         await storeKitManager.verifyEntitlement()
         refreshActiveParking()
         if locationManager.isAuthorized {
             locationManager.startUpdating()
         }
+    }
+
+    func completeOnboarding() {
+        hasSeenOnboarding = true
+        preferences.hasSeenOnboarding = true
     }
 
     func refreshActiveParking() {

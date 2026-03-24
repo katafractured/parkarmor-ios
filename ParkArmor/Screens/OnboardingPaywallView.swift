@@ -5,11 +5,11 @@ struct OnboardingPaywallView: View {
 
     var body: some View {
         PaywallView(storeKit: appViewModel.storeKitManager) {
-            appViewModel.hasSeenOnboarding = true
+            appViewModel.completeOnboarding()
         }
         .onChange(of: appViewModel.storeKitManager.isPro) { _, isPro in
             if isPro {
-                appViewModel.hasSeenOnboarding = true
+                appViewModel.completeOnboarding()
             }
         }
         .navigationBarBackButtonHidden()

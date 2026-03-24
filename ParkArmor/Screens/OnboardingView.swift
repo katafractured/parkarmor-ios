@@ -87,7 +87,7 @@ struct OnboardingView: View {
                         .padding(.horizontal, 20)
 
                         Button("Skip for Now") {
-                            appViewModel.hasSeenOnboarding = true
+                            appViewModel.completeOnboarding()
                         }
                         .font(.subheadline)
                         .foregroundStyle(DesignTokens.parkTextSecondary)
