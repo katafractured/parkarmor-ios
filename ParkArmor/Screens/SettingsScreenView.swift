@@ -125,7 +125,7 @@ struct SettingsScreenView: View {
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            if let url = URL(string: "https://ch-land.github.io/ParkArmor/terms.html") {
+                            if let url = URL(string: "https://katafract.com/terms-parkarmor") {
                                 UIApplication.shared.open(url)
                             }
                         }
