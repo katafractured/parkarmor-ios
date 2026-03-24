@@ -4,6 +4,7 @@ struct SettingsScreenView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showingPaywall = false
+    var showsDismissButton = true
 
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -24,7 +25,7 @@ struct SettingsScreenView: View {
                                 Image(systemName: "shield.checkered")
                                     .foregroundStyle(DesignTokens.parkCyan)
                                 Text("ParkArmor Pro")
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(DesignTokens.parkTextPrimary)
                                 Spacer()
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(DesignTokens.parkCyan)
@@ -37,7 +38,7 @@ struct SettingsScreenView: View {
                                     Image(systemName: "shield.checkered")
                                         .foregroundStyle(DesignTokens.parkCyan)
                                     Text("Upgrade to Pro")
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(DesignTokens.parkTextPrimary)
                                     Spacer()
                                     Text("$2.99")
                                         .foregroundStyle(DesignTokens.parkCyan)
@@ -66,7 +67,7 @@ struct SettingsScreenView: View {
                     Section {
                         HStack {
                             Label("Distance", systemImage: "ruler")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
                             Picker("Distance", selection: Binding(
                                 get: { appViewModel.preferences.distanceUnit },
@@ -82,7 +83,7 @@ struct SettingsScreenView: View {
 
                         HStack {
                             Label("Notifications", systemImage: "bell.fill")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
                             Toggle("", isOn: Binding(
                                 get: { appViewModel.preferences.notificationsEnabled },
@@ -101,7 +102,7 @@ struct SettingsScreenView: View {
                     Section {
                         HStack {
                             Label("Privacy Policy", systemImage: "lock.shield")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(.caption)
@@ -109,14 +110,14 @@ struct SettingsScreenView: View {
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            if let url = URL(string: "https://katafract.com/privacy") {
+                            if let url = URL(string: "https://katafract.com/privacy-parkarmor.html") {
                                 UIApplication.shared.open(url)
                             }
                         }
 
                         HStack {
                             Label("Terms of Service", systemImage: "doc.text")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(.caption)
@@ -124,14 +125,14 @@ struct SettingsScreenView: View {
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            if let url = URL(string: "https://katafract.com/terms") {
+                            if let url = URL(string: "https://ch-land.github.io/ParkArmor/terms.html") {
                                 UIApplication.shared.open(url)
                             }
                         }
 
                         HStack {
                             Label("Version", systemImage: "info.circle")
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DesignTokens.parkTextPrimary)
                             Spacer()
                             Text(appVersion)
                                 .foregroundStyle(DesignTokens.parkTextSecondary)
@@ -150,9 +151,11 @@ struct SettingsScreenView: View {
             .toolbarBackground(DesignTokens.parkNavy, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
-                        .foregroundStyle(DesignTokens.parkCyan)
+                if showsDismissButton {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Done") { dismiss() }
+                            .foregroundStyle(DesignTokens.parkCyan)
+                    }
                 }
             }
             .sheet(isPresented: $showingPaywall) {

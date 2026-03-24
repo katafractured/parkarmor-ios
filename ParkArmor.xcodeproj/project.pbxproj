@@ -6,9 +6,60 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BC380DC32F72AFFA00CE6623 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC380DC22F72AFF900CE6623 /* WidgetKit.framework */; };
+		BC380DC52F72AFFA00CE6623 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC380DC42F72AFFA00CE6623 /* SwiftUI.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA00000AAA00000AAA00000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA000009AA000009AA000009;
+			remoteInfo = ParkArmorWidgetExtension;
+		};
+		BC380DD02F72AFFC00CE6623 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC380DBF2F72AFF900CE6623;
+			remoteInfo = ParkArmorWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA000008AA000008AA000008 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC380DC02F72AFF900CE6623 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC380DC22F72AFF900CE6623 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		BC380DC42F72AFFA00CE6623 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkArmor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BC380DD22F72AFFC00CE6623 /* Exceptions for "ParkArmorWidget" folder in "ParkArmorWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BC380DBF2F72AFF900CE6623 /* ParkArmorWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */ = {
@@ -16,9 +67,34 @@
 			path = ParkArmor;
 			sourceTree = "<group>";
 		};
+		AA000003AA000003AA000003 /* ParkArmorWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ParkArmorWidgetExtension;
+			sourceTree = "<group>";
+		};
+		AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ParkArmor/ParkArmorShared;
+			sourceTree = "<group>";
+		};
+		BC380DC62F72AFFA00CE6623 /* ParkArmorWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BC380DD22F72AFFC00CE6623 /* Exceptions for "ParkArmorWidget" folder in "ParkArmorWidgetExtension" target */,
+			);
+			path = ParkArmorWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA000005AA000005AA000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBA1907E3AE04C8B9CC5C41F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -26,28 +102,105 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BC380DBD2F72AFF900CE6623 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC380DC52F72AFFA00CE6623 /* SwiftUI.framework in Frameworks */,
+				BC380DC32F72AFFA00CE6623 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8A5F370D17764FEC93F77EF3 = {
-			isa = PBXGroup;
-			children = (
-				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
-				40B17B783B7240E29058D7D7 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
 		40B17B783B7240E29058D7D7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */,
+				AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */,
+				BC380DC02F72AFF900CE6623 /* ParkArmorWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8A5F370D17764FEC93F77EF3 = {
+			isa = PBXGroup;
+			children = (
+				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
+				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
+				BC380DC62F72AFFA00CE6623 /* ParkArmorWidget */,
+				BC380DC12F72AFF900CE6623 /* Frameworks */,
+				40B17B783B7240E29058D7D7 /* Products */,
+				BC380CC92F7259AA00CE6623 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		BC380CC92F7259AA00CE6623 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		BC380DC12F72AFF900CE6623 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BC380DC22F72AFF900CE6623 /* WidgetKit.framework */,
+				BC380DC42F72AFFA00CE6623 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AA000009AA000009AA000009 /* ParkArmorWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
+			buildPhases = (
+				AA000007AA000007AA000007 /* Sources */,
+				AA000005AA000005AA000005 /* Frameworks */,
+				AA000006AA000006AA000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
+				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
+			);
+			name = ParkArmorWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = ParkArmorWidgetExtension;
+			productReference = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		BC380DBF2F72AFF900CE6623 /* ParkArmorWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BC380DD32F72AFFC00CE6623 /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
+			buildPhases = (
+				BC380DBC2F72AFF900CE6623 /* Sources */,
+				BC380DBD2F72AFF900CE6623 /* Frameworks */,
+				BC380DBE2F72AFF900CE6623 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BC380DC62F72AFFA00CE6623 /* ParkArmorWidget */,
+			);
+			name = ParkArmorWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = ParkArmorWidgetExtension;
+			productReference = BC380DC02F72AFF900CE6623 /* ParkArmorWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E82BEB1FFB51493EAF25C3E2 /* ParkArmor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DF98AF3056A84F87BBDCF472 /* Build configuration list for PBXNativeTarget "ParkArmor" */;
@@ -55,10 +208,13 @@
 				1B531F0D3EC24E9ABE8166E6 /* Sources */,
 				BBA1907E3AE04C8B9CC5C41F /* Frameworks */,
 				1A3C90841736490D85B6D31F /* Resources */,
+				AA000008AA000008AA000008 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AA00000BAA00000BAA00000B /* PBXTargetDependency */,
+				BC380DD12F72AFFC00CE6623 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
@@ -80,6 +236,12 @@
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					AA000009AA000009AA000009 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					BC380DBF2F72AFF900CE6623 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 					E82BEB1FFB51493EAF25C3E2 = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -100,12 +262,28 @@
 			projectRoot = "";
 			targets = (
 				E82BEB1FFB51493EAF25C3E2 /* ParkArmor */,
+				AA000009AA000009AA000009 /* ParkArmorWidgetExtension */,
+				BC380DBF2F72AFF900CE6623 /* ParkArmorWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1A3C90841736490D85B6D31F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000006AA000006AA000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC380DBE2F72AFF900CE6623 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,9 +300,134 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA000007AA000007AA000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC380DBC2F72AFF900CE6623 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AA00000BAA00000BAA00000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA000009AA000009AA000009 /* ParkArmorWidgetExtension */;
+			targetProxy = AA00000AAA00000AAA00000A /* PBXContainerItemProxy */;
+		};
+		BC380DD12F72AFFC00CE6623 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC380DBF2F72AFF900CE6623 /* ParkArmorWidgetExtension */;
+			targetProxy = BC380DD02F72AFFC00CE6623 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		30B4FB6084194E659BBBF4D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		39B1BF668C2B4D75811489B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		5082577C664F4129BD382361 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -189,59 +492,126 @@
 			};
 			name = Debug;
 		};
-		39B1BF668C2B4D75811489B3 /* Release */ = {
+		AA00000CAA00000CAA00000C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.widgetextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA00000DAA00000DAA00000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.widgetextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BC380DD42F72AFFC00CE6623 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkArmorWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmorWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BC380DD52F72AFFC00CE6623 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkArmorWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmorWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -261,7 +631,9 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "\U00a9 2026 Katafract LLC";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -272,7 +644,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
 				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -286,50 +657,27 @@
 			};
 			name = Debug;
 		};
-		30B4FB6084194E659BBBF4D0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2SGGP65W6C;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
-				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "\U00a9 2026 Katafract LLC";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0.0;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
-				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA00000CAA00000CAA00000C /* Debug */,
+				AA00000DAA00000DAA00000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BC380DD32F72AFFC00CE6623 /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC380DD42F72AFFC00CE6623 /* Debug */,
+				BC380DD52F72AFFC00CE6623 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D80B3DBBEF764422A50A759E /* Build configuration list for PBXProject "ParkArmor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
