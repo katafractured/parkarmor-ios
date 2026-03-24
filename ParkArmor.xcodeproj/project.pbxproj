@@ -251,6 +251,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -259,6 +260,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "\U00a9 2026 Katafract LLC";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -271,7 +273,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
-				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.parkarmor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -290,6 +292,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -298,6 +301,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "\U00a9 2026 Katafract LLC";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -310,7 +314,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
-				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.parkarmor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
