@@ -36,12 +36,12 @@ struct SettingsScreenView: View {
                             } label: {
                                 HStack {
                                     Image(systemName: "shield.checkered")
-                                        .foregroundStyle(DesignTokens.parkCyan)
+                                        .foregroundStyle(DesignTokens.parkAccentText)
                                     Text("Upgrade to Pro")
                                         .foregroundStyle(DesignTokens.parkTextPrimary)
                                     Spacer()
                                     Text("$2.99")
-                                        .foregroundStyle(DesignTokens.parkCyan)
+                                        .foregroundStyle(DesignTokens.parkAccentText)
                                         .font(.subheadline.bold())
                                 }
                             }
@@ -78,7 +78,7 @@ struct SettingsScreenView: View {
                                 }
                             }
                             .pickerStyle(.menu)
-                            .foregroundStyle(DesignTokens.parkCyan)
+                            .foregroundStyle(DesignTokens.parkAccentText)
                         }
 
                         HStack {
@@ -107,7 +107,7 @@ struct SettingsScreenView: View {
                                     }
                                 }
                                 .pickerStyle(.menu)
-                                .foregroundStyle(DesignTokens.parkCyan)
+                                .foregroundStyle(DesignTokens.parkAccentText)
                             }
                         } else {
                             Button {
@@ -183,7 +183,7 @@ struct SettingsScreenView: View {
                 if showsDismissButton {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Done") { dismiss() }
-                            .foregroundStyle(DesignTokens.parkCyan)
+                            .foregroundStyle(DesignTokens.parkAccentText)
                     }
                 }
             }
