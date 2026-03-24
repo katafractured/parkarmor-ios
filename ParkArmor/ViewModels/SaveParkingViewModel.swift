@@ -9,6 +9,7 @@ import SwiftUI
     var notes = ""
     var selectedPhotos: [PhotosPickerItem] = []
     var photoData: [Data] = []
+    var capturedPhotoData: [Data] = []
     var hasTimer = false
     var timerDate: Date = Date().addingTimeInterval(7200) // 2 hours default
     var isSaving = false
@@ -51,11 +52,16 @@ import SwiftUI
     }
 
     func loadSelectedPhotos() async {
-        guard !selectedPhotos.isEmpty else { return }
+        guard !selectedPhotos.isEmpty else {
+            photoData = capturedPhotoData
+            return
+        }
         do {
-            photoData = try await photoManager.loadImages(from: selectedPhotos)
+            let libraryPhotos = try await photoManager.loadImages(from: selectedPhotos)
+            photoData = capturedPhotoData + libraryPhotos
         } catch {
             self.error = error.localizedDescription
+            photoData = capturedPhotoData
         }
     }
 

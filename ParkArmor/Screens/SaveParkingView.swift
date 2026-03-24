@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import UIKit
 
 struct SaveParkingView: View {
     @Environment(AppViewModel.self) private var appViewModel
@@ -10,6 +11,9 @@ struct SaveParkingView: View {
     @State private var viewModel: SaveParkingViewModel?
     @State private var selectedPhotoItems: [PhotosPickerItem] = []
     @State private var photoThumbnails: [Data] = []
+    @State private var showingPhotoSourceDialog = false
+    @State private var showingPhotoLibrary = false
+    @State private var showingCamera = false
 
     var body: some View {
         NavigationStack {
@@ -66,6 +70,31 @@ struct SaveParkingView: View {
             viewModel = vm
             if let loc = appViewModel.locationManager.currentLocation {
                 vm.beginSave(coordinate: loc.coordinate)
+            }
+        }
+        .confirmationDialog("Add Parking Photo", isPresented: $showingPhotoSourceDialog, titleVisibility: .visible) {
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                Button("Take Photo") {
+                    showingCamera = true
+                }
+            }
+            Button("Choose from Library") {
+                showingPhotoLibrary = true
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .photosPicker(
+            isPresented: $showingPhotoLibrary,
+            selection: $selectedPhotoItems,
+            maxSelectionCount: max(0, 3 - viewModelPhotoCount),
+            matching: .images
+        )
+        .sheet(isPresented: $showingCamera) {
+            CameraPicker { image in
+                guard let image else { return }
+                let compressed = appViewModel.photoManager.compressImage(image.jpegData(compressionQuality: 0.9) ?? Data())
+                photoThumbnails.append(compressed)
+                viewModel?.capturedPhotoData.append(compressed)
             }
         }
     }
@@ -139,19 +168,19 @@ struct SaveParkingView: View {
             }
 
             if appViewModel.isPro {
-                PhotosPicker(
-                    selection: $selectedPhotoItems,
-                    maxSelectionCount: 3,
-                    matching: .images
-                ) {
+                Button {
+                    showingPhotoSourceDialog = true
+                } label: {
                     Label("Add Photos", systemImage: "plus")
                         .font(.subheadline)
                         .foregroundStyle(DesignTokens.parkCyan)
                 }
+                .disabled(viewModelPhotoCount >= 3)
                 .onChange(of: selectedPhotoItems) { _, items in
                     vm.selectedPhotos = items
                     Task {
-                        photoThumbnails = (try? await appViewModel.photoManager.loadImages(from: items)) ?? []
+                        let libraryThumbnails = (try? await appViewModel.photoManager.loadImages(from: items)) ?? []
+                        photoThumbnails = vm.capturedPhotoData + libraryThumbnails
                     }
                 }
 
@@ -243,6 +272,12 @@ struct SaveParkingView: View {
                 .multilineTextAlignment(.center)
         }
     }
+
+    private var viewModelPhotoCount: Int {
+        let libraryCount = selectedPhotoItems.count
+        let capturedCount = viewModel?.capturedPhotoData.count ?? 0
+        return libraryCount + capturedCount
+    }
 }
 
 // MARK: - Pro Badge
@@ -256,5 +291,45 @@ struct ProBadge: View {
             .background(DesignTokens.parkCyan.opacity(0.2))
             .foregroundStyle(DesignTokens.parkCyan)
             .clipShape(Capsule())
+    }
+}
+
+private struct CameraPicker: UIViewControllerRepresentable {
+    var onImagePicked: (UIImage?) -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onImagePicked: onImagePicked)
+    }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        picker.allowsEditing = false
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        private let onImagePicked: (UIImage?) -> Void
+
+        init(onImagePicked: @escaping (UIImage?) -> Void) {
+            self.onImagePicked = onImagePicked
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            onImagePicked(nil)
+            picker.dismiss(animated: true)
+        }
+
+        func imagePickerController(
+            _ picker: UIImagePickerController,
+            didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+        ) {
+            let image = info[.originalImage] as? UIImage
+            onImagePicked(image)
+            picker.dismiss(animated: true)
+        }
     }
 }

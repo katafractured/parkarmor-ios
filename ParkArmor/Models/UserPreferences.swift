@@ -37,46 +37,44 @@ enum TimerAlertMode: String, CaseIterable {
 @Observable final class UserPreferences {
     private let defaults: UserDefaults
 
-    init() {
-        self.defaults = UserDefaults(suiteName: "group.com.katafract.ParkArmor") ?? .standard
-    }
-
     var distanceUnit: DistanceUnit {
-        get {
-            let raw = defaults.string(forKey: "distanceUnit") ?? DistanceUnit.miles.rawValue
-            return DistanceUnit(rawValue: raw) ?? .miles
-        }
-        set { defaults.set(newValue.rawValue, forKey: "distanceUnit") }
+        didSet { defaults.set(distanceUnit.rawValue, forKey: "distanceUnit") }
     }
 
     var timeFormat: TimeFormat {
-        get {
-            let raw = defaults.string(forKey: "timeFormat") ?? TimeFormat.elapsed.rawValue
-            return TimeFormat(rawValue: raw) ?? .elapsed
-        }
-        set { defaults.set(newValue.rawValue, forKey: "timeFormat") }
+        didSet { defaults.set(timeFormat.rawValue, forKey: "timeFormat") }
     }
 
     var notificationsEnabled: Bool {
-        get { defaults.object(forKey: "notificationsEnabled") as? Bool ?? true }
-        set { defaults.set(newValue, forKey: "notificationsEnabled") }
+        didSet { defaults.set(notificationsEnabled, forKey: "notificationsEnabled") }
     }
 
     var timerAlertMode: TimerAlertMode {
-        get {
-            let raw = defaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
-            return TimerAlertMode(rawValue: raw) ?? .atExpiration
-        }
-        set { defaults.set(newValue.rawValue, forKey: "timerAlertMode") }
+        didSet { defaults.set(timerAlertMode.rawValue, forKey: "timerAlertMode") }
     }
 
     var hasSeenOnboarding: Bool {
-        get { defaults.bool(forKey: "hasSeenOnboarding") }
-        set { defaults.set(newValue, forKey: "hasSeenOnboarding") }
+        didSet { defaults.set(hasSeenOnboarding, forKey: "hasSeenOnboarding") }
     }
 
     var isPro: Bool {
-        get { defaults.bool(forKey: "isPro") }
-        set { defaults.set(newValue, forKey: "isPro") }
+        didSet { defaults.set(isPro, forKey: "isPro") }
+    }
+
+    init() {
+        self.defaults = UserDefaults(suiteName: "group.com.katafract.ParkArmor") ?? .standard
+        let distanceRaw = defaults.string(forKey: "distanceUnit") ?? DistanceUnit.miles.rawValue
+        self.distanceUnit = DistanceUnit(rawValue: distanceRaw) ?? .miles
+
+        let timeFormatRaw = defaults.string(forKey: "timeFormat") ?? TimeFormat.elapsed.rawValue
+        self.timeFormat = TimeFormat(rawValue: timeFormatRaw) ?? .elapsed
+
+        self.notificationsEnabled = defaults.object(forKey: "notificationsEnabled") as? Bool ?? true
+
+        let timerAlertRaw = defaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
+        self.timerAlertMode = TimerAlertMode(rawValue: timerAlertRaw) ?? .atExpiration
+
+        self.hasSeenOnboarding = defaults.bool(forKey: "hasSeenOnboarding")
+        self.isPro = defaults.bool(forKey: "isPro")
     }
 }

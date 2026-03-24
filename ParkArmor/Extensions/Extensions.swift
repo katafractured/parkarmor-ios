@@ -22,6 +22,14 @@ enum DesignTokens {
             return .white
         }
     )
+    static let parkAccentText = Color(
+        uiColor: UIColor { traits in
+            if traits.userInterfaceStyle == .dark {
+                return UIColor(red: 0.54, green: 0.92, blue: 0.97, alpha: 1.0)
+            }
+            return UIColor(red: 0.00, green: 0.34, blue: 0.47, alpha: 1.0)
+        }
+    )
     static let parkSurface = Color(uiColor: .secondarySystemBackground)
     static let parkSurfaceElevated = Color(uiColor: .tertiarySystemBackground)
     static let parkTextPrimary = Color(uiColor: .label)
