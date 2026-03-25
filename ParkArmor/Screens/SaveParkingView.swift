@@ -14,6 +14,7 @@ struct SaveParkingView: View {
     @State private var showingPhotoSourceDialog = false
     @State private var showingPhotoLibrary = false
     @State private var showingCamera = false
+    @State private var nickname: String = ""
 
     var body: some View {
         NavigationStack {
@@ -23,8 +24,18 @@ struct SaveParkingView: View {
                 if let vm = viewModel {
                     ScrollView {
                         VStack(spacing: 20) {
+                            // Nearby previous visits banner
+                            if !vm.nearbyPreviousVisits.isEmpty {
+                                nearbyBanner(visits: vm.nearbyPreviousVisits)
+                            }
+
                             // Location info card
                             locationCard(vm: vm)
+
+                            // Nickname field (Pro)
+                            if appViewModel.isPro {
+                                nicknameField()
+                            }
 
                             // Notes field
                             notesField(vm: vm)
@@ -211,6 +222,59 @@ struct SaveParkingView: View {
     }
 
     @ViewBuilder
+    private func nearbyBanner(visits: [ParkingLocation]) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "clock.arrow.circlepath")
+                .font(.system(size: 18))
+                .foregroundStyle(DesignTokens.parkCyan)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("You've parked here \(visits.count == 1 ? "before" : "\(visits.count) times before")")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DesignTokens.parkTextPrimary)
+
+                if let last = visits.first {
+                    let notePreview = last.notes.isEmpty ? "" : " · \(last.notes)"
+                    Text("Last: \(last.savedAt.formatted(date: .abbreviated, time: .shortened))\(notePreview)")
+                        .font(.caption)
+                        .foregroundStyle(DesignTokens.parkTextSecondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer()
+        }
+        .padding(14)
+        .background(DesignTokens.parkCyan.opacity(0.12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(DesignTokens.parkCyan.opacity(0.35), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    @ViewBuilder
+    private func nicknameField() -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("Nickname (Optional)", systemImage: "tag.fill")
+                    .font(.headline)
+                    .foregroundStyle(DesignTokens.parkCyan)
+                Spacer()
+                ProBadge()
+            }
+
+            TextField("e.g. Work Garage, Airport Terminal B", text: $nickname)
+                .foregroundStyle(DesignTokens.parkTextPrimary)
+                .font(.body)
+                .autocorrectionDisabled()
+        }
+        .padding(16)
+        .background(DesignTokens.parkSurface)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    @ViewBuilder
     private func timerSection(vm: SaveParkingViewModel) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -242,7 +306,7 @@ struct SaveParkingView: View {
     @ViewBuilder
     private func saveButton(vm: SaveParkingViewModel) -> some View {
         Button {
-            vm.confirmSave { saved in
+            vm.confirmSave(nickname: nickname.trimmingCharacters(in: .whitespaces)) { saved in
                 onSaved(saved)
             }
         } label: {

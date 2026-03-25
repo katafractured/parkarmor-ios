@@ -14,6 +14,7 @@ import Observation
         coordinate: CLLocationCoordinate2D,
         address: String,
         notes: String,
+        nickname: String? = nil,
         photoData: [Data] = [],
         preserveHistory: Bool = true
     ) throws -> ParkingLocation {
@@ -27,6 +28,9 @@ import Observation
             notes: notes,
             isActive: true
         )
+        if let nick = nickname, !nick.trimmingCharacters(in: .whitespaces).isEmpty {
+            location.nickname = nick
+        }
 
         for data in photoData {
             let photo = ParkingPhoto(imageData: data)
@@ -75,6 +79,11 @@ import Observation
 
     func delete(_ location: ParkingLocation) throws {
         context.delete(location)
+        try context.save()
+    }
+
+    func updateNickname(_ location: ParkingLocation, nickname: String?) throws {
+        location.nickname = nickname?.trimmingCharacters(in: .whitespaces).isEmpty == true ? nil : nickname
         try context.save()
     }
 

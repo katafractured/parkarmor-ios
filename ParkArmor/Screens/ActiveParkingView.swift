@@ -10,6 +10,8 @@ struct ActiveParkingView: View {
     @State private var selectedPhotoData: Data?
     @State private var showingTimerPicker = false
     @State private var timerDate = Date().addingTimeInterval(7200)
+    @State private var showingNicknameEditor = false
+    @State private var nicknameDraft: String = ""
 
     var body: some View {
         NavigationStack {
@@ -119,13 +121,39 @@ struct ActiveParkingView: View {
 
     private var addressCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Parked at", systemImage: "car.fill")
-                .font(.caption)
-                .foregroundStyle(DesignTokens.parkTextSecondary)
+            HStack {
+                Label("Parked at", systemImage: "car.fill")
+                    .font(.caption)
+                    .foregroundStyle(DesignTokens.parkTextSecondary)
+
+                Spacer()
+
+                if appViewModel.isPro {
+                    Button {
+                        nicknameDraft = parking.nickname ?? ""
+                        showingNicknameEditor = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "tag")
+                                .font(.caption)
+                            Text(parking.nickname == nil ? "Add Name" : "Rename")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(DesignTokens.parkCyan)
+                    }
+                }
+            }
 
             Text(parking.displayAddress)
                 .font(.title3.bold())
                 .foregroundStyle(DesignTokens.parkTextPrimary)
+
+            // Show raw address as sub-label when a nickname is active
+            if let nick = parking.nickname, !nick.trimmingCharacters(in: .whitespaces).isEmpty {
+                Text(parking.rawAddress)
+                    .font(.caption)
+                    .foregroundStyle(DesignTokens.parkTextSecondary)
+            }
 
             Text(parking.savedAt.formatted(date: .abbreviated, time: .shortened))
                 .font(.caption)
@@ -135,6 +163,22 @@ struct ActiveParkingView: View {
         .padding(16)
         .background(DesignTokens.parkSurface)
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .alert("Name This Spot", isPresented: $showingNicknameEditor) {
+            TextField("e.g. Work Garage, Airport P3", text: $nicknameDraft)
+                .autocorrectionDisabled()
+            Button("Save") {
+                let trimmed = nicknameDraft.trimmingCharacters(in: .whitespaces)
+                try? appViewModel.repository?.updateNickname(parking, nickname: trimmed.isEmpty ? nil : trimmed)
+            }
+            if parking.nickname != nil {
+                Button("Clear Name") {
+                    try? appViewModel.repository?.updateNickname(parking, nickname: nil)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("A custom name makes it easy to spot this location in your history.")
+        }
     }
 
     private var notesCard: some View {

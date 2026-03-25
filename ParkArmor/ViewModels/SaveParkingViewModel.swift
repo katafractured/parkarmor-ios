@@ -16,6 +16,8 @@ import SwiftUI
     var isGeocodingAddress = false
     var error: String?
     var coordinate: CLLocationCoordinate2D?
+    /// Previous visits detected within ~50m of the current save coordinate.
+    var nearbyPreviousVisits: [ParkingLocation] = []
 
     private let mapKitHelper: MapKitHelper
     private let photoManager: PhotoManager
@@ -42,7 +44,19 @@ import SwiftUI
 
     func beginSave(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
-        Task { await geocodeAddress(coordinate: coordinate) }
+        Task {
+            await geocodeAddress(coordinate: coordinate)
+            detectNearbyPreviousVisits(coordinate: coordinate)
+        }
+    }
+
+    private func detectNearbyPreviousVisits(coordinate: CLLocationCoordinate2D) {
+        let clLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let history = (try? repository.fetchHistory(includeActive: false)) ?? []
+        let nearby = history.filter { past in
+            past.clLocation.distance(from: clLocation) < 50 // meters
+        }
+        nearbyPreviousVisits = nearby
     }
 
     private func geocodeAddress(coordinate: CLLocationCoordinate2D) async {
@@ -65,7 +79,7 @@ import SwiftUI
         }
     }
 
-    func confirmSave(onSuccess: @escaping (ParkingLocation) -> Void) {
+    func confirmSave(nickname: String = "", onSuccess: @escaping (ParkingLocation) -> Void) {
         guard let coordinate else {
             error = "Location unavailable."
             return
@@ -78,6 +92,7 @@ import SwiftUI
                     coordinate: coordinate,
                     address: address,
                     notes: notes,
+                    nickname: nickname.isEmpty ? nil : nickname,
                     photoData: photoData,
                     preserveHistory: preferences.saveParkingHistory
                 )

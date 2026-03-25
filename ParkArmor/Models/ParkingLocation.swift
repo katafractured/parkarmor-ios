@@ -12,6 +12,8 @@ import SwiftData
     var isActive: Bool
     var isPinned: Bool
     var isFavorite: Bool
+    /// Optional user-assigned name, e.g. "Work Garage" or "Airport Terminal B".
+    var nickname: String?
 
     @Relationship(deleteRule: .cascade, inverse: \ParkingPhoto.location)
     var photos: [ParkingPhoto]
@@ -46,7 +48,16 @@ import SwiftData
         CLLocation(latitude: latitude, longitude: longitude)
     }
 
+    /// Primary display label — shows nickname if set, otherwise the geocoded address.
     var displayAddress: String {
+        if let nick = nickname, !nick.trimmingCharacters(in: .whitespaces).isEmpty {
+            return nick
+        }
+        return address.isEmpty ? String(format: "%.4f°, %.4f°", latitude, longitude) : address
+    }
+
+    /// Always returns the raw geocoded address (for sub-labels showing the actual street).
+    var rawAddress: String {
         address.isEmpty ? String(format: "%.4f°, %.4f°", latitude, longitude) : address
     }
 }

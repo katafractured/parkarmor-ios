@@ -8,45 +8,66 @@ struct MapScreenView: View {
     @State private var showingPaywall = false
     @State private var showingActiveParking = false
     @State private var allLocations: [ParkingLocation] = []
+    @State private var mapSpan: MKCoordinateSpan = .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
 
     var body: some View {
         ZStack(alignment: .bottom) {
             // Full-screen map
-            Map(position: $mapVM.cameraPosition) {
-                UserAnnotation()
+            MapReader { proxy in
+                Map(position: $mapVM.cameraPosition) {
+                    UserAnnotation()
 
-                ForEach(allLocations) { location in
-                    Annotation(
-                        location.displayAddress,
-                        coordinate: location.coordinate
-                    ) {
-                        Button {
-                            if !location.isActive && appViewModel.requiresPro(feature: "history") {
-                                return
+                    // Active parking — always show individually
+                    ForEach(allLocations.filter(\.isActive)) { location in
+                        Annotation(location.displayAddress, coordinate: location.coordinate) {
+                            Button {
+                                mapVM.centerOn(parking: location)
+                                showingActiveParking = true
+                            } label: {
+                                ParkingPinView(isActive: true)
                             }
-                            mapVM.centerOn(parking: location)
-                            showingActiveParking = location.isActive
-                        } label: {
-                            ParkingPinView(isActive: location.isActive)
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Active parking location")
+                            .accessibilityHint("Opens your active parking details")
+                            .accessibilityValue(location.displayAddress)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(location.isActive ? "Active parking location" : "Parking history location")
-                        .accessibilityHint(location.isActive ? "Opens your active parking details" : "Opens this saved parking location")
-                        .accessibilityValue(location.displayAddress)
-                        .simultaneousGesture(TapGesture().onEnded {
-                            if !location.isActive && appViewModel.requiresPro(feature: "history") {
-                                return
+                    }
+
+                    // History — clustered
+                    if appViewModel.isPro {
+                        let historyClusters = mapVM.clusters(for: allLocations, span: mapSpan)
+                        ForEach(historyClusters) { cluster in
+                            if cluster.isSingle, let location = cluster.single {
+                                Annotation(location.displayAddress, coordinate: cluster.coordinate) {
+                                    Button {
+                                        mapVM.centerOn(parking: location)
+                                        showingActiveParking = false
+                                    } label: {
+                                        ParkingPinView(isActive: false)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Parking history location")
+                                    .accessibilityValue(location.displayAddress)
+                                }
+                            } else {
+                                Annotation("\(cluster.count) spots", coordinate: cluster.coordinate) {
+                                    ClusterPinView(count: cluster.count)
+                                        .accessibilityLabel("\(cluster.count) past parking locations")
+                                }
                             }
-                        })
+                        }
                     }
                 }
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                    MapScaleView()
+                }
+                .ignoresSafeArea()
+                .onMapCameraChange { context in
+                    mapSpan = context.region.span
+                }
             }
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
-                MapScaleView()
-            }
-            .ignoresSafeArea()
 
             // Active parking banner
             if let active = appViewModel.activeParking {
@@ -150,6 +171,29 @@ private struct ParkingPinView: View {
                 .foregroundStyle(isActive ? DesignTokens.parkAccentForeground : DesignTokens.parkTextPrimary)
         }
         .shadow(color: isActive ? DesignTokens.parkCyan.opacity(0.5) : .clear, radius: 8)
+    }
+}
+
+// MARK: - Cluster Pin
+
+private struct ClusterPinView: View {
+    let count: Int
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.gray.opacity(0.55))
+                .frame(width: 40, height: 40)
+                .overlay(
+                    Circle()
+                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 1.5)
+                )
+
+            Text("\(count)")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(.white)
+        }
+        .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
     }
 }
 

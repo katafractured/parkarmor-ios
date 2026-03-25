@@ -19,10 +19,10 @@ struct HistoryScreenView: View {
 
                 Group {
                     if let vm = viewModel {
-                        if vm.locations.isEmpty {
+                        if vm.locations.isEmpty && vm.searchQuery.isEmpty {
                             emptyState
                         } else {
-                            historyList(vm: vm)
+                            historyContent(vm: vm)
                         }
                     } else {
                         ProgressView().tint(DesignTokens.parkCyan)
@@ -41,7 +41,7 @@ struct HistoryScreenView: View {
                     }
                 }
 
-                if let vm = viewModel, !vm.locations.isEmpty {
+                if let vm = viewModel, !vm.locations.isEmpty || !vm.searchQuery.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             if appViewModel.isPro {
@@ -132,36 +132,114 @@ struct HistoryScreenView: View {
     }
 
     @ViewBuilder
-    private func historyList(vm: HistoryViewModel) -> some View {
+    private func historyContent(vm: HistoryViewModel) -> some View {
         ScrollView {
-            LazyVStack(spacing: 12) {
-                if !appViewModel.isPro && vm.availableHistoryCount > vm.locations.count {
-                    upgradeCard(hiddenCount: vm.availableHistoryCount - vm.locations.count)
+            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                // Search bar (Pro)
+                if appViewModel.isPro {
+                    searchBar(vm: vm)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        .padding(.bottom, 4)
                 }
 
-                ForEach(vm.locations) { location in
-                    HistoryRowView(
-                        location: location,
-                        currentLocation: appViewModel.locationManager.currentLocation,
-                        distanceUnit: appViewModel.preferences.distanceUnit,
-                        isPro: appViewModel.isPro,
-                        onReactivate: {
-                            vm.reactivate(location)
-                            onReactivated?(location)
-                            if showsDismissButton {
-                                dismiss()
+                // Upgrade nudge for free users
+                if !appViewModel.isPro && vm.availableHistoryCount > vm.locations.count {
+                    upgradeCard(hiddenCount: vm.availableHistoryCount - vm.locations.count)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        .padding(.bottom, 4)
+                }
+
+                if vm.locations.isEmpty && !vm.searchQuery.isEmpty {
+                    // No search results
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.4))
+                        Text("No results for \"\(vm.searchQuery)\"")
+                            .font(.subheadline)
+                            .foregroundStyle(DesignTokens.parkTextSecondary)
+                    }
+                    .padding(.top, 60)
+                } else {
+                    // Grouped sections
+                    ForEach(vm.groupedLocations, id: \.label) { group in
+                        Section {
+                            ForEach(group.locations) { location in
+                                HistoryRowView(
+                                    location: location,
+                                    currentLocation: appViewModel.locationManager.currentLocation,
+                                    distanceUnit: appViewModel.preferences.distanceUnit,
+                                    isPro: appViewModel.isPro,
+                                    onReactivate: {
+                                        vm.reactivate(location)
+                                        onReactivated?(location)
+                                        if showsDismissButton {
+                                            dismiss()
+                                        }
+                                    },
+                                    onDelete: { vm.delete(location) },
+                                    onToggleFavorite: { vm.toggleFavorite(location) },
+                                    onUpgrade: { showingPaywall = true },
+                                    onNicknameChanged: { newNickname in
+                                        try? appViewModel.repository?.updateNickname(location, nickname: newNickname)
+                                    }
+                                )
+                                .padding(.horizontal, 16)
+                                .padding(.bottom, 10)
                             }
-                        },
-                        onDelete: { vm.delete(location) },
-                        onToggleFavorite: { vm.toggleFavorite(location) },
-                        onUpgrade: { showingPaywall = true }
-                    )
+                        } header: {
+                            HStack {
+                                Text(group.label)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(DesignTokens.parkTextSecondary)
+                                    .textCase(nil)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 6)
+                            .background(DesignTokens.parkNavy)
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 12)
             .padding(.bottom, 40)
         }
+    }
+
+    @ViewBuilder
+    private func searchBar(vm: HistoryViewModel) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(DesignTokens.parkTextSecondary)
+                .font(.system(size: 15))
+
+            TextField("Search address or notes…", text: Binding(
+                get: { vm.searchQuery },
+                set: {
+                    vm.searchQuery = $0
+                    vm.load()
+                }
+            ))
+            .foregroundStyle(DesignTokens.parkTextPrimary)
+            .font(.subheadline)
+            .autocorrectionDisabled()
+
+            if !vm.searchQuery.isEmpty {
+                Button {
+                    vm.searchQuery = ""
+                    vm.load()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(DesignTokens.parkTextSecondary)
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(DesignTokens.parkSurface)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private func upgradeCard(hiddenCount: Int) -> some View {
@@ -170,7 +248,7 @@ struct HistoryScreenView: View {
                 .font(.headline)
                 .foregroundStyle(DesignTokens.parkTextPrimary)
 
-            Text("Upgrade to unlock \(hiddenCount) more saved spot\(hiddenCount == 1 ? "" : "s"), favorites, and longer retention.")
+            Text("Upgrade to unlock \(hiddenCount) more saved spot\(hiddenCount == 1 ? "" : "s"), search, nicknames, and longer retention.")
                 .font(.subheadline)
                 .foregroundStyle(DesignTokens.parkTextSecondary)
 
@@ -192,6 +270,8 @@ struct HistoryScreenView: View {
     }
 }
 
+// MARK: - History Row
+
 private struct HistoryRowView: View {
     let location: ParkingLocation
     let currentLocation: CLLocation?
@@ -201,6 +281,10 @@ private struct HistoryRowView: View {
     var onDelete: () -> Void
     var onToggleFavorite: () -> Void
     var onUpgrade: () -> Void
+    var onNicknameChanged: (String?) -> Void
+
+    @State private var showingNicknameEditor = false
+    @State private var nicknameDraft: String = ""
 
     var distanceText: String? {
         guard let current = currentLocation else { return nil }
@@ -220,7 +304,8 @@ private struct HistoryRowView: View {
                     .foregroundStyle(location.isActive ? DesignTokens.parkCyan : DesignTokens.parkTextSecondary)
             }
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
+                // Primary label (nickname or address)
                 HStack(spacing: 6) {
                     Text(location.displayAddress)
                         .font(.subheadline.weight(.semibold))
@@ -234,6 +319,15 @@ private struct HistoryRowView: View {
                     }
                 }
 
+                // Show raw address as sub-label when nickname is active
+                if let nick = location.nickname, !nick.trimmingCharacters(in: .whitespaces).isEmpty {
+                    Text(location.rawAddress)
+                        .font(.caption)
+                        .foregroundStyle(DesignTokens.parkTextSecondary)
+                        .lineLimit(1)
+                }
+
+                // Date + distance
                 HStack(spacing: 8) {
                     Text(location.savedAt.formatted(date: .abbreviated, time: .shortened))
                         .font(.caption)
@@ -246,6 +340,15 @@ private struct HistoryRowView: View {
                             .font(.caption)
                             .foregroundStyle(DesignTokens.parkTextSecondary)
                     }
+                }
+
+                // Notes preview (if any)
+                if !location.notes.isEmpty {
+                    Text(location.notes)
+                        .font(.caption)
+                        .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.85))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
                 }
             }
 
@@ -268,8 +371,17 @@ private struct HistoryRowView: View {
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if !location.isActive {
                 if isPro {
+                    Button {
+                        nicknameDraft = location.nickname ?? ""
+                        showingNicknameEditor = true
+                    } label: {
+                        Label("Rename", systemImage: "pencil")
+                    }
+                    .tint(DesignTokens.parkBlue)
+
                     Button(action: onToggleFavorite) {
-                        Label(location.isFavorite ? "Unfavorite" : "Favorite", systemImage: location.isFavorite ? "star.slash" : "star")
+                        Label(location.isFavorite ? "Unfavorite" : "Favorite",
+                              systemImage: location.isFavorite ? "star.slash" : "star")
                     }
                     .tint(.yellow)
                 } else {
@@ -284,6 +396,20 @@ private struct HistoryRowView: View {
                 }
                 .tint(DesignTokens.parkAccentText)
             }
+        }
+        .alert("Rename Location", isPresented: $showingNicknameEditor) {
+            TextField("e.g. Work Garage, Airport P3", text: $nicknameDraft)
+                .autocorrectionDisabled()
+            Button("Save") {
+                let trimmed = nicknameDraft.trimmingCharacters(in: .whitespaces)
+                onNicknameChanged(trimmed.isEmpty ? nil : trimmed)
+            }
+            Button("Clear Name") {
+                onNicknameChanged(nil)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Give this spot a custom name to find it faster.")
         }
     }
 }
