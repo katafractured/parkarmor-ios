@@ -1,0 +1,23 @@
+# Xcode user-specific data (never belongs in source control)
+xcuserdata/
+*.xcuserdatad/
+
+# Build products
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Loose/temp files
+*.png.tmp
+"PNG image.png"
+PNG\ image.png
