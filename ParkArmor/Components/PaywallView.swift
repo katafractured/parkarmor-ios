@@ -113,6 +113,23 @@ struct PaywallView: View {
                     Text("One-time purchase • No subscription")
                         .font(.caption2)
                         .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.5))
+
+                    // Required by App Store Review Guideline 3.1.1
+                    HStack(spacing: 16) {
+                        Button("Privacy Policy") {
+                            if let url = URL(string: "https://katafract.com/privacy/parkarmor") {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                        Text("·")
+                        Button("Terms of Service") {
+                            if let url = URL(string: "https://katafract.com/terms/parkarmor") {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.4))
                 }
                 .padding(.bottom, 40)
             }

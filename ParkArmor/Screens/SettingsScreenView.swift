@@ -200,13 +200,13 @@ struct SettingsScreenView: View {
             settingsLinkRow(
                 title: "Privacy Policy",
                 systemImage: "lock.shield",
-                urlString: "https://katafract.com/privacy-parkarmor.html"
+                urlString: "https://katafract.com/privacy/parkarmor"
             )
 
             settingsLinkRow(
                 title: "Terms of Service",
                 systemImage: "doc.text",
-                urlString: "https://katafract.com/terms-parkarmor"
+                urlString: "https://katafract.com/terms/parkarmor"
             )
 
             HStack(spacing: 12) {

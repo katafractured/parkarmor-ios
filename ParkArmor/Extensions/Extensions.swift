@@ -57,9 +57,11 @@ enum DesignTokens {
     static let parkTabBarAccent = Color(
         uiColor: UIColor { traits in
             if traits.userInterfaceStyle == .dark {
-                return UIColor(red: 0.63, green: 0.84, blue: 0.92, alpha: 1.0)
+                // Bright saturated cyan — high contrast against dark navy background
+                return UIColor(red: 0.20, green: 0.85, blue: 1.00, alpha: 1.0)
             }
-            return UIColor(red: 0.71, green: 0.84, blue: 0.92, alpha: 1.0)
+            // Light mode: deep teal for contrast against the dark tab bar
+            return UIColor(red: 0.10, green: 0.72, blue: 0.90, alpha: 1.0)
         }
     )
     static let parkSurface = Color(uiColor: .secondarySystemBackground)
