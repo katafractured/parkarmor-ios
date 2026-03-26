@@ -21,3 +21,12 @@ Podfile.lock
 *.png.tmp
 "PNG image.png"
 PNG\ image.png
+
+# macOS filesystem noise
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# Local agent workflow notes
+.agent-rules.md
