@@ -69,7 +69,7 @@ private struct WatchActiveParkingView: View {
                     Text(parking.elapsedString)
                         .font(.caption2)
                 }
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.75))
 
                 if let bearing = viewModel.bearingToParking {
                     WatchCompassView(bearing: bearing)
@@ -100,7 +100,7 @@ private struct WatchCompassView: View {
     var body: some View {
         ZStack {
             Circle()
-                .strokeBorder(.cyan.opacity(0.3), lineWidth: 1.5)
+                .strokeBorder(.cyan.opacity(0.65), lineWidth: 2)
                 .frame(width: 60, height: 60)
 
             Image(systemName: "arrow.up")

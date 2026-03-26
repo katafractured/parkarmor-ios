@@ -76,7 +76,7 @@ struct MapScreenView: View {
                     showingActiveParking = true
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 100)
+                .padding(.bottom, 120)
             }
 
             // FAB — park here
@@ -187,7 +187,7 @@ private struct ParkingPinView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(isActive ? DesignTokens.parkCyan : Color.gray.opacity(0.4))
+                .fill(isActive ? DesignTokens.parkCyan : Color.gray.opacity(0.75))
                 .frame(width: 36, height: 36)
 
             Image(systemName: isActive ? "car.fill" : "clock.arrow.circlepath")
@@ -206,11 +206,11 @@ private struct ClusterPinView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.gray.opacity(0.55))
+                .fill(Color.gray.opacity(0.82))
                 .frame(width: 40, height: 40)
                 .overlay(
                     Circle()
-                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 1.5)
+                        .strokeBorder(Color.white.opacity(0.55), lineWidth: 1.5)
                 )
 
             Text("\(count)")
@@ -231,7 +231,7 @@ private struct ActiveParkingBanner: View {
         Button(action: onTap) {
             HStack(spacing: 12) {
                 Image(systemName: "car.fill")
-                    .font(.system(size: 18))
+                    .font(.system(size: 20))
                     .foregroundStyle(DesignTokens.parkCyan)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -247,16 +247,17 @@ private struct ActiveParkingBanner: View {
 
                 Image(systemName: "chevron.right")
                     .font(.caption.bold())
-                    .foregroundStyle(DesignTokens.parkTextSecondary)
+                    .foregroundStyle(DesignTokens.parkCyan)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(.ultraThinMaterial)
+            .padding(.vertical, 14)
+            .background(DesignTokens.parkSurface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .strokeBorder(DesignTokens.parkCyan.opacity(0.3), lineWidth: 1)
+                    .strokeBorder(DesignTokens.parkCyan.opacity(0.65), lineWidth: 1.5)
             )
+            .shadow(color: .black.opacity(0.2), radius: 8, y: 2)
         }
     }
 }
