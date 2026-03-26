@@ -22,6 +22,13 @@ Podfile.lock
 "PNG image.png"
 PNG\ image.png
 
+# Distribution config (contains signing identity — keep local)
+ExportOptions.plist
+
+# Icon generation scripts (dev tooling, not part of app source)
+generate_icon.swift
+generate_icon_v2.py
+
 # macOS filesystem noise
 .DS_Store
 ._*

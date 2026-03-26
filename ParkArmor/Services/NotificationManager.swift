@@ -81,7 +81,7 @@ import Observation
         authorizationStatus == .authorized || authorizationStatus == .provisional
     }
 
-    private func notificationBody(locationName: String, minutesBefore: Int?) -> String {
+    func notificationBody(locationName: String, minutesBefore: Int?) -> String {
         if let minutesBefore {
             if locationName.isEmpty {
                 return "Your parking meter expires in \(minutesBefore) minutes."
@@ -95,7 +95,7 @@ import Observation
         return "Meter at \(locationName) is about to expire."
     }
 
-    private func notificationIdentifier(for parkingId: UUID, suffix: Int) -> String {
+    func notificationIdentifier(for parkingId: UUID, suffix: Int) -> String {
         "parking-timer-\(parkingId.uuidString)-\(suffix)"
     }
 }
