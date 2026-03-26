@@ -46,7 +46,7 @@ import Observation
         detectionState = .idle
     }
 
-    private func handleActivityUpdate(_ activity: CMMotionActivity) {
+    func handleActivityUpdate(_ activity: CMMotionActivity) {
         if activity.automotive && activity.confidence != .low {
             detectionState = .driving
             lastDrivingDate = activity.startDate

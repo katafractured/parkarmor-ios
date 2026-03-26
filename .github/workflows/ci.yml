@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Privacy Lint ─────────────────────────────────────────────────────────────
+  privacy-lint:
+    name: Privacy Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify no unauthorized URLSession usage
+        run: |
+          # Only the StoreKit manager is allowed to make network calls (App Store validation).
+          # Flag any URLSession usage outside that file.
+          VIOLATIONS=$(grep -rl "URLSession\|URLRequest\|Network\.framework" \
+            --include="*.swift" \
+            ParkArmor/ ParkArmorWidgetExtension/ \
+            "ParkArmorWatch Watch App/" \
+            ParkArmorWatchComplication/ \
+            | grep -v "ParkArmor/Services/StoreKitManager.swift" || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ Unauthorized network calls found in:"
+            echo "$VIOLATIONS"
+            exit 1
+          fi
+          echo "✅ No unauthorized network calls found."
+
+      - name: Verify no analytics SDKs
+        run: |
+          ANALYTICS_PATTERNS="Firebase|Mixpanel|Amplitude|Segment|AppsFlyer|Crashlytics|Sentry|Datadog"
+          VIOLATIONS=$(grep -rl "$ANALYTICS_PATTERNS" \
+            --include="*.swift" --include="Package.swift" --include="Podfile" \
+            . || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ Analytics SDK references found in:"
+            echo "$VIOLATIONS"
+            exit 1
+          fi
+          echo "✅ No analytics SDKs detected."
+
+      - name: Verify no iCloud / CloudKit usage
+        run: |
+          VIOLATIONS=$(grep -rl "CloudKit\|NSUbiquitousKeyValueStore\|NSPersistentCloudKitContainer" \
+            --include="*.swift" \
+            . || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "❌ CloudKit / iCloud usage found in:"
+            echo "$VIOLATIONS"
+            exit 1
+          fi
+          echo "✅ No CloudKit usage detected."
+
+  # ── Build & Test ─────────────────────────────────────────────────────────────
+  build-and-test:
+    name: Build & Test (iOS ${{ matrix.ios }})
+    runs-on: macos-15
+    strategy:
+      matrix:
+        ios: ["18.4"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+
+      - name: Show build environment
+        run: |
+          xcodebuild -version
+          xcrun simctl list devices available | grep -E "iPhone 1[6-9]|iPhone 2" | head -5
+
+      - name: Resolve package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            | grep -E "error:|warning:|Resolved" || true
+
+      - name: Build (no signing)
+        run: |
+          xcodebuild build \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color || xcodebuild build \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run unit tests
+        run: |
+          xcodebuild test \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            -only-testing:ParkArmorTests \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color --report junit --output test-results.xml || \
+          xcodebuild test \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            -only-testing:ParkArmorTests \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-ios-${{ matrix.ios }}
+          path: test-results.xml
+          retention-days: 14
+
+  # ── Archive (main branch only) ───────────────────────────────────────────────
+  archive:
+    name: Archive
+    runs-on: macos-15
+    needs: [privacy-lint, build-and-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+
+      - name: Archive (no signing)
+        run: |
+          xcodebuild archive \
+            -project ParkArmor.xcodeproj \
+            -scheme ParkArmor \
+            -destination "generic/platform=iOS" \
+            -archivePath build/ParkArmor.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            SKIP_INSTALL=NO
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ParkArmor-archive
+          path: build/ParkArmor.xcarchive
+          retention-days: 30
