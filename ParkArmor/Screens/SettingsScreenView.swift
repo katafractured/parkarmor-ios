@@ -82,7 +82,7 @@ struct SettingsScreenView: View {
     }
 
     private var subscriptionSection: some View {
-        Section("Subscription") {
+        Section("Pro Access") {
             if appViewModel.isPro {
                 HStack(spacing: 12) {
                     Image(systemName: "shield.checkered")
