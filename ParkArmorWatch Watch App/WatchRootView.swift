@@ -38,9 +38,14 @@ private struct WatchNoParkingView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(.cyan)
-            .disabled(viewModel.isSavingParking)
+            .disabled(viewModel.isSavingParking || !viewModel.isPhoneReachable)
 
-            if let error = viewModel.saveError {
+            if !viewModel.isPhoneReachable {
+                Text("iPhone not in range")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            } else if let error = viewModel.saveError {
                 Text(error)
                     .font(.caption2)
                     .foregroundStyle(.red)
@@ -99,9 +104,14 @@ private struct WatchActiveParkingView: View {
                             .font(.caption.bold())
                     }
                 }
-                .disabled(viewModel.isEndingParking)
+                .disabled(viewModel.isEndingParking || !viewModel.isPhoneReachable)
 
-                if let error = viewModel.endError {
+                if !viewModel.isPhoneReachable {
+                    Text("iPhone not in range")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                } else if let error = viewModel.endError {
                     Text(error)
                         .font(.caption2)
                         .foregroundStyle(.red)
