@@ -58,6 +58,9 @@ extension LocationManager: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         currentLocation = location
         locationError = nil
+        let defaults = UserDefaults(suiteName: "group.com.katafract.ParkArmor")
+        defaults?.set(location.coordinate.latitude, forKey: "lastKnownLatitude")
+        defaults?.set(location.coordinate.longitude, forKey: "lastKnownLongitude")
 
         if let continuation = locationContinuation {
             locationContinuation = nil

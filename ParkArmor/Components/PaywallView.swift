@@ -76,7 +76,7 @@ struct PaywallView: View {
                                 Text("Get ParkArmor Pro")
                                     .font(.headline)
                                 Spacer()
-                                Text(storeKit.proProduct?.displayPrice ?? "$2.99")
+                                Text(storeKit.proProduct?.displayPrice ?? "$3.99")
                                     .font(.headline)
                             }
                         }

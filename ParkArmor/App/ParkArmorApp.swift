@@ -23,12 +23,12 @@ struct ParkArmorApp: App {
             storeURL = URL.applicationSupportDirectory.appendingPathComponent("parkarmor.store")
         }
 
-        let config = ModelConfiguration(schema: schema, url: storeURL)
+        let config = ModelConfiguration(nil, schema: schema, url: storeURL)
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
             // If migration fails, wipe and start fresh (acceptable for local-only data).
-            let wipeConfig = ModelConfiguration(schema: schema, url: storeURL, allowsSave: true)
+            let wipeConfig = ModelConfiguration(nil, schema: schema, url: storeURL, allowsSave: true)
             return (try? ModelContainer(for: schema, configurations: [wipeConfig]))
                 ?? (try! ModelContainer(for: schema))
         }

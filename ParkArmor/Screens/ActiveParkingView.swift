@@ -1,3 +1,4 @@
+import ARKit
 import SwiftUI
 
 struct ActiveParkingView: View {
@@ -311,6 +312,24 @@ struct ActiveParkingView: View {
                     .background(DesignTokens.parkCyan)
                     .foregroundStyle(DesignTokens.parkAccentForeground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+
+            if ARWorldTrackingConfiguration.isSupported {
+                NavigationLink {
+                    ARWalkBackView(parking: parking)
+                } label: {
+                    Label("AR Walk-Back", systemImage: "arkit")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(DesignTokens.parkSurface)
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .strokeBorder(DesignTokens.parkCyan.opacity(0.35), lineWidth: 1)
+                        )
+                }
             }
 
             if appViewModel.isPro {

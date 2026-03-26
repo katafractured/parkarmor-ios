@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BCA03C912F74B6D900772D5A /* ParkArmorWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D952F74BC5E00772D5A /* WidgetKit.framework */; };
+		BCA03D982F74BC5F00772D5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D972F74BC5F00772D5A /* SwiftUI.framework */; };
+		BCA03DA52F74BC6400772D5A /* ParkArmorWatchComplicationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -17,6 +21,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = AA000009AA000009AA000009;
 			remoteInfo = ParkArmorWidgetExtension;
+		};
+		BCA03C7E2F74B6D900772D5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA03C702F74B6D600772D5A;
+			remoteInfo = "ParkArmorWatch Watch App";
+		};
+		BCA03C882F74B6D900772D5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA03C702F74B6D600772D5A;
+			remoteInfo = "ParkArmorWatch Watch App";
+		};
+		BCA03C8F2F74B6D900772D5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA03C702F74B6D600772D5A;
+			remoteInfo = "ParkArmorWatch Watch App";
+		};
+		BCA03DA32F74BC6400772D5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BCA03D922F74BC5E00772D5A;
+			remoteInfo = ParkArmorWatchComplicationExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -32,17 +64,65 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BCA03C922F74B6D900772D5A /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				BCA03C912F74B6D900772D5A /* ParkArmorWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03DA62F74BC6400772D5A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BCA03DA52F74BC6400772D5A /* ParkArmorWatchComplicationExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ParkArmorWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWatchComplicationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA03D952F74BC5E00772D5A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		BCA03D972F74BC5F00772D5A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkArmor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BCA03DA92F74BC6400772D5A /* Exceptions for "ParkArmorWatchComplication" folder in "ParkArmorWatchComplicationExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BCA03D922F74BC5E00772D5A /* ParkArmorWatchComplicationExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmor;
+			sourceTree = "<group>";
+		};
+		6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ParkArmor/Extensions;
+			sourceTree = "<group>";
+		};
+		6E7F10026E7F10026E7F1002 /* ParkArmor/Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ParkArmor/Models;
 			sourceTree = "<group>";
 		};
 		AA000003AA000003AA000003 /* ParkArmorWidgetExtension */ = {
@@ -53,6 +133,29 @@
 		AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmor/ParkArmorShared;
+			sourceTree = "<group>";
+		};
+		BCA03C722F74B6D600772D5A /* ParkArmorWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "ParkArmorWatch Watch App";
+			sourceTree = "<group>";
+		};
+		BCA03C802F74B6D900772D5A /* ParkArmorWatch Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "ParkArmorWatch Watch AppTests";
+			sourceTree = "<group>";
+		};
+		BCA03C8A2F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "ParkArmorWatch Watch AppUITests";
+			sourceTree = "<group>";
+		};
+		BCA03D992F74BC5F00772D5A /* ParkArmorWatchComplication */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BCA03DA92F74BC6400772D5A /* Exceptions for "ParkArmorWatchComplication" folder in "ParkArmorWatchComplicationExtension" target */,
+			);
+			path = ParkArmorWatchComplication;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -72,6 +175,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BCA03C6E2F74B6D600772D5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C7A2F74B6D900772D5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C842F74B6D900772D5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03D902F74BC5E00772D5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCA03D982F74BC5F00772D5A /* SwiftUI.framework in Frameworks */,
+				BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -80,6 +213,10 @@
 			children = (
 				F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */,
 				AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */,
+				BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */,
+				BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */,
+				BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */,
+				BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,6 +226,11 @@
 			children = (
 				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
 				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
+				BCA03C722F74B6D600772D5A /* ParkArmorWatch Watch App */,
+				BCA03C802F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
+				BCA03C8A2F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
+				BCA03D992F74BC5F00772D5A /* ParkArmorWatchComplication */,
+				BCA03D942F74BC5E00772D5A /* Frameworks */,
 				40B17B783B7240E29058D7D7 /* Products */,
 				BC380CC92F7259AA00CE6623 /* Recovered References */,
 			);
@@ -98,8 +240,19 @@
 			isa = PBXGroup;
 			children = (
 				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
+				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
+				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		BCA03D942F74BC5E00772D5A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BCA03D952F74BC5E00772D5A /* WidgetKit.framework */,
+				BCA03D972F74BC5F00772D5A /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +271,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
+				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
 				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
 				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
 			);
@@ -128,6 +283,98 @@
 			productReference = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCA03C992F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch App" */;
+			buildPhases = (
+				BCA03C6D2F74B6D600772D5A /* Sources */,
+				BCA03C6E2F74B6D600772D5A /* Frameworks */,
+				BCA03C6F2F74B6D600772D5A /* Resources */,
+				BCA03DA62F74BC6400772D5A /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BCA03DA42F74BC6400772D5A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BCA03C722F74B6D600772D5A /* ParkArmorWatch Watch App */,
+			);
+			name = "ParkArmorWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "ParkArmorWatch Watch App";
+			productReference = BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BCA03C7C2F74B6D900772D5A /* ParkArmorWatch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCA03C9A2F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch AppTests" */;
+			buildPhases = (
+				BCA03C792F74B6D900772D5A /* Sources */,
+				BCA03C7A2F74B6D900772D5A /* Frameworks */,
+				BCA03C7B2F74B6D900772D5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BCA03C7F2F74B6D900772D5A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BCA03C802F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
+			);
+			name = "ParkArmorWatch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "ParkArmorWatch Watch AppTests";
+			productReference = BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BCA03C862F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCA03C9B2F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch AppUITests" */;
+			buildPhases = (
+				BCA03C832F74B6D900772D5A /* Sources */,
+				BCA03C842F74B6D900772D5A /* Frameworks */,
+				BCA03C852F74B6D900772D5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BCA03C892F74B6D900772D5A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BCA03C8A2F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
+			);
+			name = "ParkArmorWatch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "ParkArmorWatch Watch AppUITests";
+			productReference = BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		BCA03D922F74BC5E00772D5A /* ParkArmorWatchComplicationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCA03DAA2F74BC6400772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatchComplicationExtension" */;
+			buildPhases = (
+				BCA03D8F2F74BC5E00772D5A /* Sources */,
+				BCA03D902F74BC5E00772D5A /* Frameworks */,
+				BCA03D912F74BC5E00772D5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BCA03D992F74BC5F00772D5A /* ParkArmorWatchComplication */,
+			);
+			name = ParkArmorWatchComplicationExtension;
+			packageProductDependencies = (
+			);
+			productName = ParkArmorWatchComplicationExtension;
+			productReference = BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E82BEB1FFB51493EAF25C3E2 /* ParkArmor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DF98AF3056A84F87BBDCF472 /* Build configuration list for PBXNativeTarget "ParkArmor" */;
@@ -136,11 +383,13 @@
 				BBA1907E3AE04C8B9CC5C41F /* Frameworks */,
 				1A3C90841736490D85B6D31F /* Resources */,
 				AA000008AA000008AA000008 /* Embed Foundation Extensions */,
+				BCA03C922F74B6D900772D5A /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				AA00000BAA00000BAA00000B /* PBXTargetDependency */,
+				BCA03C902F74B6D900772D5A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
@@ -159,11 +408,25 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					AA000009AA000009AA000009 = {
 						CreatedOnToolsVersion = 26.3;
+					};
+					BCA03C702F74B6D600772D5A = {
+						CreatedOnToolsVersion = 26.4;
+					};
+					BCA03C7C2F74B6D900772D5A = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = BCA03C702F74B6D600772D5A;
+					};
+					BCA03C862F74B6D900772D5A = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = BCA03C702F74B6D600772D5A;
+					};
+					BCA03D922F74BC5E00772D5A = {
+						CreatedOnToolsVersion = 26.4;
 					};
 					E82BEB1FFB51493EAF25C3E2 = {
 						CreatedOnToolsVersion = 26.3;
@@ -186,6 +449,10 @@
 			targets = (
 				E82BEB1FFB51493EAF25C3E2 /* ParkArmor */,
 				AA000009AA000009AA000009 /* ParkArmorWidgetExtension */,
+				BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */,
+				BCA03C7C2F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
+				BCA03C862F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
+				BCA03D922F74BC5E00772D5A /* ParkArmorWatchComplicationExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -199,6 +466,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA000006AA000006AA000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C6F2F74B6D600772D5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C7B2F74B6D900772D5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C852F74B6D900772D5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03D912F74BC5E00772D5A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -222,6 +517,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BCA03C6D2F74B6D600772D5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C792F74B6D900772D5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03C832F74B6D900772D5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCA03D8F2F74BC5E00772D5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -229,6 +552,26 @@
 			isa = PBXTargetDependency;
 			target = AA000009AA000009AA000009 /* ParkArmorWidgetExtension */;
 			targetProxy = AA00000AAA00000AAA00000A /* PBXContainerItemProxy */;
+		};
+		BCA03C7F2F74B6D900772D5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */;
+			targetProxy = BCA03C7E2F74B6D900772D5A /* PBXContainerItemProxy */;
+		};
+		BCA03C892F74B6D900772D5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */;
+			targetProxy = BCA03C882F74B6D900772D5A /* PBXContainerItemProxy */;
+		};
+		BCA03C902F74B6D900772D5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */;
+			targetProxy = BCA03C8F2F74B6D900772D5A /* PBXContainerItemProxy */;
+		};
+		BCA03DA42F74BC6400772D5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BCA03D922F74BC5E00772D5A /* ParkArmorWatchComplicationExtension */;
+			targetProxy = BCA03DA32F74BC6400772D5A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -242,15 +585,16 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
-				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot and show AR guidance back to your car.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "ParkArmor uses motion data to automatically detect when you've parked your car.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -261,7 +605,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -321,7 +665,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -385,7 +729,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -404,17 +748,17 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWidgetExtension/ParkArmorWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.widgetextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -435,17 +779,17 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWidgetExtension/ParkArmorWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.widgetextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -459,6 +803,238 @@
 			};
 			name = Release;
 		};
+		BCA03C932F74B6D900772D5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ParkArmorWatch Watch App/ParkArmorWatch.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 16;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatch;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location on Apple Watch to save your parking spot and point you back to your car.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.katafract.ParkArmor;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		BCA03C942F74B6D900772D5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "ParkArmorWatch Watch App/ParkArmorWatch.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 16;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatch;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location on Apple Watch to save your parking spot and point you back to your car.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.katafract.ParkArmor;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		BCA03C952F74B6D900772D5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.katafract.ParkArmorWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParkArmorWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParkArmorWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		BCA03C962F74B6D900772D5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.katafract.ParkArmorWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParkArmorWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParkArmorWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		BCA03C972F74B6D900772D5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.katafract.ParkArmorWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "ParkArmorWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		BCA03C982F74B6D900772D5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2SGGP65W6C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.katafract.ParkArmorWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "ParkArmorWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		BCA03DA72F74BC6400772D5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ParkArmorWatchComplication/ParkArmorWatchComplication.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 16;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkArmorWatchComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatchComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.watchkitapp.ParkArmorWatchComplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		BCA03DA82F74BC6400772D5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ParkArmorWatchComplication/ParkArmorWatchComplication.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 16;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkArmorWatchComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatchComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor.watchkitapp.ParkArmorWatchComplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		EBF9588CAFFD40EE909F2499 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -468,15 +1044,16 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "ParkArmor: Save Your Spot";
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
-				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot or sign.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot and show AR guidance back to your car.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "ParkArmor uses motion data to automatically detect when you've parked your car.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -487,7 +1064,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katafract.ParkArmor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -509,6 +1086,42 @@
 			buildConfigurations = (
 				AA00000CAA00000CAA00000C /* Debug */,
 				AA00000DAA00000DAA00000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCA03C992F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCA03C932F74B6D900772D5A /* Debug */,
+				BCA03C942F74B6D900772D5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCA03C9A2F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCA03C952F74B6D900772D5A /* Debug */,
+				BCA03C962F74B6D900772D5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCA03C9B2F74B6D900772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCA03C972F74B6D900772D5A /* Debug */,
+				BCA03C982F74B6D900772D5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCA03DAA2F74BC6400772D5A /* Build configuration list for PBXNativeTarget "ParkArmorWatchComplicationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCA03DA72F74BC6400772D5A /* Debug */,
+				BCA03DA82F74BC6400772D5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
