@@ -53,6 +53,7 @@ private struct WatchNoParkingView: View {
 private struct WatchActiveParkingView: View {
     @Environment(WatchViewModel.self) private var viewModel
     let parking: WatchViewModel.WatchParkingSnapshot
+    @State private var showingEndConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -87,10 +88,37 @@ private struct WatchActiveParkingView: View {
                         .font(.caption2.bold())
                         .foregroundStyle(.orange)
                 }
+
+                Button(role: .destructive) {
+                    showingEndConfirmation = true
+                } label: {
+                    if viewModel.isEndingParking {
+                        ProgressView()
+                    } else {
+                        Label("End Parking", systemImage: "xmark.circle.fill")
+                            .font(.caption.bold())
+                    }
+                }
+                .disabled(viewModel.isEndingParking)
+
+                if let error = viewModel.endError {
+                    Text(error)
+                        .font(.caption2)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                }
             }
             .padding(.horizontal, 8)
         }
         .navigationTitle("My Car")
+        .alert("End Parking?", isPresented: $showingEndConfirmation) {
+            Button("End", role: .destructive) {
+                viewModel.endParking()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will end your current parking session.")
+        }
     }
 }
 

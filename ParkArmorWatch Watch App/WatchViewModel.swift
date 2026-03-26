@@ -22,6 +22,8 @@ import WidgetKit
     var heading: CLHeading?
     var isSavingParking = false
     var saveError: String?
+    var isEndingParking = false
+    var endError: String?
 
     private let locationManager = CLLocationManager()
 
@@ -110,6 +112,22 @@ import WidgetKit
                 }
             })
         }
+    }
+
+    func endParking() {
+        isEndingParking = true
+        endError = nil
+
+        WCSession.default.sendMessage(["action": "endParking"], replyHandler: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.isEndingParking = false
+            }
+        }, errorHandler: { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isEndingParking = false
+                self?.endError = error.localizedDescription
+            }
+        })
     }
 
     var bearingToParking: Double? {
