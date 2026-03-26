@@ -133,79 +133,81 @@ struct HistoryScreenView: View {
 
     @ViewBuilder
     private func historyContent(vm: HistoryViewModel) -> some View {
-        ScrollView {
-            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                // Search bar (Pro)
-                if appViewModel.isPro {
-                    searchBar(vm: vm)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 12)
-                        .padding(.bottom, 4)
-                }
+        List {
+            // Search bar (Pro)
+            if appViewModel.isPro {
+                searchBar(vm: vm)
+                    .listRowBackground(DesignTokens.parkNavy)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 4, trailing: 16))
+            }
 
-                // Upgrade nudge for free users
-                if !appViewModel.isPro && vm.availableHistoryCount > vm.locations.count {
-                    upgradeCard(hiddenCount: vm.availableHistoryCount - vm.locations.count)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 12)
-                        .padding(.bottom, 4)
-                }
+            // Upgrade nudge for free users
+            if !appViewModel.isPro && vm.availableHistoryCount > vm.locations.count {
+                upgradeCard(hiddenCount: vm.availableHistoryCount - vm.locations.count)
+                    .listRowBackground(DesignTokens.parkNavy)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 4, trailing: 16))
+            }
 
-                if vm.locations.isEmpty && !vm.searchQuery.isEmpty {
-                    // No search results
-                    VStack(spacing: 12) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.system(size: 40))
-                            .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.4))
-                        Text("No results for \"\(vm.searchQuery)\"")
-                            .font(.subheadline)
-                            .foregroundStyle(DesignTokens.parkTextSecondary)
-                    }
-                    .padding(.top, 60)
-                } else {
-                    // Grouped sections
-                    ForEach(vm.groupedLocations, id: \.label) { group in
-                        Section {
-                            ForEach(group.locations) { location in
-                                HistoryRowView(
-                                    location: location,
-                                    currentLocation: appViewModel.locationManager.currentLocation,
-                                    distanceUnit: appViewModel.preferences.distanceUnit,
-                                    isPro: appViewModel.isPro,
-                                    onReactivate: {
-                                        vm.reactivate(location)
-                                        onReactivated?(location)
-                                        if showsDismissButton {
-                                            dismiss()
-                                        }
-                                    },
-                                    onDelete: { vm.delete(location) },
-                                    onToggleFavorite: { vm.toggleFavorite(location) },
-                                    onUpgrade: { showingPaywall = true },
-                                    onNicknameChanged: { newNickname in
-                                        try? appViewModel.repository?.updateNickname(location, nickname: newNickname)
+            if vm.locations.isEmpty && !vm.searchQuery.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 40))
+                        .foregroundStyle(DesignTokens.parkTextSecondary.opacity(0.4))
+                    Text("No results for \"\(vm.searchQuery)\"")
+                        .font(.subheadline)
+                        .foregroundStyle(DesignTokens.parkTextSecondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 60)
+                .listRowBackground(DesignTokens.parkNavy)
+                .listRowSeparator(.hidden)
+            } else {
+                ForEach(vm.groupedLocations, id: \.label) { group in
+                    Section {
+                        ForEach(group.locations) { location in
+                            HistoryRowView(
+                                location: location,
+                                currentLocation: appViewModel.locationManager.currentLocation,
+                                distanceUnit: appViewModel.preferences.distanceUnit,
+                                isPro: appViewModel.isPro,
+                                onReactivate: {
+                                    vm.reactivate(location)
+                                    onReactivated?(location)
+                                    if showsDismissButton {
+                                        dismiss()
                                     }
-                                )
-                                .padding(.horizontal, 16)
-                                .padding(.bottom, 10)
-                            }
-                        } header: {
-                            HStack {
-                                Text(group.label)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(DesignTokens.parkTextSecondary)
-                                    .textCase(nil)
-                                Spacer()
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 6)
-                            .background(DesignTokens.parkNavy)
+                                },
+                                onDelete: { vm.delete(location) },
+                                onToggleFavorite: { vm.toggleFavorite(location) },
+                                onUpgrade: { showingPaywall = true },
+                                onNicknameChanged: { newNickname in
+                                    try? appViewModel.repository?.updateNickname(location, nickname: newNickname)
+                                }
+                            )
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
                         }
+                    } header: {
+                        HStack {
+                            Text(group.label)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(DesignTokens.parkTextSecondary)
+                                .textCase(nil)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 6)
                     }
+                    .listSectionSeparator(.hidden)
                 }
             }
-            .padding(.bottom, 40)
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(DesignTokens.parkNavy)
     }
 
     @ViewBuilder

@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 
 struct SettingsScreenView: View {
@@ -102,7 +103,7 @@ struct SettingsScreenView: View {
                         Text("Upgrade to Pro")
                             .foregroundStyle(DesignTokens.parkTextPrimary)
                         Spacer()
-                        Text("$2.99")
+                        Text(appViewModel.storeKitManager.proProduct?.displayPrice ?? "$3.99")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(DesignTokens.parkAccentText)
                     }
@@ -139,6 +140,22 @@ struct SettingsScreenView: View {
                 isOn: Binding(
                     get: { appViewModel.preferences.notificationsEnabled },
                     set: { appViewModel.preferences.notificationsEnabled = $0 }
+                )
+            )
+
+            settingsToggleRow(
+                title: "Auto-Detect Parking",
+                systemImage: "sensor.tag.radiowaves.forward",
+                isOn: Binding(
+                    get: { appViewModel.autoDetector.isEnabled },
+                    set: { newValue in
+                        appViewModel.autoDetector.isEnabled = newValue
+                        if newValue {
+                            appViewModel.autoDetector.startMonitoring()
+                        } else {
+                            appViewModel.autoDetector.stopMonitoring()
+                        }
+                    }
                 )
             )
 

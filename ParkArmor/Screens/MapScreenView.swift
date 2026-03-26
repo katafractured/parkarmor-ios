@@ -7,6 +7,7 @@ struct MapScreenView: View {
     @State private var showingSaveParking = false
     @State private var showingPaywall = false
     @State private var showingActiveParking = false
+    @State private var showingAutoDetectPrompt = false
     @State private var allLocations: [ParkingLocation] = []
     @State private var mapSpan: MKCoordinateSpan = .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
 
@@ -139,6 +140,24 @@ struct MapScreenView: View {
             }
             appViewModel.shouldPresentActiveParkingFromLiveActivity = false
         }
+        .onChange(of: appViewModel.shouldShowAutoDetectPrompt) { _, should in
+            if should {
+                showingAutoDetectPrompt = true
+                appViewModel.shouldShowAutoDetectPrompt = false
+            }
+        }
+        .confirmationDialog(
+            "Did you just park?",
+            isPresented: $showingAutoDetectPrompt,
+            titleVisibility: .visible
+        ) {
+            Button("Yes, Save My Spot") {
+                showingSaveParking = true
+            }
+            Button("No", role: .cancel) {}
+        } message: {
+            Text("ParkArmor detected you may have just parked. Save your location?")
+        }
         .onAppear {
             appViewModel.refreshActiveParking()
             refreshLocations()
@@ -151,7 +170,12 @@ struct MapScreenView: View {
     }
 
     private func refreshLocations() {
-        allLocations = (try? appViewModel.repository?.fetchHistory()) ?? []
+        let history = (try? appViewModel.repository?.fetchHistory()) ?? []
+        if let active = appViewModel.activeParking {
+            allLocations = [active] + history
+        } else {
+            allLocations = history
+        }
     }
 }
 
