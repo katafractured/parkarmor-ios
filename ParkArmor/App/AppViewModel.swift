@@ -88,6 +88,16 @@ import Observation
             }
         }
 
+        NotificationCenter.default.addObserver(
+            forName: .watchRequestedEndParking,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.endParking()
+            self.watchSession.sendParkingToWatch(nil)
+        }
+
         ParkArmorShortcuts.updateAppShortcutParameters()
     }
 
