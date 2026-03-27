@@ -21,7 +21,7 @@ import Observation
     /// Minimum time (seconds) that must pass between the last automotive
     /// activity and a walking/stationary transition before detection fires.
     /// Lower = more sensitive. Raise to avoid bus stops and red lights.
-    private static let minDriveDuration: TimeInterval = 60
+    private static let minDriveDuration: TimeInterval = 90
 
     /// Maximum time (seconds) after the last automotive activity during
     /// which a walking/stationary transition is still considered a park event.
@@ -30,7 +30,7 @@ import Observation
 
     /// CoreMotion confidence level required to treat an activity as driving.
     /// `.high` is least noisy; `.medium` catches more cases but more false positives.
-    private static let requiredDrivingConfidence: CMMotionActivityConfidence = .medium
+    private static let requiredDrivingConfidence: CMMotionActivityConfidence = .high
 
     /// Delay (seconds) after a Bluetooth peripheral disconnects before
     /// firing detection. Absorbs transient glitches.
