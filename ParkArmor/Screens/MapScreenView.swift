@@ -15,6 +15,7 @@ struct MapScreenView: View {
         ZStack(alignment: .bottom) {
             // Full-screen map
             MapReader { proxy in
+
                 Map(position: $mapVM.cameraPosition) {
                     UserAnnotation()
 
@@ -70,15 +71,6 @@ struct MapScreenView: View {
                 }
             }
 
-            // Active parking banner
-            if let active = appViewModel.activeParking {
-                ActiveParkingBanner(parking: active) {
-                    showingActiveParking = true
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 120)
-            }
-
             // FAB — park here
             if appViewModel.activeParking == nil {
                 Button {
@@ -102,6 +94,16 @@ struct MapScreenView: View {
                     .shadow(color: DesignTokens.parkCyan.opacity(0.4), radius: 12, y: 4)
                 }
                 .padding(.bottom, 40)
+            }
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if let active = appViewModel.activeParking {
+                ActiveParkingBanner(parking: active) {
+                    showingActiveParking = true
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
             }
         }
         .navigationTitle("ParkArmor")
