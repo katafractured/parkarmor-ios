@@ -100,6 +100,21 @@ struct ActiveParkingView: View {
                 }
             }
         }
+        .presentationDetents([.large])
+        .confirmationDialog(
+            "End Parking?",
+            isPresented: $showingEndConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("End Parking", role: .destructive) {
+                try? viewModel?.endParking(parking: parking)
+                Task { await appViewModel.liveActivityManager.endCurrentActivity() }
+                onDismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will move your parking spot to history.")
+        }
         .task {
             let vm = ActiveParkingViewModel(
                 mapKitHelper: appViewModel.mapKitHelper,
@@ -384,20 +399,6 @@ struct ActiveParkingView: View {
                             .strokeBorder(DesignTokens.parkDestructive.opacity(0.4), lineWidth: 1)
                     )
             }
-        }
-        .confirmationDialog(
-            "End Parking?",
-            isPresented: $showingEndConfirm,
-            titleVisibility: .visible
-        ) {
-            Button("End Parking", role: .destructive) {
-                try? vm.endParking(parking: parking)
-                Task { await appViewModel.liveActivityManager.endCurrentActivity() }
-                onDismiss()
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This will move your parking spot to history.")
         }
     }
 
