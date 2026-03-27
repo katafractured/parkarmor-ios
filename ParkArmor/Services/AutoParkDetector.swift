@@ -73,7 +73,7 @@ import Observation
     }
 
     func handleActivityUpdate(_ activity: CMMotionActivity) {
-        if activity.automotive && activity.confidence >= Self.requiredDrivingConfidence {
+        if activity.automotive && activity.confidence.rawValue >= Self.requiredDrivingConfidence.rawValue {
             detectionState = .driving
             lastDrivingDate = activity.startDate
             return
