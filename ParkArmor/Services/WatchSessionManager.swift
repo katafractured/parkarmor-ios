@@ -39,6 +39,10 @@ import WatchConnectivity
             userInfo: ["latitude": latitude, "longitude": longitude, "address": address]
         )
     }
+
+    func handleEndParkingRequest() {
+        NotificationCenter.default.post(name: .watchRequestedEndParking, object: nil)
+    }
 }
 
 extension WatchSessionManager: WCSessionDelegate {
@@ -63,14 +67,18 @@ extension WatchSessionManager: WCSessionDelegate {
 
     private func handleMessage(_ message: [String: Any]) {
         guard let action = message["action"] as? String else { return }
-        guard action == "saveParking",
-              let latitude = message["latitude"] as? Double,
-              let longitude = message["longitude"] as? Double,
-              let address = message["address"] as? String
-        else { return }
 
-        DispatchQueue.main.async {
-            self.handleSaveParkingRequest(latitude: latitude, longitude: longitude, address: address)
+        if action == "saveParking",
+           let latitude = message["latitude"] as? Double,
+           let longitude = message["longitude"] as? Double,
+           let address = message["address"] as? String {
+            DispatchQueue.main.async {
+                self.handleSaveParkingRequest(latitude: latitude, longitude: longitude, address: address)
+            }
+        } else if action == "endParking" {
+            DispatchQueue.main.async {
+                self.handleEndParkingRequest()
+            }
         }
     }
 
@@ -83,4 +91,5 @@ extension WatchSessionManager: WCSessionDelegate {
 
 extension Notification.Name {
     static let watchRequestedSaveParking = Notification.Name("com.katafract.ParkArmor.watchRequestedSaveParking")
+    static let watchRequestedEndParking = Notification.Name("com.katafract.ParkArmor.watchRequestedEndParking")
 }

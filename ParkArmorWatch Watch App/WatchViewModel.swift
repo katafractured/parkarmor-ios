@@ -22,6 +22,9 @@ import WidgetKit
     var heading: CLHeading?
     var isSavingParking = false
     var saveError: String?
+    var isEndingParking = false
+    var endError: String?
+    var isPhoneReachable = false
 
     private let locationManager = CLLocationManager()
 
@@ -63,9 +66,15 @@ import WidgetKit
             WCSession.default.delegate = self
             WCSession.default.activate()
         }
+
+        loadPersistedSnapshot()
     }
 
     func saveParking() {
+        guard isPhoneReachable else {
+            saveError = "iPhone not in range"
+            return
+        }
         guard let location = userLocation else {
             saveError = "Location unavailable"
             return
@@ -110,6 +119,27 @@ import WidgetKit
                 }
             })
         }
+    }
+
+    func endParking() {
+        guard isPhoneReachable else {
+            endError = "iPhone not in range"
+            return
+        }
+
+        isEndingParking = true
+        endError = nil
+
+        WCSession.default.sendMessage(["action": "endParking"], replyHandler: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.isEndingParking = false
+            }
+        }, errorHandler: { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isEndingParking = false
+                self?.endError = error.localizedDescription
+            }
+        })
     }
 
     var bearingToParking: Double? {
@@ -167,7 +197,33 @@ extension WatchViewModel: CLLocationManagerDelegate {
 }
 
 extension WatchViewModel: WCSessionDelegate {
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        DispatchQueue.main.async {
+            self.isPhoneReachable = session.isReachable
+            // Prefer the last context pushed from the phone over UserDefaults
+            if let parking = session.receivedApplicationContext["activeParking"] as? [String: Any],
+               let latitude = parking["latitude"] as? Double,
+               let longitude = parking["longitude"] as? Double,
+               let address = parking["address"] as? String,
+               let savedAtInterval = parking["savedAt"] as? TimeInterval {
+                let timerInterval = parking["timerExpiresAt"] as? TimeInterval
+                let timerDate = timerInterval.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0) : nil }
+                self.activeParkingSnapshot = WatchParkingSnapshot(
+                    latitude: latitude,
+                    longitude: longitude,
+                    address: address,
+                    savedAt: Date(timeIntervalSince1970: savedAtInterval),
+                    timerExpiresAt: timerDate
+                )
+            }
+        }
+    }
+
+    func sessionReachabilityDidChange(_ session: WCSession) {
+        DispatchQueue.main.async {
+            self.isPhoneReachable = session.isReachable
+        }
+    }
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         DispatchQueue.main.async {
@@ -194,6 +250,24 @@ extension WatchViewModel: WCSessionDelegate {
 }
 
 private extension WatchViewModel {
+    func loadPersistedSnapshot() {
+        guard let defaults = UserDefaults(suiteName: SharedKeys.suiteName),
+              let address = defaults.string(forKey: SharedKeys.activeParkingAddress) else { return }
+        let latitude = defaults.double(forKey: SharedKeys.activeParkingLatitude)
+        let longitude = defaults.double(forKey: SharedKeys.activeParkingLongitude)
+        let savedAt = defaults.double(forKey: SharedKeys.activeParkingSavedAt)
+        guard savedAt > 0 else { return }
+        let timerInterval = defaults.double(forKey: SharedKeys.activeParkingTimerExpiresAt)
+        let timerDate = timerInterval > 0 ? Date(timeIntervalSince1970: timerInterval) : nil
+        activeParkingSnapshot = WatchParkingSnapshot(
+            latitude: latitude,
+            longitude: longitude,
+            address: address,
+            savedAt: Date(timeIntervalSince1970: savedAt),
+            timerExpiresAt: timerDate
+        )
+    }
+
     func persistSharedState() {
         guard let defaults = UserDefaults(suiteName: SharedKeys.suiteName) else { return }
 

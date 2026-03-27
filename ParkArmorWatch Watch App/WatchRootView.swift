@@ -38,9 +38,14 @@ private struct WatchNoParkingView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(.cyan)
-            .disabled(viewModel.isSavingParking)
+            .disabled(viewModel.isSavingParking || !viewModel.isPhoneReachable)
 
-            if let error = viewModel.saveError {
+            if !viewModel.isPhoneReachable {
+                Text("iPhone not in range")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            } else if let error = viewModel.saveError {
                 Text(error)
                     .font(.caption2)
                     .foregroundStyle(.red)
@@ -53,6 +58,7 @@ private struct WatchNoParkingView: View {
 private struct WatchActiveParkingView: View {
     @Environment(WatchViewModel.self) private var viewModel
     let parking: WatchViewModel.WatchParkingSnapshot
+    @State private var showingEndConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -69,7 +75,7 @@ private struct WatchActiveParkingView: View {
                     Text(parking.elapsedString)
                         .font(.caption2)
                 }
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.75))
 
                 if let bearing = viewModel.bearingToParking {
                     WatchCompassView(bearing: bearing)
@@ -87,10 +93,42 @@ private struct WatchActiveParkingView: View {
                         .font(.caption2.bold())
                         .foregroundStyle(.orange)
                 }
+
+                Button(role: .destructive) {
+                    showingEndConfirmation = true
+                } label: {
+                    if viewModel.isEndingParking {
+                        ProgressView()
+                    } else {
+                        Label("End Parking", systemImage: "xmark.circle.fill")
+                            .font(.caption.bold())
+                    }
+                }
+                .disabled(viewModel.isEndingParking || !viewModel.isPhoneReachable)
+
+                if !viewModel.isPhoneReachable {
+                    Text("iPhone not in range")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                } else if let error = viewModel.endError {
+                    Text(error)
+                        .font(.caption2)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                }
             }
             .padding(.horizontal, 8)
         }
         .navigationTitle("My Car")
+        .alert("End Parking?", isPresented: $showingEndConfirmation) {
+            Button("End", role: .destructive) {
+                viewModel.endParking()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will end your current parking session.")
+        }
     }
 }
 
@@ -100,7 +138,7 @@ private struct WatchCompassView: View {
     var body: some View {
         ZStack {
             Circle()
-                .strokeBorder(.cyan.opacity(0.3), lineWidth: 1.5)
+                .strokeBorder(.cyan.opacity(0.65), lineWidth: 2)
                 .frame(width: 60, height: 60)
 
             Image(systemName: "arrow.up")
