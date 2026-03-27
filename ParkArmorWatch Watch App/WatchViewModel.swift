@@ -200,8 +200,12 @@ extension WatchViewModel: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
-            // Prefer the last context pushed from the phone over UserDefaults
-            if let parking = session.receivedApplicationContext["activeParking"] as? [String: Any],
+            let context = session.receivedApplicationContext
+            // Only trust WCSession context if the phone has ever sent activeParking.
+            // If the key is present but not valid parking data (e.g. NSNull = no session),
+            // clear the snapshot so stale UserDefaults data doesn't show a phantom session.
+            guard context.keys.contains("activeParking") else { return }
+            if let parking = context["activeParking"] as? [String: Any],
                let latitude = parking["latitude"] as? Double,
                let longitude = parking["longitude"] as? Double,
                let address = parking["address"] as? String,
@@ -215,6 +219,8 @@ extension WatchViewModel: WCSessionDelegate {
                     savedAt: Date(timeIntervalSince1970: savedAtInterval),
                     timerExpiresAt: timerDate
                 )
+            } else {
+                self.activeParkingSnapshot = nil
             }
         }
     }
