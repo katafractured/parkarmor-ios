@@ -27,8 +27,13 @@ import Observation
         defer { isLoading = false }
         do {
             products = try await Product.products(for: [Self.proProductID])
+            if products.isEmpty {
+                purchaseError = "Product not found in App Store. Check that the product ID is configured in your scheme."
+                print("[StoreKit] No products returned for ID: \(Self.proProductID)")
+            }
         } catch {
-            purchaseError = "Could not load products."
+            purchaseError = "Could not load products: \(error.localizedDescription)"
+            print("[StoreKit] loadProducts error: \(error)")
         }
     }
 
@@ -48,18 +53,24 @@ import Observation
         defer { isLoading = false }
         purchaseError = nil
 
-        let result = try await product.purchase()
-        switch result {
-        case .success(let verification):
-            let transaction = try checkVerified(verification)
-            await transaction.finish()
-            await verifyEntitlement()
-        case .pending:
-            break
-        case .userCancelled:
-            break
-        @unknown default:
-            break
+        do {
+            let result = try await product.purchase()
+            switch result {
+            case .success(let verification):
+                let transaction = try checkVerified(verification)
+                await transaction.finish()
+                await verifyEntitlement()
+            case .pending:
+                break
+            case .userCancelled:
+                break
+            @unknown default:
+                break
+            }
+        } catch {
+            purchaseError = error.localizedDescription
+            print("[StoreKit] purchase error: \(error)")
+            throw error
         }
     }
 

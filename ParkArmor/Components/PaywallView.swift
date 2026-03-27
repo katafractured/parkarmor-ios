@@ -66,7 +66,13 @@ struct PaywallView: View {
                 // Purchase CTA
                 VStack(spacing: 12) {
                     Button {
-                        Task { try? await storeKit.purchase() }
+                        Task {
+                            do {
+                                try await storeKit.purchase()
+                            } catch {
+                                // purchaseError is set inside StoreKitManager
+                            }
+                        }
                     } label: {
                         HStack {
                             if storeKit.isLoading {
