@@ -10,7 +10,8 @@ struct SaveParkingIntent: AppIntent {
     static var openAppWhenRun: Bool = false
 
     func perform() async throws -> some ReturnsValue<String> & ProvidesDialog {
-        let coordinate = try await IntentLocationFetcher().fetchCoordinate()
+        let fetcher = IntentLocationFetcher()
+        let coordinate = try await fetcher.fetchCoordinate()
         let address = await reverseGeocodeAddress(for: coordinate)
 
         guard let groupURL = FileManager.default.containerURL(
@@ -108,19 +109,15 @@ struct FindCarIntent: AppIntent {
 
         let storeURL = groupURL.appendingPathComponent("parkarmor.store")
         let schema = Schema([ParkingLocation.self, ParkingPhoto.self, ParkingTimer.self])
-        let config = ModelConfiguration(nil, schema: schema, url: storeURL)
-
-        guard let container = try? ModelContainer(for: schema, configurations: [config]) else {
-            return .result(value: "Unknown", dialog: "No parking spot saved.")
-        }
-
+        let config = ModelConfiguration(nil, schema: schema, url: storeURL, allowsSave: false)
+        let container = try ModelContainer(for: schema, configurations: [config])
         let context = ModelContext(container)
         let descriptor = FetchDescriptor<ParkingLocation>(
-            predicate: #Predicate { $0.isActive },
+            predicate: #Predicate { $0.isActive == true },
             sortBy: [SortDescriptor(\.savedAt, order: .reverse)]
         )
 
-        guard let location = try? context.fetch(descriptor).first else {
+        guard let location = try context.fetch(descriptor).first else {
             return .result(value: "No active parking", dialog: "You don't have an active parking spot saved.")
         }
 
