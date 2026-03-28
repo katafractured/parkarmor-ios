@@ -25,10 +25,16 @@ import Observation
     var showingPaywall = false
     var errorMessage: String?
     var shouldPresentActiveParkingFromLiveActivity = false
-    var shouldShowAutoDetectPrompt = false
     var hasSeenOnboarding = false
 
+    // Auto-detect banner
+    var showingAutoDetectBanner = false
+    var autoDetectBannerCountdown = 60
+
     private var hasCompletedLaunchSetup = false
+    private var pendingDetectedCoordinate: CLLocationCoordinate2D?
+    private var pendingDetectionTask: Task<Void, Never>?
+    private var bannerCountdownTask: Task<Void, Never>?
 
     var isPro: Bool { storeKitManager.isPro }
 
@@ -98,6 +104,20 @@ import Observation
             self.watchSession.sendParkingToWatch(nil)
         }
 
+        NotificationCenter.default.addObserver(
+            forName: .parkingDetectionNotificationTapped,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self else { return }
+            let action = notification.userInfo?["action"] as? String
+            if action == NotificationManager.ParkingDetection.saveAction {
+                self.confirmAutoDetectedParking()
+            } else {
+                self.dismissAutoDetectedParking()
+            }
+        }
+
         ParkArmorShortcuts.updateAppShortcutParameters()
     }
 
@@ -134,7 +154,70 @@ import Observation
     }
 
     func handleAutoDetectedParking() {
-        guard activeParking == nil else { return }
-        shouldShowAutoDetectPrompt = true
+        guard activeParking == nil, pendingDetectedCoordinate == nil else { return }
+        // Capture location at the moment of detection (while the user is still near the car).
+        // Uses the existing when-in-use location permission — no background location access needed.
+        pendingDetectedCoordinate = locationManager.currentLocation?.coordinate
+
+        autoDetectBannerCountdown = 60
+        showingAutoDetectBanner = true
+
+        // Count down the in-app banner, then fire a notification for locked/backgrounded devices.
+        bannerCountdownTask = Task { @MainActor in
+            for tick in stride(from: 59, through: 0, by: -1) {
+                try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
+                autoDetectBannerCountdown = tick
+            }
+            showingAutoDetectBanner = false
+            await notificationManager.scheduleParkingDetectedNotification()
+        }
+
+        // Auto-save as a suggested session after 5 minutes with no response.
+        pendingDetectionTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(300))
+            guard !Task.isCancelled else { return }
+            autoSaveAsSuggested()
+        }
+    }
+
+    func confirmAutoDetectedParking() {
+        let coordinate = pendingDetectedCoordinate
+        cancelPendingDetection()
+        guard let coordinate else { return }
+        Task {
+            let address = await mapKitHelper.reverseGeocode(coordinate: coordinate)
+            try? repository?.saveParking(
+                coordinate: coordinate,
+                address: address,
+                notes: "",
+                preserveHistory: preferences.saveParkingHistory
+            )
+            await MainActor.run { refreshActiveParking() }
+        }
+    }
+
+    func dismissAutoDetectedParking() {
+        cancelPendingDetection()
+    }
+
+    private func autoSaveAsSuggested() {
+        guard let coordinate = pendingDetectedCoordinate else { return }
+        cancelPendingDetection(clearCoordinate: false)
+        pendingDetectedCoordinate = nil
+        Task {
+            let address = await mapKitHelper.reverseGeocode(coordinate: coordinate)
+            try? repository?.saveSuggested(coordinate: coordinate, address: address)
+        }
+    }
+
+    private func cancelPendingDetection(clearCoordinate: Bool = true) {
+        pendingDetectionTask?.cancel()
+        bannerCountdownTask?.cancel()
+        pendingDetectionTask = nil
+        bannerCountdownTask = nil
+        showingAutoDetectBanner = false
+        notificationManager.cancelParkingDetectedNotification()
+        if clearCoordinate { pendingDetectedCoordinate = nil }
     }
 }

@@ -91,6 +91,15 @@ enum HistoryFilter: String, CaseIterable {
         }
     }
 
+    func confirmSuggested(_ location: ParkingLocation) {
+        do {
+            try repository.confirmSuggested(location)
+            load()
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
     /// Groups visible locations by date bucket for sectioned display.
     var groupedLocations: [(label: String, locations: [ParkingLocation])] {
         let calendar = Calendar.current

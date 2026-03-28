@@ -117,6 +117,26 @@ import Observation
         }
     }
 
+    @discardableResult
+    func saveSuggested(coordinate: CLLocationCoordinate2D, address: String) throws -> ParkingLocation {
+        let location = ParkingLocation(
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            address: address,
+            notes: "",
+            isActive: false
+        )
+        location.isSuggested = true
+        context.insert(location)
+        try context.save()
+        return location
+    }
+
+    func confirmSuggested(_ location: ParkingLocation) throws {
+        location.isSuggested = false
+        try context.save()
+    }
+
     func reactivate(_ location: ParkingLocation) throws {
         try deactivateAll()
         location.isActive = true

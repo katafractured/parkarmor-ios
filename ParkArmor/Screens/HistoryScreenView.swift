@@ -184,7 +184,8 @@ struct HistoryScreenView: View {
                                 onUpgrade: { showingPaywall = true },
                                 onNicknameChanged: { newNickname in
                                     try? appViewModel.repository?.updateNickname(location, nickname: newNickname)
-                                }
+                                },
+                                onConfirmSuggested: location.isSuggested ? { vm.confirmSuggested(location) } : nil
                             )
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
@@ -284,6 +285,7 @@ private struct HistoryRowView: View {
     var onToggleFavorite: () -> Void
     var onUpgrade: () -> Void
     var onNicknameChanged: (String?) -> Void
+    var onConfirmSuggested: (() -> Void)? = nil
 
     @State private var showingNicknameEditor = false
     @State private var nicknameDraft: String = ""
@@ -311,10 +313,20 @@ private struct HistoryRowView: View {
                 HStack(spacing: 6) {
                     Text(location.displayAddress)
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                        .foregroundStyle(location.isSuggested
+                            ? DesignTokens.parkTextSecondary
+                            : DesignTokens.parkTextPrimary)
                         .lineLimit(1)
 
-                    if location.isFavorite {
+                    if location.isSuggested {
+                        Text("Suggested")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.orange)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(.orange.opacity(0.15))
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                    } else if location.isFavorite {
                         Image(systemName: "star.fill")
                             .font(.caption)
                             .foregroundStyle(DesignTokens.parkAccentText)
@@ -372,7 +384,12 @@ private struct HistoryRowView: View {
         }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if !location.isActive {
-                if isPro {
+                if location.isSuggested, let confirm = onConfirmSuggested {
+                    Button(action: confirm) {
+                        Label("Confirm", systemImage: "checkmark.circle")
+                    }
+                    .tint(.green)
+                } else if isPro {
                     Button {
                         nicknameDraft = location.nickname ?? ""
                         showingNicknameEditor = true
@@ -393,10 +410,12 @@ private struct HistoryRowView: View {
                     .tint(DesignTokens.parkCyan)
                 }
 
-                Button(action: onReactivate) {
-                    Label("Set Active", systemImage: "car.fill")
+                if !location.isSuggested {
+                    Button(action: onReactivate) {
+                        Label("Set Active", systemImage: "car.fill")
+                    }
+                    .tint(DesignTokens.parkAccentText)
                 }
-                .tint(DesignTokens.parkAccentText)
             }
         }
         .alert("Rename Location", isPresented: $showingNicknameEditor) {
