@@ -15,11 +15,20 @@ final class ParkArmorWatch_Watch_AppTests: XCTestCase {
     }
 
     func testFormattedDistanceUsesMetersUnderOneKilometer() {
-        XCTAssertEqual(WatchViewModel.formattedDistance(320), "320 m")
+        XCTAssertEqual(WatchViewModel.formattedDistance(320, unit: "km"), "320 m")
     }
 
     func testFormattedDistanceUsesKilometersAtDistance() {
-        XCTAssertEqual(WatchViewModel.formattedDistance(1500), "1.5 km")
+        XCTAssertEqual(WatchViewModel.formattedDistance(1500, unit: "km"), "1.5 km")
+    }
+
+    func testFormattedDistanceUsesFeetForShortImperialDistance() {
+        XCTAssertEqual(WatchViewModel.formattedDistance(20, unit: "miles"), "You're here")
+        XCTAssertEqual(WatchViewModel.formattedDistance(120, unit: "miles"), "393 ft")
+    }
+
+    func testFormattedDistanceUsesMilesAtDistance() {
+        XCTAssertEqual(WatchViewModel.formattedDistance(1609.344, unit: "miles"), "1.0 mi")
     }
 
     func testRelativeBearingAccountsForHeading() {

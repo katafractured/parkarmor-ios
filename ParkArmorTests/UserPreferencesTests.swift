@@ -89,3 +89,30 @@ struct TimeFormatTests {
         }
     }
 }
+
+@Suite("UserPreferences — premium entitlement")
+struct UserPreferencesPremiumTests {
+    @Test func doesNotRestoreProFromLegacyDefaultsCache() {
+        let suiteName = "UserPreferencesPremiumTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.set(true, forKey: "isPro")
+
+        let preferences = UserPreferences(defaults: defaults)
+
+        #expect(preferences.isPro == false)
+
+        defaults.removePersistentDomain(forName: suiteName)
+    }
+
+    @Test func changingProStateDoesNotWriteToDefaults() {
+        let suiteName = "UserPreferencesPremiumTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        let preferences = UserPreferences(defaults: defaults)
+
+        preferences.isPro = true
+
+        #expect(defaults.object(forKey: "isPro") == nil)
+
+        defaults.removePersistentDomain(forName: suiteName)
+    }
+}

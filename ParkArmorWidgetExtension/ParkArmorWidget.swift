@@ -6,7 +6,6 @@ import WidgetKit
 struct ParkingWidgetEntry: TimelineEntry {
     let date: Date
     let activeParking: ActiveParkingSnapshot?
-    let isPro: Bool
     let distanceText: String?
 }
 
@@ -54,7 +53,6 @@ struct ParkingWidgetProvider: TimelineProvider {
                 longitude: -122.4194,
                 timerExpiresAt: Date().addingTimeInterval(3600)
             ),
-            isPro: true,
             distanceText: "0.4 mi away"
         )
     }
@@ -79,14 +77,12 @@ struct ParkingWidgetProvider: TimelineProvider {
 
     private func makeEntry() -> ParkingWidgetEntry {
         let defaults = UserDefaults(suiteName: "group.com.katafract.ParkArmor")
-        let isPro = defaults?.bool(forKey: "isPro") ?? false
         let snapshot = fetchActiveParking()
         let distanceText = snapshot.flatMap { computeDistanceText(to: $0.coordinate, defaults: defaults) }
 
         return ParkingWidgetEntry(
             date: .now,
             activeParking: snapshot,
-            isPro: isPro,
             distanceText: distanceText
         )
     }

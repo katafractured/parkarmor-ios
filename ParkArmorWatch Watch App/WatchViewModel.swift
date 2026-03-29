@@ -153,7 +153,10 @@ import WidgetKit
 
     var distanceToParking: String? {
         guard let parking = activeParkingSnapshot, let userLocation else { return nil }
-        return Self.formattedDistance(userLocation.distance(from: parking.clLocation))
+        return Self.formattedDistance(
+            userLocation.distance(from: parking.clLocation),
+            unit: distanceUnitFromDefaults()
+        )
     }
 
     static func relativeBearing(
@@ -176,10 +179,19 @@ import WidgetKit
         return bearing
     }
 
-    static func formattedDistance(_ meters: CLLocationDistance) -> String {
+    static func formattedDistance(_ meters: CLLocationDistance, unit: String = "km") -> String {
         if meters < 50 { return "You're here" }
-        if meters < 1000 { return "\(Int(meters)) m" }
-        return String(format: "%.1f km", meters / 1000)
+
+        if unit == "km" {
+            if meters < 1000 { return "\(Int(meters)) m" }
+            return String(format: "%.1f km", meters / 1000)
+        }
+
+        let miles = meters / 1609.344
+        if miles < 0.1 {
+            return "\(Int(meters * 3.28084)) ft"
+        }
+        return String(format: "%.1f mi", miles)
     }
 }
 
@@ -256,6 +268,10 @@ extension WatchViewModel: WCSessionDelegate {
 }
 
 private extension WatchViewModel {
+    func distanceUnitFromDefaults() -> String {
+        UserDefaults(suiteName: SharedKeys.suiteName)?.string(forKey: SharedKeys.distanceUnit) ?? "km"
+    }
+
     func loadPersistedSnapshot() {
         guard let defaults = UserDefaults(suiteName: SharedKeys.suiteName),
               let address = defaults.string(forKey: SharedKeys.activeParkingAddress) else { return }

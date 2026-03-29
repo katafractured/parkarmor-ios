@@ -9,6 +9,7 @@ struct SaveParkingIntent: AppIntent {
     static let description = IntentDescription("Save your current location as your parking spot.")
     static var openAppWhenRun: Bool = false
 
+    @MainActor
     func perform() async throws -> some ReturnsValue<String> & ProvidesDialog {
         let fetcher = IntentLocationFetcher()
         let coordinate = try await fetcher.fetchCoordinate()
@@ -181,6 +182,7 @@ struct ParkArmorShortcuts: AppShortcutsProvider {
 private final class IntentLocationFetcher: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     private var continuation: CheckedContinuation<CLLocationCoordinate2D, Error>?
+    private var authorizationContinuation: CheckedContinuation<Void, Error>?
 
     override init() {
         super.init()
@@ -189,13 +191,27 @@ private final class IntentLocationFetcher: NSObject, CLLocationManagerDelegate {
     }
 
     func fetchCoordinate() async throws -> CLLocationCoordinate2D {
-        if manager.authorizationStatus == .notDetermined {
-            manager.requestWhenInUseAuthorization()
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            break
+        case .notDetermined:
+            try await waitForAuthorization()
+        case .denied, .restricted:
+            throw SaveParkingIntent.IntentError.locationUnavailable
+        @unknown default:
+            throw SaveParkingIntent.IntentError.locationUnavailable
         }
 
         return try await withCheckedThrowingContinuation { continuation in
             self.continuation = continuation
             manager.requestLocation()
+        }
+    }
+
+    private func waitForAuthorization() async throws {
+        manager.requestWhenInUseAuthorization()
+        try await withCheckedThrowingContinuation { continuation in
+            authorizationContinuation = continuation
         }
     }
 
@@ -208,5 +224,23 @@ private final class IntentLocationFetcher: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         continuation?.resume(throwing: error)
         continuation = nil
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        guard let authorizationContinuation else { return }
+
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            self.authorizationContinuation = nil
+            authorizationContinuation.resume()
+        case .denied, .restricted:
+            self.authorizationContinuation = nil
+            authorizationContinuation.resume(throwing: SaveParkingIntent.IntentError.locationUnavailable)
+        case .notDetermined:
+            break
+        @unknown default:
+            self.authorizationContinuation = nil
+            authorizationContinuation.resume(throwing: SaveParkingIntent.IntentError.locationUnavailable)
+        }
     }
 }

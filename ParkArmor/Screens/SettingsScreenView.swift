@@ -143,22 +143,6 @@ struct SettingsScreenView: View {
                 )
             )
 
-            settingsToggleRow(
-                title: "Auto-Detect Parking",
-                systemImage: "sensor.tag.radiowaves.forward",
-                isOn: Binding(
-                    get: { appViewModel.autoDetector.isEnabled },
-                    set: { newValue in
-                        appViewModel.autoDetector.isEnabled = newValue
-                        if newValue {
-                            appViewModel.autoDetector.startMonitoring()
-                        } else {
-                            appViewModel.autoDetector.stopMonitoring()
-                        }
-                    }
-                )
-            )
-
             if appViewModel.isPro {
                 preferenceMenuRow(
                     title: "Timer Alerts",
