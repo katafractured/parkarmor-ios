@@ -13,6 +13,7 @@ struct ARWalkBackView: View {
     @State private var bearing: Double = 0
     @State private var headingDegrees: Double = 0
     @State private var distance: String = ""
+    @State private var lastRawBearing: Double = 0
 
     var body: some View {
         ZStack {
@@ -79,8 +80,7 @@ struct ARWalkBackView: View {
             updateNavigation(userLocation: location)
         }
         .onChange(of: appViewModel.locationManager.heading) { _, heading in
-            guard let location = appViewModel.locationManager.currentLocation else { return }
-            updateNavigation(userLocation: location, heading: heading)
+            applyHeading(heading)
         }
         .onAppear {
             if let location = appViewModel.locationManager.currentLocation {
@@ -90,16 +90,20 @@ struct ARWalkBackView: View {
         .navigationBarHidden(true)
     }
 
-    private func updateNavigation(userLocation: CLLocation, heading: CLHeading? = nil) {
+    private func updateNavigation(userLocation: CLLocation) {
         let meters = userLocation.distance(from: parking.clLocation)
         distance = appViewModel.preferences.distanceUnit.formatted(meters)
+        lastRawBearing = userLocation.coordinate.bearing(to: parking.coordinate)
+        applyHeading(appViewModel.locationManager.heading)
+    }
 
-        let rawBearing = userLocation.coordinate.bearing(to: parking.coordinate)
-        if let heading = heading ?? appViewModel.locationManager.heading {
-            bearing = (rawBearing - heading.trueHeading + 360).truncatingRemainder(dividingBy: 360)
+    private func applyHeading(_ heading: CLHeading?) {
+        if let heading {
+            bearing = (lastRawBearing - heading.trueHeading + 360)
+                .truncatingRemainder(dividingBy: 360)
             headingDegrees = heading.trueHeading
         } else {
-            bearing = rawBearing
+            bearing = lastRawBearing
             headingDegrees = 0
         }
     }

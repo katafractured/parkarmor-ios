@@ -133,6 +133,9 @@ struct ActiveParkingView: View {
                 vm.update(userLocation: loc, parking: parking, heading: appViewModel.locationManager.heading)
             }
         }
+        .onChange(of: appViewModel.locationManager.heading) { _, heading in
+            viewModel?.updateHeading(heading)
+        }
     }
 
     private var addressCard: some View {
