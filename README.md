@@ -35,7 +35,7 @@ Parking data is stored locally and shared across app targets through the App Gro
 - Parking meter timer with notifications and Live Activities
 - Home Screen and Lock Screen widgets
 - Siri Shortcuts via App Intents
-- Auto-detect parking prompts
+- Quick explicit save flows on iPhone and Apple Watch
 - Apple Watch companion app
 - Watch complication support
 - AR walk-back view on supported devices
@@ -72,7 +72,6 @@ ParkArmor is built with:
 - App Intents
 - WatchConnectivity
 - CoreLocation
-- CoreMotion
 - ARKit
 
 The app follows a local-only architecture. Shared state for widgets and watch features is coordinated through SwiftData and App Group `UserDefaults`.

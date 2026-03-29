@@ -96,28 +96,14 @@ struct MapScreenView: View {
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
-            VStack(spacing: 6) {
-                if appViewModel.showingAutoDetectBanner {
-                    AutoDetectBanner(
-                        countdown: appViewModel.autoDetectBannerCountdown,
-                        onSave: { appViewModel.confirmAutoDetectedParking() },
-                        onDismiss: { appViewModel.dismissAutoDetectedParking() }
-                    )
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+            if let active = appViewModel.activeParking {
+                ActiveParkingBanner(parking: active) {
+                    showingActiveParking = true
                 }
-
-                if let active = appViewModel.activeParking {
-                    ActiveParkingBanner(parking: active) {
-                        showingActiveParking = true
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.top, appViewModel.showingAutoDetectBanner ? 0 : 8)
-                    .padding(.bottom, 4)
-                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
             }
-            .animation(.spring(response: 0.45, dampingFraction: 0.85), value: appViewModel.showingAutoDetectBanner)
         }
         .navigationTitle("ParkArmor")
         .navigationBarTitleDisplayMode(.inline)
@@ -215,73 +201,6 @@ private struct ClusterPinView: View {
                 .foregroundStyle(.white)
         }
         .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
-    }
-}
-
-// MARK: - Auto-Detect Banner
-
-private struct AutoDetectBanner: View {
-    let countdown: Int
-    let onSave: () -> Void
-    let onDismiss: () -> Void
-
-    var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 12) {
-                Image(systemName: "car.badge.questionmark")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(DesignTokens.parkCyan)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Did you just park?")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(DesignTokens.parkTextPrimary)
-                    Text("Saving suggestion in \(countdown)s")
-                        .font(.caption)
-                        .foregroundStyle(DesignTokens.parkTextSecondary)
-                        .contentTransition(.numericText())
-                }
-
-                Spacer()
-
-                Button(action: onDismiss) {
-                    Image(systemName: "xmark")
-                        .font(.caption.bold())
-                        .foregroundStyle(DesignTokens.parkTextSecondary)
-                        .padding(6)
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
-
-            HStack(spacing: 8) {
-                Button("Not Me", action: onDismiss)
-                    .font(.subheadline)
-                    .foregroundStyle(DesignTokens.parkTextSecondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 38)
-                    .background(DesignTokens.parkSurfaceElevated)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-
-                Button("Save My Spot", action: onSave)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(DesignTokens.parkAccentForeground)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 38)
-                    .background(DesignTokens.parkCyan)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 12)
-        }
-        .background(DesignTokens.parkSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .strokeBorder(DesignTokens.parkCyan.opacity(0.65), lineWidth: 1.5)
-        )
-        .shadow(color: .black.opacity(0.2), radius: 10, y: 3)
     }
 }
 

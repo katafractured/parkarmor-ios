@@ -99,28 +99,28 @@ enum HistoryRetentionOption: String, CaseIterable {
         didSet { defaults.set(hasSeenOnboarding, forKey: "hasSeenOnboarding") }
     }
 
-    var isPro: Bool {
-        didSet { defaults.set(isPro, forKey: "isPro") }
-    }
+    // Premium access must be derived from StoreKit transactions, not cached locally.
+    var isPro: Bool
 
-    init() {
-        self.defaults = UserDefaults(suiteName: "group.com.katafract.ParkArmor") ?? .standard
-        let distanceRaw = defaults.string(forKey: "distanceUnit") ?? DistanceUnit.miles.rawValue
+    init(defaults: UserDefaults? = nil) {
+        let resolvedDefaults = defaults ?? UserDefaults(suiteName: "group.com.katafract.ParkArmor") ?? .standard
+        self.defaults = resolvedDefaults
+        let distanceRaw = resolvedDefaults.string(forKey: "distanceUnit") ?? DistanceUnit.miles.rawValue
         self.distanceUnit = DistanceUnit(rawValue: distanceRaw) ?? .miles
 
-        let timeFormatRaw = defaults.string(forKey: "timeFormat") ?? TimeFormat.elapsed.rawValue
+        let timeFormatRaw = resolvedDefaults.string(forKey: "timeFormat") ?? TimeFormat.elapsed.rawValue
         self.timeFormat = TimeFormat(rawValue: timeFormatRaw) ?? .elapsed
 
-        self.notificationsEnabled = defaults.object(forKey: "notificationsEnabled") as? Bool ?? true
-        self.saveParkingHistory = defaults.object(forKey: "saveParkingHistory") as? Bool ?? true
+        self.notificationsEnabled = resolvedDefaults.object(forKey: "notificationsEnabled") as? Bool ?? true
+        self.saveParkingHistory = resolvedDefaults.object(forKey: "saveParkingHistory") as? Bool ?? true
 
-        let historyRetentionRaw = defaults.string(forKey: "historyRetention") ?? HistoryRetentionOption.thirtyDays.rawValue
+        let historyRetentionRaw = resolvedDefaults.string(forKey: "historyRetention") ?? HistoryRetentionOption.thirtyDays.rawValue
         self.historyRetention = HistoryRetentionOption(rawValue: historyRetentionRaw) ?? .thirtyDays
 
-        let timerAlertRaw = defaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
+        let timerAlertRaw = resolvedDefaults.string(forKey: "timerAlertMode") ?? TimerAlertMode.atExpiration.rawValue
         self.timerAlertMode = TimerAlertMode(rawValue: timerAlertRaw) ?? .atExpiration
 
-        self.hasSeenOnboarding = defaults.bool(forKey: "hasSeenOnboarding")
-        self.isPro = defaults.bool(forKey: "isPro")
+        self.hasSeenOnboarding = resolvedDefaults.bool(forKey: "hasSeenOnboarding")
+        self.isPro = false
     }
 }

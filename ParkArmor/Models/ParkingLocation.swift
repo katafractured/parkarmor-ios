@@ -12,7 +12,7 @@ import SwiftData
     var isActive: Bool
     var isPinned: Bool
     var isFavorite: Bool
-    /// True when this session was auto-saved by the detector without explicit user confirmation.
+    /// True when this session still needs explicit user confirmation.
     var isSuggested: Bool
     /// Optional user-assigned name, e.g. "Work Garage" or "Airport Terminal B".
     var nickname: String?

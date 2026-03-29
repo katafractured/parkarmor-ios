@@ -103,8 +103,8 @@
 		BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWatchComplicationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03D952F74BC5E00772D5A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		BCA03D972F74BC5F00772D5A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkArmor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0000001F0000001F0000001 /* ParkArmorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkArmorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkArmor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -280,29 +280,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F0000006F0000006F0000006 /* ParkArmorTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F000000BF000000BF000000B /* Build configuration list for PBXNativeTarget "ParkArmorTests" */;
-			buildPhases = (
-				F0000002F0000002F0000002 /* Sources */,
-				F0000003F0000003F0000003 /* Frameworks */,
-				F0000004F0000004F0000004 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F0000008F0000008F0000008 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				F0000005F0000005F0000005 /* ParkArmorTests */,
-			);
-			name = ParkArmorTests;
-			packageProductDependencies = (
-			);
-			productName = ParkArmorTests;
-			productReference = F0000001F0000001F0000001 /* ParkArmorTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		AA000009AA000009AA000009 /* ParkArmorWidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
@@ -445,6 +422,29 @@
 			productName = ParkArmor;
 			productReference = F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F0000006F0000006F0000006 /* ParkArmorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F000000BF000000BF000000B /* Build configuration list for PBXNativeTarget "ParkArmorTests" */;
+			buildPhases = (
+				F0000002F0000002F0000002 /* Sources */,
+				F0000003F0000003F0000003 /* Frameworks */,
+				F0000004F0000004F0000004 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0000008F0000008F0000008 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F0000005F0000005F0000005 /* ParkArmorTests */,
+			);
+			name = ParkArmorTests;
+			packageProductDependencies = (
+			);
+			productName = ParkArmorTests;
+			productReference = F0000001F0000001F0000001 /* ParkArmorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -663,8 +663,6 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot and show AR guidance back to your car.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
-				INFOPLIST_KEY_NSMotionUsageDescription = "ParkArmor uses motion data to automatically detect when you've parked your car.";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ParkArmor uses Bluetooth to detect when you leave your car and automatically prompt you to save your parking spot.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1123,8 +1121,6 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "ParkArmor uses the camera to photograph your parking spot and show AR guidance back to your car.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Katafract LLC";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location to save where you parked and navigate you back.";
-				INFOPLIST_KEY_NSMotionUsageDescription = "ParkArmor uses motion data to automatically detect when you've parked your car.";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ParkArmor uses Bluetooth to detect when you leave your car and automatically prompt you to save your parking spot.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
