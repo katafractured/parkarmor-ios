@@ -46,20 +46,31 @@ import Observation
         timerTask = nil
     }
 
+    private var lastAbsoluteBearing: Double = 0
+
     func update(userLocation: CLLocation, parking: ParkingLocation, heading: CLHeading?) {
         let meters = userLocation.distance(from: parking.clLocation)
         distanceText = preferences.distanceUnit.formatted(meters)
 
         let bearing = mapKitHelper.bearing(from: userLocation, to: parking.clLocation)
+        lastAbsoluteBearing = bearing
         compassCardinal = bearing.cardinalDirection
 
-        // Adjust bearing relative to user's heading for a "relative compass"
-        if let heading = heading {
-            let relativeBearing = (bearing - heading.trueHeading + 360).truncatingRemainder(dividingBy: 360)
-            bearingDegrees = relativeBearing
+        applyHeading(heading)
+    }
+
+    /// Called on every heading tick — cheap, no distance recalculation.
+    func updateHeading(_ heading: CLHeading?) {
+        applyHeading(heading)
+    }
+
+    private func applyHeading(_ heading: CLHeading?) {
+        if let heading {
+            bearingDegrees = (lastAbsoluteBearing - heading.trueHeading + 360)
+                .truncatingRemainder(dividingBy: 360)
             headingDegrees = heading.trueHeading
         } else {
-            bearingDegrees = bearing
+            bearingDegrees = lastAbsoluteBearing
             headingDegrees = 0
         }
     }
