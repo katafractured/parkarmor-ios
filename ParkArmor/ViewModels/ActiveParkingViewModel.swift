@@ -5,6 +5,7 @@ import Observation
     var elapsedSeconds: TimeInterval = 0
     var distanceText = ""
     var bearingDegrees: Double = 0
+    var headingDegrees: Double = 0
     var compassCardinal = "N"
     var isActive = false
 
@@ -56,8 +57,10 @@ import Observation
         if let heading = heading {
             let relativeBearing = (bearing - heading.trueHeading + 360).truncatingRemainder(dividingBy: 360)
             bearingDegrees = relativeBearing
+            headingDegrees = heading.trueHeading
         } else {
             bearingDegrees = bearing
+            headingDegrees = 0
         }
     }
 

@@ -41,7 +41,7 @@ struct ActiveParkingView: View {
 
                                 // Compass
                                 VStack(spacing: 6) {
-                                    CompassArrow(bearingDegrees: vm.bearingDegrees, size: 50)
+                                    CompassArrow(bearingDegrees: vm.bearingDegrees, headingDegrees: vm.headingDegrees, size: 50)
                                     Text("\(vm.compassCardinal) • \(vm.distanceText)")
                                         .font(.caption.weight(.semibold))
                                         .foregroundStyle(DesignTokens.parkTextPrimary)

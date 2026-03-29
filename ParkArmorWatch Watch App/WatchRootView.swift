@@ -78,7 +78,7 @@ private struct WatchActiveParkingView: View {
                 .foregroundStyle(.white.opacity(0.75))
 
                 if let bearing = viewModel.bearingToParking {
-                    WatchCompassView(bearing: bearing)
+                    WatchCompassView(bearing: bearing, headingDegrees: viewModel.heading?.trueHeading ?? 0)
                 }
 
                 if let distance = viewModel.distanceToParking {
@@ -134,12 +134,26 @@ private struct WatchActiveParkingView: View {
 
 private struct WatchCompassView: View {
     let bearing: Double
+    var headingDegrees: Double = 0
 
     var body: some View {
         ZStack {
-            Circle()
-                .strokeBorder(.cyan.opacity(0.65), lineWidth: 2)
-                .frame(width: 60, height: 60)
+            // Ring + cardinal labels rotate so N tracks true north
+            Group {
+                Circle()
+                    .strokeBorder(.cyan.opacity(0.65), lineWidth: 2)
+                    .frame(width: 60, height: 60)
+
+                ForEach(Array(zip(["N", "E", "S", "W"], [0.0, 90.0, 180.0, 270.0])), id: \.0) { label, angle in
+                    Text(label)
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(label == "N" ? Color.cyan : Color.white.opacity(0.5))
+                        .offset(y: -24)
+                        .rotationEffect(.degrees(angle))
+                }
+            }
+            .rotationEffect(.degrees(-headingDegrees))
+            .animation(.easeInOut(duration: 0.3), value: headingDegrees)
 
             Image(systemName: "arrow.up")
                 .resizable()

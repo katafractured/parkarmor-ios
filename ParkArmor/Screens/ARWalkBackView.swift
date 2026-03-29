@@ -11,6 +11,7 @@ struct ARWalkBackView: View {
 
     @State private var arAvailable = ARWorldTrackingConfiguration.isSupported
     @State private var bearing: Double = 0
+    @State private var headingDegrees: Double = 0
     @State private var distance: String = ""
 
     var body: some View {
@@ -46,7 +47,7 @@ struct ARWalkBackView: View {
                             .fill(DesignTokens.parkSurface.opacity(arAvailable ? 0.75 : 1))
                             .frame(width: 180, height: 180)
 
-                        CompassArrow(bearingDegrees: bearing, size: 120)
+                        CompassArrow(bearingDegrees: bearing, headingDegrees: headingDegrees, size: 120)
                     }
 
                     VStack(spacing: 8) {
@@ -96,8 +97,10 @@ struct ARWalkBackView: View {
         let rawBearing = userLocation.coordinate.bearing(to: parking.coordinate)
         if let heading = heading ?? appViewModel.locationManager.heading {
             bearing = (rawBearing - heading.trueHeading + 360).truncatingRemainder(dividingBy: 360)
+            headingDegrees = heading.trueHeading
         } else {
             bearing = rawBearing
+            headingDegrees = 0
         }
     }
 }
