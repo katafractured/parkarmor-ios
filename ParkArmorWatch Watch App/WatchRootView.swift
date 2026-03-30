@@ -65,6 +65,8 @@ private struct WatchNoParkingView: View {
             Group {
                 if let statusMessage = viewModel.statusMessage {
                     WatchStatusRow(message: statusMessage)
+                } else if viewModel.isSavingParking && viewModel.userLocation == nil {
+                    watchHelperText("Getting location…")
                 } else if !viewModel.isPhoneReachable {
                     watchHelperText("iPhone not in range")
                 } else if let error = viewModel.saveError {

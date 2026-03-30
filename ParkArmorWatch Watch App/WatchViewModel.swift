@@ -35,6 +35,7 @@ import WidgetKit
 
     private let locationManager = CLLocationManager()
     @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
+    @ObservationIgnored private var pendingSaveAfterLocation = false
 
     struct WatchParkingSnapshot {
         let latitude: Double
@@ -83,14 +84,22 @@ import WidgetKit
             saveError = "iPhone not in range"
             return
         }
+        saveError = nil
+        endError = nil
+
         guard let location = userLocation else {
-            saveError = "Location unavailable"
+            pendingSaveAfterLocation = true
+            isSavingParking = true
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.requestLocation()
             return
         }
 
         isSavingParking = true
-        saveError = nil
+        sendSaveParking(for: location)
+    }
 
+    private func sendSaveParking(for location: CLLocation) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, _ in
             guard let self else { return }
@@ -221,15 +230,44 @@ import WidgetKit
 
 extension WatchViewModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        userLocation = locations.last
+        guard let latestLocation = locations.last else { return }
+        userLocation = latestLocation
         persistSharedState()
+
+        if pendingSaveAfterLocation {
+            pendingSaveAfterLocation = false
+            sendSaveParking(for: latestLocation)
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         heading = newHeading
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            if pendingSaveAfterLocation {
+                manager.requestLocation()
+            }
+        case .denied, .restricted:
+            pendingSaveAfterLocation = false
+            isSavingParking = false
+            saveError = "Allow location on Apple Watch"
+        case .notDetermined:
+            break
+        @unknown default:
+            break
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        if pendingSaveAfterLocation {
+            pendingSaveAfterLocation = false
+            isSavingParking = false
+            saveError = "Still getting location. Try again."
+        }
+    }
 }
 
 extension WatchViewModel: WCSessionDelegate {
