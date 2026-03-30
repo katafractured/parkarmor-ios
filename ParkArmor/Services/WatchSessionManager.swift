@@ -57,28 +57,43 @@ extension WatchSessionManager: WCSessionDelegate {
     }
 
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
-        handleMessage(message)
+        processMessage(message)
     }
 
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-        handleMessage(message)
-        replyHandler(["status": "ok"])
+        processMessage(message, replyHandler: replyHandler)
     }
 
-    private func handleMessage(_ message: [String: Any]) {
-        guard let action = message["action"] as? String else { return }
+    private func processMessage(
+        _ message: [String: Any],
+        replyHandler: (([String: Any]) -> Void)? = nil
+    ) {
+        guard let action = message["action"] as? String else {
+            replyHandler?(["status": "error", "message": "Missing action"])
+            return
+        }
 
-        if action == "saveParking",
-           let latitude = message["latitude"] as? Double,
-           let longitude = message["longitude"] as? Double,
-           let address = message["address"] as? String {
-            DispatchQueue.main.async {
+        let work = {
+            if action == "saveParking",
+               let latitude = message["latitude"] as? Double,
+               let longitude = message["longitude"] as? Double,
+               let address = message["address"] as? String {
                 self.handleSaveParkingRequest(latitude: latitude, longitude: longitude, address: address)
-            }
-        } else if action == "endParking" {
-            DispatchQueue.main.async {
+                replyHandler?(["status": "ok", "action": action])
+            } else if action == "endParking" {
                 self.handleEndParkingRequest()
+                replyHandler?(["status": "ok", "action": action])
+            } else {
+                replyHandler?(["status": "error", "message": "Unknown action: \(action)"])
             }
+        }
+
+        if Thread.isMainThread {
+            work()
+        } else if replyHandler != nil {
+            DispatchQueue.main.sync(execute: work)
+        } else {
+            DispatchQueue.main.async(execute: work)
         }
     }
 

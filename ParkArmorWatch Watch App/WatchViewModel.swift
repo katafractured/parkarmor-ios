@@ -25,8 +25,10 @@ import WidgetKit
     var isEndingParking = false
     var endError: String?
     var isPhoneReachable = false
+    var statusMessage: String?
 
     private let locationManager = CLLocationManager()
+    @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
 
     struct WatchParkingSnapshot {
         let latitude: Double
@@ -108,9 +110,15 @@ import WidgetKit
                 "address": address
             ]
 
-            WCSession.default.sendMessage(message, replyHandler: { [weak self] _ in
+            WCSession.default.sendMessage(message, replyHandler: { [weak self] reply in
                 DispatchQueue.main.async {
                     self?.isSavingParking = false
+                    if (reply["status"] as? String) != "ok" {
+                        self?.saveError = reply["message"] as? String ?? "Unable to save parking"
+                    } else {
+                        self?.saveError = nil
+                        self?.showStatusMessage("Parking saved")
+                    }
                 }
             }, errorHandler: { [weak self] error in
                 DispatchQueue.main.async {
@@ -130,9 +138,19 @@ import WidgetKit
         isEndingParking = true
         endError = nil
 
-        WCSession.default.sendMessage(["action": "endParking"], replyHandler: { [weak self] _ in
+        WCSession.default.sendMessage(["action": "endParking"], replyHandler: { [weak self] reply in
             DispatchQueue.main.async {
                 self?.isEndingParking = false
+
+                guard (reply["status"] as? String) == "ok" else {
+                    self?.endError = reply["message"] as? String ?? "Unable to end parking"
+                    return
+                }
+
+                self?.endError = nil
+                self?.activeParkingSnapshot = nil
+                self?.persistSharedState()
+                self?.showStatusMessage("Parking ended")
             }
         }, errorHandler: { [weak self] error in
             DispatchQueue.main.async {
@@ -313,5 +331,18 @@ private extension WatchViewModel {
         }
 
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    func showStatusMessage(_ message: String) {
+        statusMessageTask?.cancel()
+        statusMessage = message
+
+        statusMessageTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(2.4))
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                self?.statusMessage = nil
+            }
+        }
     }
 }

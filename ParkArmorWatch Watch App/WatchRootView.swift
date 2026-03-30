@@ -4,11 +4,36 @@ struct WatchRootView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     var body: some View {
-        if let parking = viewModel.activeParkingSnapshot {
-            WatchActiveParkingView(parking: parking)
-        } else {
-            WatchNoParkingView()
+        ZStack(alignment: .bottom) {
+            if let parking = viewModel.activeParkingSnapshot {
+                WatchActiveParkingView(parking: parking)
+            } else {
+                WatchNoParkingView()
+            }
+
+            if let statusMessage = viewModel.statusMessage {
+                WatchStatusBanner(message: statusMessage)
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 8)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: viewModel.statusMessage)
+    }
+}
+
+private struct WatchStatusBanner: View {
+    let message: String
+
+    var body: some View {
+        Label(message, systemImage: "checkmark.circle.fill")
+            .font(.caption2.bold())
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .background(.green.opacity(0.88))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
