@@ -882,7 +882,7 @@
 				CURRENT_PROJECT_VERSION = 18;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatch;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location on Apple Watch to save your parking spot and point you back to your car.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.katafract.ParkArmor;
@@ -918,7 +918,7 @@
 				CURRENT_PROJECT_VERSION = 18;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatch;
+				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ParkArmor uses your location on Apple Watch to save your parking spot and point you back to your car.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.katafract.ParkArmor;
