@@ -45,6 +45,9 @@ import Observation
 
     func configure(context: ModelContext) {
         repository = ParkingRepository(context: context)
+        watchSession.statusProvider = { [weak self] in
+            self?.currentWatchStatusPayload() ?? ["status": "error", "message": "Phone still starting"]
+        }
         refreshActiveParking()
         processPendingWatchActionIfNeeded()
     }
@@ -165,5 +168,26 @@ import Observation
         case .endParking:
             handleWatchEndParking()
         }
+    }
+
+    private func currentWatchStatusPayload() -> [String: Any] {
+        let currentParking = activeParking ?? (try? repository?.fetchActive()) ?? nil
+        if let currentParking {
+            return [
+                "status": "ok",
+                "activeParking": [
+                    "latitude": currentParking.latitude,
+                    "longitude": currentParking.longitude,
+                    "address": currentParking.displayAddress,
+                    "savedAt": currentParking.savedAt.timeIntervalSince1970,
+                    "timerExpiresAt": currentParking.timer?.expiresAt.timeIntervalSince1970 ?? 0
+                ]
+            ]
+        }
+
+        return [
+            "status": "ok",
+            "activeParking": NSNull()
+        ]
     }
 }

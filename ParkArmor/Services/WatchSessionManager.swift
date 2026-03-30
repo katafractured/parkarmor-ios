@@ -6,6 +6,7 @@ import WatchConnectivity
     static let shared = WatchSessionManager()
 
     var isReachable = false
+    var statusProvider: (() -> [String: Any])?
 
     override init() {
         super.init()
@@ -83,6 +84,9 @@ extension WatchSessionManager: WCSessionDelegate {
             } else if action == "endParking" {
                 self.handleEndParkingRequest()
                 replyHandler?(["status": "ok", "action": action])
+            } else if action == "syncStatus" {
+                let payload = self.statusProvider?() ?? ["status": "error", "message": "Phone still starting"]
+                replyHandler?(payload)
             } else {
                 replyHandler?(["status": "error", "message": "Unknown action: \(action)"])
             }

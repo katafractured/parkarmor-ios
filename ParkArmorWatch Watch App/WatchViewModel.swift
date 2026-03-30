@@ -7,7 +7,8 @@ import WidgetKit
 @Observable final class WatchViewModel: NSObject {
     enum SyncState {
         case syncing
-        case resolved
+        case live
+        case cached
     }
 
     private enum SharedKeys {
@@ -36,6 +37,7 @@ import WidgetKit
     private let locationManager = CLLocationManager()
     @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
     @ObservationIgnored private var pendingSaveAfterLocation = false
+    @ObservationIgnored private var syncFallbackTask: Task<Void, Never>?
 
     struct WatchParkingSnapshot {
         let latitude: Double
@@ -77,6 +79,7 @@ import WidgetKit
         }
 
         loadPersistedSnapshot()
+        startSyncFallbackTimer()
     }
 
     func saveParking() {
@@ -274,13 +277,20 @@ extension WatchViewModel: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
-            self.applyApplicationContext(session.receivedApplicationContext)
+            if session.isReachable {
+                self.requestCurrentStatus()
+            } else {
+                self.applyApplicationContext(session.receivedApplicationContext)
+            }
         }
     }
 
     func sessionReachabilityDidChange(_ session: WCSession) {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
+            if session.isReachable {
+                self.requestCurrentStatus()
+            }
         }
     }
 
@@ -314,8 +324,56 @@ private extension WatchViewModel {
         )
     }
 
+    func requestCurrentStatus() {
+        guard WCSession.default.isReachable else { return }
+        syncState = .syncing
+
+        WCSession.default.sendMessage(["action": "syncStatus"], replyHandler: { [weak self] reply in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.applySyncReply(reply)
+            }
+        }, errorHandler: { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.applyApplicationContext(WCSession.default.receivedApplicationContext)
+            }
+        })
+    }
+
+    func applySyncReply(_ reply: [String: Any]) {
+        syncFallbackTask?.cancel()
+        syncState = .live
+
+        guard (reply["status"] as? String) == "ok" else {
+            activeParkingSnapshot = nil
+            persistSharedState()
+            return
+        }
+
+        if let parking = reply["activeParking"] as? [String: Any],
+           let latitude = parking["latitude"] as? Double,
+           let longitude = parking["longitude"] as? Double,
+           let address = parking["address"] as? String,
+           let savedAtInterval = parking["savedAt"] as? TimeInterval {
+            let timerInterval = parking["timerExpiresAt"] as? TimeInterval
+            let timerDate = timerInterval.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0) : nil }
+            activeParkingSnapshot = WatchParkingSnapshot(
+                latitude: latitude,
+                longitude: longitude,
+                address: address,
+                savedAt: Date(timeIntervalSince1970: savedAtInterval),
+                timerExpiresAt: timerDate
+            )
+        } else {
+            activeParkingSnapshot = nil
+        }
+
+        persistSharedState()
+    }
+
     func applyApplicationContext(_ applicationContext: [String: Any]) {
-        syncState = .resolved
+        syncFallbackTask?.cancel()
+        syncState = .cached
 
         if let parking = applicationContext["activeParking"] as? [String: Any],
            let latitude = parking["latitude"] as? Double,
@@ -337,6 +395,18 @@ private extension WatchViewModel {
         }
 
         persistSharedState()
+    }
+
+    func startSyncFallbackTimer() {
+        syncFallbackTask?.cancel()
+        syncFallbackTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(1.2))
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                guard let self, self.syncState == .syncing else { return }
+                self.applyApplicationContext(WCSession.default.receivedApplicationContext)
+            }
+        }
     }
 
     func persistSharedState() {

@@ -65,6 +65,8 @@ private struct WatchNoParkingView: View {
             Group {
                 if let statusMessage = viewModel.statusMessage {
                     WatchStatusRow(message: statusMessage)
+                } else if viewModel.syncState == .cached {
+                    WatchCachedRow()
                 } else if viewModel.isSavingParking && viewModel.userLocation == nil {
                     watchHelperText("Getting location…")
                 } else if !viewModel.isPhoneReachable {
@@ -144,6 +146,8 @@ private struct WatchActiveParkingView: View {
             Group {
                 if let statusMessage = viewModel.statusMessage {
                     WatchStatusRow(message: statusMessage)
+                } else if viewModel.syncState == .cached {
+                    WatchCachedRow()
                 } else if !viewModel.isPhoneReachable {
                     watchHelperText("iPhone not in range")
                 } else if let error = viewModel.endError {
@@ -183,6 +187,19 @@ private struct WatchActiveParkingView: View {
         } message: {
             Text("This will end your current parking session.")
         }
+    }
+}
+
+private struct WatchCachedRow: View {
+    var body: some View {
+        Label("Cached data, waiting to sync", systemImage: "clock.arrow.circlepath")
+            .font(.caption2.weight(.semibold))
+            .foregroundStyle(.yellow)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .frame(maxWidth: .infinity)
+            .background(.yellow.opacity(0.14))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 
