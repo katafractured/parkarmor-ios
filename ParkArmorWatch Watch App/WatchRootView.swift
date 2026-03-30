@@ -4,36 +4,45 @@ struct WatchRootView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            if let parking = viewModel.activeParkingSnapshot {
+        Group {
+            if viewModel.syncState == .syncing {
+                WatchSyncingView()
+            } else if let parking = viewModel.activeParkingSnapshot {
                 WatchActiveParkingView(parking: parking)
             } else {
                 WatchNoParkingView()
             }
-
-            if let statusMessage = viewModel.statusMessage {
-                WatchStatusBanner(message: statusMessage)
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 8)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
         }
-        .animation(.easeInOut(duration: 0.2), value: viewModel.statusMessage)
     }
 }
 
-private struct WatchStatusBanner: View {
+private struct WatchSyncingView: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            ProgressView()
+                .tint(.cyan)
+
+            Text("Syncing iPhone…")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle("ParkArmor")
+    }
+}
+
+private struct WatchStatusRow: View {
     let message: String
 
     var body: some View {
         Label(message, systemImage: "checkmark.circle.fill")
-            .font(.caption2.bold())
-            .foregroundStyle(.white)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
+            .font(.caption2.weight(.semibold))
+            .foregroundStyle(.green)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
             .frame(maxWidth: .infinity)
-            .background(.green.opacity(0.88))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .background(.green.opacity(0.14))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 
@@ -41,41 +50,51 @@ private struct WatchNoParkingView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
+            Spacer(minLength: 0)
+
             Image(systemName: "car.fill")
-                .font(.title2)
+                .font(.title3)
                 .foregroundStyle(.cyan)
 
-            Text("No parking saved")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            Text("Ready to save your spot")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
+
+            Group {
+                if let statusMessage = viewModel.statusMessage {
+                    WatchStatusRow(message: statusMessage)
+                } else if !viewModel.isPhoneReachable {
+                    watchHelperText("iPhone not in range")
+                } else if let error = viewModel.saveError {
+                    watchErrorText(error)
+                } else {
+                    watchHelperText("Tap once after you park.")
+                }
+            }
 
             Button {
                 viewModel.saveParking()
             } label: {
                 if viewModel.isSavingParking {
                     ProgressView()
+                        .tint(.black)
+                        .frame(maxWidth: .infinity)
                 } else {
                     Label("Park Here", systemImage: "pin.fill")
                         .font(.caption.bold())
+                        .frame(maxWidth: .infinity)
                 }
             }
             .buttonStyle(.borderedProminent)
             .tint(.cyan)
             .disabled(viewModel.isSavingParking || !viewModel.isPhoneReachable)
 
-            if !viewModel.isPhoneReachable {
-                Text("iPhone not in range")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            } else if let error = viewModel.saveError {
-                Text(error)
-                    .font(.caption2)
-                    .foregroundStyle(.red)
-            }
+            Spacer(minLength: 0)
         }
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("ParkArmor")
     }
 }
@@ -86,13 +105,13 @@ private struct WatchActiveParkingView: View {
     @State private var showingEndConfirmation = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 12) {
+        VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 Text(parking.address)
                     .font(.caption.bold())
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                    .lineLimit(3)
+                    .lineLimit(2)
 
                 HStack(spacing: 4) {
                     Image(systemName: "timer")
@@ -118,33 +137,41 @@ private struct WatchActiveParkingView: View {
                         .font(.caption2.bold())
                         .foregroundStyle(.orange)
                 }
+            }
 
-                Button(role: .destructive) {
-                    showingEndConfirmation = true
-                } label: {
-                    if viewModel.isEndingParking {
-                        ProgressView()
-                    } else {
-                        Label("End Parking", systemImage: "xmark.circle.fill")
-                            .font(.caption.bold())
-                    }
-                }
-                .disabled(viewModel.isEndingParking || !viewModel.isPhoneReachable)
-
-                if !viewModel.isPhoneReachable {
-                    Text("iPhone not in range")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+            Group {
+                if let statusMessage = viewModel.statusMessage {
+                    WatchStatusRow(message: statusMessage)
+                } else if !viewModel.isPhoneReachable {
+                    watchHelperText("iPhone not in range")
                 } else if let error = viewModel.endError {
-                    Text(error)
-                        .font(.caption2)
-                        .foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
+                    watchErrorText(error)
                 }
             }
-            .padding(.horizontal, 8)
+
+            Spacer(minLength: 0)
+
+            Button(role: .destructive) {
+                showingEndConfirmation = true
+            } label: {
+                if viewModel.isEndingParking {
+                    ProgressView()
+                        .tint(.white)
+                        .frame(maxWidth: .infinity)
+                } else {
+                    Label("End Parking", systemImage: "xmark.circle.fill")
+                        .font(.caption.bold())
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .disabled(viewModel.isEndingParking || !viewModel.isPhoneReachable)
+            .buttonStyle(.borderedProminent)
+            .tint(.red)
+
+            Spacer(minLength: 0)
         }
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("My Car")
         .alert("End Parking?", isPresented: $showingEndConfirmation) {
             Button("End", role: .destructive) {
@@ -155,6 +182,22 @@ private struct WatchActiveParkingView: View {
             Text("This will end your current parking session.")
         }
     }
+}
+
+private func watchHelperText(_ text: String) -> some View {
+    Text(text)
+        .font(.caption2)
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+}
+
+private func watchErrorText(_ text: String) -> some View {
+    Text(text)
+        .font(.caption2)
+        .foregroundStyle(.red)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
 }
 
 private struct WatchCompassView: View {
