@@ -5,6 +5,11 @@ import WatchConnectivity
 import WidgetKit
 
 @Observable final class WatchViewModel: NSObject {
+    enum SyncState {
+        case syncing
+        case resolved
+    }
+
     private enum SharedKeys {
         static let suiteName = "group.com.katafract.ParkArmor"
         static let activeParkingAddress = "watchActiveParkingAddress"
@@ -26,6 +31,7 @@ import WidgetKit
     var endError: String?
     var isPhoneReachable = false
     var statusMessage: String?
+    var syncState: SyncState = .syncing
 
     private let locationManager = CLLocationManager()
     @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
@@ -230,28 +236,7 @@ extension WatchViewModel: WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
-            let context = session.receivedApplicationContext
-            // Only trust WCSession context if the phone has ever sent activeParking.
-            // If the key is present but not valid parking data (e.g. NSNull = no session),
-            // clear the snapshot so stale UserDefaults data doesn't show a phantom session.
-            guard context.keys.contains("activeParking") else { return }
-            if let parking = context["activeParking"] as? [String: Any],
-               let latitude = parking["latitude"] as? Double,
-               let longitude = parking["longitude"] as? Double,
-               let address = parking["address"] as? String,
-               let savedAtInterval = parking["savedAt"] as? TimeInterval {
-                let timerInterval = parking["timerExpiresAt"] as? TimeInterval
-                let timerDate = timerInterval.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0) : nil }
-                self.activeParkingSnapshot = WatchParkingSnapshot(
-                    latitude: latitude,
-                    longitude: longitude,
-                    address: address,
-                    savedAt: Date(timeIntervalSince1970: savedAtInterval),
-                    timerExpiresAt: timerDate
-                )
-            } else {
-                self.activeParkingSnapshot = nil
-            }
+            self.applyApplicationContext(session.receivedApplicationContext)
         }
     }
 
@@ -263,24 +248,7 @@ extension WatchViewModel: WCSessionDelegate {
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         DispatchQueue.main.async {
-            if let parking = applicationContext["activeParking"] as? [String: Any],
-               let latitude = parking["latitude"] as? Double,
-               let longitude = parking["longitude"] as? Double,
-               let address = parking["address"] as? String,
-               let savedAtInterval = parking["savedAt"] as? TimeInterval {
-                let timerInterval = parking["timerExpiresAt"] as? TimeInterval
-                let timerDate = timerInterval.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0) : nil }
-                self.activeParkingSnapshot = WatchParkingSnapshot(
-                    latitude: latitude,
-                    longitude: longitude,
-                    address: address,
-                    savedAt: Date(timeIntervalSince1970: savedAtInterval),
-                    timerExpiresAt: timerDate
-                )
-            } else {
-                self.activeParkingSnapshot = nil
-            }
-            self.persistSharedState()
+            self.applyApplicationContext(applicationContext)
         }
     }
 }
@@ -306,6 +274,31 @@ private extension WatchViewModel {
             savedAt: Date(timeIntervalSince1970: savedAt),
             timerExpiresAt: timerDate
         )
+    }
+
+    func applyApplicationContext(_ applicationContext: [String: Any]) {
+        syncState = .resolved
+
+        if let parking = applicationContext["activeParking"] as? [String: Any],
+           let latitude = parking["latitude"] as? Double,
+           let longitude = parking["longitude"] as? Double,
+           let address = parking["address"] as? String,
+           let savedAtInterval = parking["savedAt"] as? TimeInterval {
+            let timerInterval = parking["timerExpiresAt"] as? TimeInterval
+            let timerDate = timerInterval.flatMap { $0 > 0 ? Date(timeIntervalSince1970: $0) : nil }
+            activeParkingSnapshot = WatchParkingSnapshot(
+                latitude: latitude,
+                longitude: longitude,
+                address: address,
+                savedAt: Date(timeIntervalSince1970: savedAtInterval),
+                timerExpiresAt: timerDate
+            )
+        } else {
+            // Do not keep stale watch-local state if the phone has no active parking.
+            activeParkingSnapshot = nil
+        }
+
+        persistSharedState()
     }
 
     func persistSharedState() {
