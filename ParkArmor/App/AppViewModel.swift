@@ -5,6 +5,11 @@ import SwiftData
 import Observation
 
 @Observable final class AppViewModel {
+    private enum PendingWatchAction {
+        case save(latitude: Double, longitude: Double, address: String)
+        case endParking
+    }
+
     // Services
     let locationManager = LocationManager()
     let mapKitHelper = MapKitHelper()
@@ -27,15 +32,21 @@ import Observation
     var hasSeenOnboarding = false
 
     private var hasCompletedLaunchSetup = false
+    private var hasRegisteredWatchObservers = false
+    private var pendingWatchAction: PendingWatchAction?
+    private var observerTokens: [NSObjectProtocol] = []
 
     var isPro: Bool { storeKitManager.isPro }
 
     init() {
         hasSeenOnboarding = preferences.hasSeenOnboarding
+        registerWatchObserversIfNeeded()
     }
 
     func configure(context: ModelContext) {
         repository = ParkingRepository(context: context)
+        refreshActiveParking()
+        processPendingWatchActionIfNeeded()
     }
 
     func onAppLaunch() async {
@@ -49,40 +60,6 @@ import Observation
 
         guard !hasCompletedLaunchSetup else { return }
         hasCompletedLaunchSetup = true
-
-        NotificationCenter.default.addObserver(
-            forName: .watchRequestedSaveParking,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            guard let self,
-                  let lat = notification.userInfo?["latitude"] as? Double,
-                  let lon = notification.userInfo?["longitude"] as? Double,
-                  let address = notification.userInfo?["address"] as? String
-            else { return }
-
-            do {
-                try self.repository?.saveParking(
-                    coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
-                    address: address,
-                    notes: "",
-                    preserveHistory: self.preferences.saveParkingHistory
-                )
-                self.refreshActiveParking()
-            } catch {
-                self.errorMessage = error.localizedDescription
-            }
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: .watchRequestedEndParking,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self else { return }
-            self.endParking()
-            self.watchSession.sendParkingToWatch(nil)
-        }
 
         ParkArmorShortcuts.updateAppShortcutParameters()
     }
@@ -99,14 +76,16 @@ import Observation
     }
 
     func endParking() {
-        guard let active = activeParking else { return }
+        guard let repository else { return }
+        guard let active = activeParking ?? (try? repository.fetchActive()) else { return }
         // Cancel any timer notification
         if let identifier = active.timer?.notificationIdentifier, !identifier.isEmpty {
             notificationManager.cancelNotification(identifier: identifier)
         }
         do {
-            try repository?.deactivateAll()
+            try repository.deactivateAll()
             activeParking = nil
+            watchSession.sendParkingToWatch(nil)
             Task { await liveActivityManager.endCurrentActivity() }
         } catch {
             errorMessage = error.localizedDescription
@@ -117,5 +96,74 @@ import Observation
         if isPro { return false }
         showingPaywall = true
         return true
+    }
+
+    private func registerWatchObserversIfNeeded() {
+        guard !hasRegisteredWatchObservers else { return }
+        hasRegisteredWatchObservers = true
+
+        let saveToken = NotificationCenter.default.addObserver(
+            forName: .watchRequestedSaveParking,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self,
+                  let lat = notification.userInfo?["latitude"] as? Double,
+                  let lon = notification.userInfo?["longitude"] as? Double,
+                  let address = notification.userInfo?["address"] as? String
+            else { return }
+
+            self.handleWatchSaveParking(latitude: lat, longitude: lon, address: address)
+        }
+        observerTokens.append(saveToken)
+
+        let endToken = NotificationCenter.default.addObserver(
+            forName: .watchRequestedEndParking,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleWatchEndParking()
+        }
+        observerTokens.append(endToken)
+    }
+
+    private func handleWatchSaveParking(latitude: Double, longitude: Double, address: String) {
+        guard let repository else {
+            pendingWatchAction = .save(latitude: latitude, longitude: longitude, address: address)
+            return
+        }
+
+        do {
+            try repository.saveParking(
+                coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
+                address: address,
+                notes: "",
+                preserveHistory: preferences.saveParkingHistory
+            )
+            refreshActiveParking()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func handleWatchEndParking() {
+        guard repository != nil else {
+            pendingWatchAction = .endParking
+            return
+        }
+
+        endParking()
+    }
+
+    private func processPendingWatchActionIfNeeded() {
+        guard let pendingWatchAction else { return }
+        self.pendingWatchAction = nil
+
+        switch pendingWatchAction {
+        case let .save(latitude, longitude, address):
+            handleWatchSaveParking(latitude: latitude, longitude: longitude, address: address)
+        case .endParking:
+            handleWatchEndParking()
+        }
     }
 }
