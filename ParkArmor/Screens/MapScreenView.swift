@@ -223,7 +223,11 @@ private struct ActiveParkingBanner: View {
                         .foregroundStyle(DesignTokens.parkTextPrimary)
                         .lineLimit(1)
 
-                    CompactTimerDisplay(savedAt: parking.savedAt)
+                    if let timer = parking.timer, !timer.isExpired {
+                        CompactCountdownDisplay(expiresAt: timer.expiresAt)
+                    } else {
+                        CompactTimerDisplay(savedAt: parking.savedAt)
+                    }
                 }
 
                 Spacer()

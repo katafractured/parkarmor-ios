@@ -8,17 +8,26 @@ enum TimeFormat: String, CaseIterable {
 
 enum TimerAlertMode: String, CaseIterable {
     case atExpiration = "at_expiration"
+    case fiveMinutesBefore = "five_minutes_before"
     case fifteenMinutesBefore = "fifteen_minutes_before"
     case fifteenMinutesAndExpiration = "fifteen_minutes_and_expiration"
+    case thirtyMinutesBefore = "thirty_minutes_before"
+    case oneHourBefore = "one_hour_before"
 
     var title: String {
         switch self {
         case .atExpiration:
             return "At expiration"
+        case .fiveMinutesBefore:
+            return "5 min before"
         case .fifteenMinutesBefore:
             return "15 min before"
         case .fifteenMinutesAndExpiration:
             return "15 min before + expiration"
+        case .thirtyMinutesBefore:
+            return "30 min before"
+        case .oneHourBefore:
+            return "1 hour before"
         }
     }
 
@@ -26,10 +35,16 @@ enum TimerAlertMode: String, CaseIterable {
         switch self {
         case .atExpiration:
             return [0]
+        case .fiveMinutesBefore:
+            return [5 * 60]
         case .fifteenMinutesBefore:
             return [15 * 60]
         case .fifteenMinutesAndExpiration:
             return [15 * 60, 0]
+        case .thirtyMinutesBefore:
+            return [30 * 60]
+        case .oneHourBefore:
+            return [60 * 60]
         }
     }
 }
