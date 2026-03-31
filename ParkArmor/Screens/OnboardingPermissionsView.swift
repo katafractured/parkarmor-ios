@@ -78,10 +78,21 @@ struct OnboardingPermissionsView: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            let status = appViewModel.locationManager.authorizationStatus
+            if status == .denied || status == .restricted {
+                showPaywall = true
+            }
+        }
         .onChange(of: appViewModel.locationManager.authorizationStatus) { _, status in
-            if status == .authorizedWhenInUse || status == .authorizedAlways {
+            switch status {
+            case .authorizedWhenInUse, .authorizedAlways:
                 appViewModel.locationManager.startUpdating()
                 showPaywall = true
+            case .denied, .restricted:
+                showPaywall = true
+            default:
+                break
             }
         }
         .navigationDestination(isPresented: $showPaywall) {

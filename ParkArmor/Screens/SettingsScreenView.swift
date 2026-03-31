@@ -8,6 +8,7 @@ struct SettingsScreenView: View {
     @State private var showingPaywall = false
     @State private var showingClearHistoryConfirmation = false
     @State private var distanceUnit: DistanceUnit = .miles
+    @State private var timeFormat: TimeFormat = .elapsed
     @State private var timerAlertMode: TimerAlertMode = .atExpiration
     @State private var historyRetention: HistoryRetentionOption = .thirtyDays
 
@@ -62,11 +63,15 @@ struct SettingsScreenView: View {
             }
             .task {
                 distanceUnit = appViewModel.preferences.distanceUnit
+                timeFormat = appViewModel.preferences.timeFormat
                 timerAlertMode = appViewModel.preferences.timerAlertMode
                 historyRetention = clampedHistoryRetention(appViewModel.preferences.historyRetention)
             }
             .onChange(of: distanceUnit) { _, newValue in
                 appViewModel.preferences.distanceUnit = newValue
+            }
+            .onChange(of: timeFormat) { _, newValue in
+                appViewModel.preferences.timeFormat = newValue
             }
             .onChange(of: timerAlertMode) { _, newValue in
                 appViewModel.preferences.timerAlertMode = newValue
@@ -132,6 +137,19 @@ struct SettingsScreenView: View {
                 selection: $distanceUnit,
                 options: DistanceUnit.allCases,
                 titleForOption: { $0.rawValue.capitalized }
+            )
+
+            preferenceMenuRow(
+                title: "Time Display",
+                systemImage: "clock",
+                selection: $timeFormat,
+                options: TimeFormat.allCases,
+                titleForOption: {
+                    switch $0 {
+                    case .elapsed: return "Elapsed (2h 15m)"
+                    case .clockTime: return "Clock time (Parked at 2:30 PM)"
+                    }
+                }
             )
 
             settingsToggleRow(

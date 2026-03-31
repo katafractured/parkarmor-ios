@@ -7,6 +7,11 @@ struct OnboardingPaywallView: View {
         PaywallView(storeKit: appViewModel.storeKitManager) {
             appViewModel.completeOnboarding()
         }
+        .onAppear {
+            if appViewModel.storeKitManager.isPro {
+                appViewModel.completeOnboarding()
+            }
+        }
         .onChange(of: appViewModel.storeKitManager.isPro) { _, isPro in
             if isPro {
                 appViewModel.completeOnboarding()

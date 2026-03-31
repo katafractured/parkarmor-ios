@@ -105,6 +105,24 @@ import Observation
         guard !hasRegisteredWatchObservers else { return }
         hasRegisteredWatchObservers = true
 
+        let openFromNotifToken = NotificationCenter.default.addObserver(
+            forName: .notificationTappedOpenActiveParking,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.shouldPresentActiveParkingFromLiveActivity = true
+        }
+        observerTokens.append(openFromNotifToken)
+
+        let endFromNotifToken = NotificationCenter.default.addObserver(
+            forName: .notificationActionEndParking,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleWatchEndParking()
+        }
+        observerTokens.append(endFromNotifToken)
+
         let saveToken = NotificationCenter.default.addObserver(
             forName: .watchRequestedSaveParking,
             object: nil,

@@ -13,6 +13,7 @@ struct ActiveParkingView: View {
     @State private var timerDate = Date().addingTimeInterval(7200)
     @State private var showingNicknameEditor = false
     @State private var nicknameDraft: String = ""
+    @State private var timerSchedulingError: String?
 
     var body: some View {
         NavigationStack {
@@ -135,6 +136,14 @@ struct ActiveParkingView: View {
         }
         .onChange(of: appViewModel.locationManager.heading) { _, heading in
             viewModel?.updateHeading(heading)
+        }
+        .alert("Couldn't Set Timer", isPresented: Binding(
+            get: { timerSchedulingError != nil },
+            set: { if !$0 { timerSchedulingError = nil } }
+        )) {
+            Button("OK", role: .cancel) { timerSchedulingError = nil }
+        } message: {
+            Text(timerSchedulingError ?? "")
         }
     }
 
@@ -294,7 +303,9 @@ struct ActiveParkingView: View {
                                     try appViewModel.repository?.addTimer(to: parking, expiresAt: timerDate, notificationId: id)
                                     appViewModel.liveActivityManager.sync(with: parking)
                                     showingTimerPicker = false
-                                } catch {}
+                                } catch {
+                                    timerSchedulingError = error.localizedDescription
+                                }
                             }
                         }
                         .buttonStyle(.borderedProminent)
