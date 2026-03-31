@@ -64,7 +64,7 @@ struct OnboardingPermissionsView: View {
                     Button {
                         appViewModel.locationManager.requestPermission()
                     } label: {
-                        Text("Enable Location")
+                        Text("Continue")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .frame(height: 54)
@@ -73,12 +73,6 @@ struct OnboardingPermissionsView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                     .padding(.horizontal, 20)
-
-                    Button("Use Timer Only") {
-                        showPaywall = true
-                    }
-                    .font(.footnote)
-                    .foregroundStyle(DesignTokens.parkTextSecondary)
                 }
                 .padding(.bottom, 48)
             }
