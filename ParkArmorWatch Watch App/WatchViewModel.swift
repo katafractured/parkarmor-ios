@@ -21,6 +21,7 @@ import WidgetKit
         static let userLatitude = "watchUserLatitude"
         static let userLongitude = "watchUserLongitude"
         static let distanceUnit = "distanceUnit"
+        static let watchSyncState = "watchSyncState"
     }
 
     var activeParkingSnapshot: WatchParkingSnapshot?
@@ -430,6 +431,17 @@ private extension WatchViewModel {
             defaults.set(userLocation.coordinate.latitude, forKey: SharedKeys.userLatitude)
             defaults.set(userLocation.coordinate.longitude, forKey: SharedKeys.userLongitude)
         }
+
+        let syncStateValue: String
+        switch syncState {
+        case .syncing:
+            syncStateValue = "syncing"
+        case .live:
+            syncStateValue = "live"
+        case .cached:
+            syncStateValue = "cached"
+        }
+        defaults.set(syncStateValue, forKey: SharedKeys.watchSyncState)
 
         WidgetCenter.shared.reloadAllTimelines()
     }

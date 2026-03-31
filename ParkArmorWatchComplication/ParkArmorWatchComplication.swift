@@ -12,6 +12,7 @@ private enum SharedKeys {
     static let userLatitude = "watchUserLatitude"
     static let userLongitude = "watchUserLongitude"
     static let distanceUnit = "distanceUnit"
+    static let watchSyncState = "watchSyncState"
 }
 
 struct ParkArmorComplicationEntry: TimelineEntry {
@@ -20,6 +21,7 @@ struct ParkArmorComplicationEntry: TimelineEntry {
     let distanceText: String?
     let timerText: String?
     let isParked: Bool
+    let isCached: Bool
 }
 
 struct ParkArmorComplicationProvider: TimelineProvider {
@@ -29,7 +31,8 @@ struct ParkArmorComplicationProvider: TimelineProvider {
             address: "123 Main St",
             distanceText: "0.3 mi",
             timerText: "42m left",
-            isParked: true
+            isParked: true,
+            isCached: false
         )
     }
 
@@ -57,20 +60,22 @@ struct ParkArmorComplicationProvider: TimelineProvider {
               defaults.object(forKey: SharedKeys.activeParkingLongitude) != nil,
               defaults.object(forKey: SharedKeys.activeParkingSavedAt) != nil
         else {
-            return ParkArmorComplicationEntry(date: .now, address: nil, distanceText: nil, timerText: nil, isParked: false)
+            return ParkArmorComplicationEntry(date: .now, address: nil, distanceText: nil, timerText: nil, isParked: false, isCached: false)
         }
 
         let parkingLatitude = defaults.double(forKey: SharedKeys.activeParkingLatitude)
         let parkingLongitude = defaults.double(forKey: SharedKeys.activeParkingLongitude)
         let distanceText = formattedDistance(from: defaults, to: CLLocationCoordinate2D(latitude: parkingLatitude, longitude: parkingLongitude))
         let timerText = formattedTimer(from: defaults)
+        let isCached = defaults.string(forKey: SharedKeys.watchSyncState) == "cached"
 
         return ParkArmorComplicationEntry(
             date: .now,
             address: address,
             distanceText: distanceText,
             timerText: timerText,
-            isParked: true
+            isParked: true,
+            isCached: isCached
         )
     }
 
@@ -145,12 +150,12 @@ struct ParkArmorWatchComplicationEntryView: View {
             AccessoryWidgetBackground()
             if entry.isParked {
                 VStack(spacing: 2) {
-                    Image(systemName: "car.fill")
-                    Text(entry.distanceText ?? "--")
+                    Image(systemName: entry.isCached ? "clock.arrow.circlepath" : "car.fill")
+                    Text(circularPrimaryText)
                         .font(.system(size: 10, weight: .bold))
                         .minimumScaleFactor(0.7)
                 }
-                .foregroundStyle(.cyan)
+                .foregroundStyle(entry.isCached ? .yellow : .cyan)
             } else {
                 Image(systemName: "car")
                     .foregroundStyle(.secondary)
@@ -162,9 +167,9 @@ struct ParkArmorWatchComplicationEntryView: View {
         Group {
             if entry.isParked {
                 Label {
-                    Text(entry.distanceText ?? "--")
+                    Text(entry.isCached ? "Cached" : (entry.distanceText ?? "--"))
                 } icon: {
-                    Image(systemName: "car.fill")
+                    Image(systemName: entry.isCached ? "clock.arrow.circlepath" : "car.fill")
                 }
             } else {
                 Label("No car", systemImage: "car")
@@ -175,7 +180,7 @@ struct ParkArmorWatchComplicationEntryView: View {
     private var inlineView: some View {
         Group {
             if entry.isParked {
-                Label(entry.distanceText ?? "Parked", systemImage: "car.fill")
+                Label(inlineText, systemImage: entry.isCached ? "clock.arrow.circlepath" : "car.fill")
             } else {
                 Label("No car", systemImage: "car")
             }
@@ -185,20 +190,40 @@ struct ParkArmorWatchComplicationEntryView: View {
     private var rectangularView: some View {
         HStack(spacing: 8) {
             Image(systemName: "car.fill")
-                .foregroundStyle(.cyan)
+                .foregroundStyle(entry.isCached ? .yellow : .cyan)
             VStack(alignment: .leading, spacing: 2) {
                 Text(entry.address ?? "No active parking")
                     .font(.caption.bold())
                     .lineLimit(1)
-                if let timerText = entry.timerText {
-                    Text(timerText)
+                if entry.isCached {
+                    Text(rectangularCachedText)
                         .font(.caption2)
                 } else {
-                    Text(entry.distanceText ?? "Tap to park")
+                    Text(entry.timerText ?? entry.distanceText ?? "Tap to park")
                         .font(.caption2)
                 }
             }
         }
+    }
+
+    private var circularPrimaryText: String {
+        if entry.isCached { return "..." }
+        return entry.distanceText ?? "--"
+    }
+
+    private var inlineText: String {
+        if entry.isCached { return "Cached car" }
+        return entry.distanceText ?? "Parked"
+    }
+
+    private var rectangularCachedText: String {
+        if let timerText = entry.timerText {
+            return "Cached • \(timerText)"
+        }
+        if let distanceText = entry.distanceText {
+            return "Cached • \(distanceText)"
+        }
+        return "Cached, waiting to sync"
     }
 }
 
@@ -224,6 +249,7 @@ struct ParkArmorWatchComplication: Widget {
         address: "123 Main St",
         distanceText: "0.3 mi",
         timerText: "42m",
-        isParked: true
+        isParked: true,
+        isCached: false
     )
 }
