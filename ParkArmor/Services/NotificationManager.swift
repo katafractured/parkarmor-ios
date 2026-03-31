@@ -9,7 +9,28 @@ import Observation
 
     init() {
         UNUserNotificationCenter.current().delegate = notificationDelegate
+        registerNotificationCategories()
         Task { await refreshStatus() }
+    }
+
+    private func registerNotificationCategories() {
+        let endAction = UNNotificationAction(
+            identifier: "END_PARKING",
+            title: "End Parking",
+            options: [.destructive, .authenticationRequired]
+        )
+        let snoozeAction = UNNotificationAction(
+            identifier: "SNOOZE_15",
+            title: "Snooze 15 min",
+            options: []
+        )
+        let category = UNNotificationCategory(
+            identifier: "PARKING_TIMER",
+            actions: [endAction, snoozeAction],
+            intentIdentifiers: [],
+            options: []
+        )
+        UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 
     func refreshStatus() async {
@@ -47,6 +68,7 @@ import Observation
                 minutesBefore: offset == 0 ? nil : Int(offset / 60)
             )
             content.sound = .default
+            content.categoryIdentifier = "PARKING_TIMER"
 
             let components = Calendar.current.dateComponents(
                 [.year, .month, .day, .hour, .minute],
@@ -114,6 +136,21 @@ private final class ParkingNotificationDelegate: NSObject, UNUserNotificationCen
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
+        switch response.actionIdentifier {
+        case "END_PARKING":
+            NotificationCenter.default.post(name: .notificationActionEndParking, object: nil)
+        case "SNOOZE_15":
+            let content = response.notification.request.content.mutableCopy() as! UNMutableNotificationContent
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15 * 60, repeats: false)
+            let request = UNNotificationRequest(
+                identifier: response.notification.request.identifier + "-snooze",
+                content: content,
+                trigger: trigger
+            )
+            center.add(request)
+        default: // UNNotificationDefaultActionIdentifier — banner tap
+            NotificationCenter.default.post(name: .notificationTappedOpenActiveParking, object: nil)
+        }
         completionHandler()
     }
 
@@ -124,4 +161,13 @@ private final class ParkingNotificationDelegate: NSObject, UNUserNotificationCen
     ) {
         completionHandler([.banner, .sound])
     }
+}
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    static let notificationTappedOpenActiveParking =
+        Notification.Name("com.katafract.ParkArmor.notificationTappedOpenActiveParking")
+    static let notificationActionEndParking =
+        Notification.Name("com.katafract.ParkArmor.notificationActionEndParking")
 }

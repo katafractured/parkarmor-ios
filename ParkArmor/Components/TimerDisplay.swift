@@ -41,6 +41,20 @@ struct CompactTimerDisplay: View {
     }
 }
 
+struct CompactCountdownDisplay: View {
+    let expiresAt: Date
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let remaining = max(0, expiresAt.timeIntervalSince(context.date))
+            TimerDisplay(elapsedSeconds: remaining, style: .compact)
+                .foregroundStyle(remaining < 5 * 60
+                    ? DesignTokens.parkDestructive
+                    : DesignTokens.parkCyan)
+        }
+    }
+}
+
 #Preview {
     ZStack {
         DesignTokens.parkNavy.ignoresSafeArea()
