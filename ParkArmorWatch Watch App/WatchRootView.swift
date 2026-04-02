@@ -195,18 +195,28 @@ private struct WatchActiveParkingView: View {
 }
 
 private struct WatchCachedRow: View {
+    @Environment(WatchViewModel.self) private var viewModel
+
+    private var ageText: String {
+        guard let updatedAt = viewModel.contextUpdatedAt else { return "Cached · waiting to sync" }
+        let minutes = Int(Date().timeIntervalSince(updatedAt) / 60)
+        if minutes < 1 { return "Cached · just now" }
+        if minutes < 60 { return "Cached · \(minutes)m ago" }
+        return "Cached · \(minutes / 60)h ago"
+    }
+
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: "clock.arrow.circlepath")
-            Text("Cached, waiting to sync")
+            Text(ageText)
         }
-            .font(.system(size: 10, weight: .semibold))
-            .foregroundStyle(.yellow)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 4)
-            .frame(maxWidth: .infinity)
-            .background(.yellow.opacity(0.12))
-            .clipShape(Capsule())
+        .font(.system(size: 10, weight: .semibold))
+        .foregroundStyle(.yellow)
+        .padding(.horizontal, 6)
+        .padding(.vertical, 4)
+        .frame(maxWidth: .infinity)
+        .background(.yellow.opacity(0.12))
+        .clipShape(Capsule())
     }
 }
 
