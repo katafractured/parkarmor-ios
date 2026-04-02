@@ -19,17 +19,22 @@ import WatchConnectivity
     func sendParkingToWatch(_ parking: ParkingLocation?) {
         guard WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
 
+        let now = Date().timeIntervalSince1970
         if let parking {
             let payload: [String: Any] = [
-                "latitude": parking.latitude,
-                "longitude": parking.longitude,
-                "address": parking.displayAddress,
-                "savedAt": parking.savedAt.timeIntervalSince1970,
-                "timerExpiresAt": parking.timer?.expiresAt.timeIntervalSince1970 ?? 0
+                "activeParking": [
+                    "latitude": parking.latitude,
+                    "longitude": parking.longitude,
+                    "address": parking.displayAddress,
+                    "savedAt": parking.savedAt.timeIntervalSince1970,
+                    "timerExpiresAt": parking.timer?.expiresAt.timeIntervalSince1970 ?? 0
+                ] as [String: Any],
+                "contextUpdatedAt": now
             ]
-            try? WCSession.default.updateApplicationContext(["activeParking": payload])
+            try? WCSession.default.updateApplicationContext(payload)
         } else {
-            try? WCSession.default.updateApplicationContext(["activeParking": NSNull()])
+            // Empty dict clears stale parking. NSNull is not a valid plist type and silently fails.
+            try? WCSession.default.updateApplicationContext(["contextUpdatedAt": now])
         }
     }
 
