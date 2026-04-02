@@ -50,15 +50,15 @@ private struct WatchNoParkingView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             Spacer(minLength: 0)
 
             Image(systemName: "car.fill")
-                .font(.title3)
+                .font(.headline)
                 .foregroundStyle(.cyan)
 
             Text("Ready to save your spot")
-                .font(.caption.weight(.semibold))
+                .font(.caption2.weight(.semibold))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
@@ -87,7 +87,7 @@ private struct WatchNoParkingView: View {
                         .frame(maxWidth: .infinity)
                 } else {
                     Label("Park Here", systemImage: "pin.fill")
-                        .font(.caption.bold())
+                        .font(.caption2.bold())
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -109,10 +109,10 @@ private struct WatchActiveParkingView: View {
     @State private var showingEndConfirmation = false
 
     var body: some View {
-        VStack(spacing: 10) {
-            VStack(spacing: 8) {
+        VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Text(parking.address)
-                    .font(.caption.bold())
+                    .font(.caption2.bold())
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
@@ -123,7 +123,11 @@ private struct WatchActiveParkingView: View {
                     Text(parking.elapsedString)
                         .font(.caption2)
                 }
-                .foregroundStyle(.white.opacity(0.75))
+                .foregroundStyle(.white.opacity(0.9))
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(.black.opacity(0.38))
+                .clipShape(Capsule())
 
                 if let bearing = viewModel.bearingToParking {
                     WatchCompassView(bearing: bearing, headingDegrees: viewModel.heading?.trueHeading ?? 0)
@@ -166,7 +170,7 @@ private struct WatchActiveParkingView: View {
                         .frame(maxWidth: .infinity)
                 } else {
                     Label("End Parking", systemImage: "xmark.circle.fill")
-                        .font(.caption.bold())
+                        .font(.caption2.bold())
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -192,14 +196,17 @@ private struct WatchActiveParkingView: View {
 
 private struct WatchCachedRow: View {
     var body: some View {
-        Label("Cached data, waiting to sync", systemImage: "clock.arrow.circlepath")
-            .font(.caption2.weight(.semibold))
+        HStack(spacing: 4) {
+            Image(systemName: "clock.arrow.circlepath")
+            Text("Cached, waiting to sync")
+        }
+            .font(.system(size: 10, weight: .semibold))
             .foregroundStyle(.yellow)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 4)
             .frame(maxWidth: .infinity)
-            .background(.yellow.opacity(0.14))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .background(.yellow.opacity(0.12))
+            .clipShape(Capsule())
     }
 }
 
@@ -229,13 +236,13 @@ private struct WatchCompassView: View {
             Group {
                 Circle()
                     .strokeBorder(.cyan.opacity(0.65), lineWidth: 2)
-                    .frame(width: 60, height: 60)
+                    .frame(width: 54, height: 54)
 
                 ForEach(Array(zip(["N", "E", "S", "W"], [0.0, 90.0, 180.0, 270.0])), id: \.0) { label, angle in
                     Text(label)
                         .font(.system(size: 8, weight: .semibold))
                         .foregroundStyle(label == "N" ? Color.cyan : Color.white.opacity(0.5))
-                        .offset(y: -24)
+                        .offset(y: -21)
                         .rotationEffect(.degrees(angle))
                 }
             }
@@ -245,7 +252,7 @@ private struct WatchCompassView: View {
             Image(systemName: "arrow.up")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)
+                .frame(width: 20, height: 20)
                 .foregroundStyle(.cyan)
                 .rotationEffect(.degrees(bearing))
                 .animation(.easeInOut(duration: 0.3), value: bearing)
