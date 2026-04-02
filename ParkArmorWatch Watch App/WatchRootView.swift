@@ -191,8 +191,19 @@ private struct WatchActiveParkingView: View {
 }
 
 private struct WatchCachedRow: View {
+    @Environment(WatchViewModel.self) private var viewModel
+
+    private var ageText: String {
+        guard let updatedAt = viewModel.contextUpdatedAt else { return "Cached · waiting to sync" }
+        let minutes = Int(Date().timeIntervalSince(updatedAt) / 60)
+        if minutes < 1 { return "Cached · just now" }
+        if minutes < 60 { return "Cached · \(minutes)m ago" }
+        let hours = minutes / 60
+        return "Cached · \(hours)h ago"
+    }
+
     var body: some View {
-        Label("Cached data, waiting to sync", systemImage: "clock.arrow.circlepath")
+        Label(ageText, systemImage: "clock.arrow.circlepath")
             .font(.caption2.weight(.semibold))
             .foregroundStyle(.yellow)
             .padding(.horizontal, 8)

@@ -33,6 +33,8 @@ import WidgetKit
     var isPhoneReachable = false
     var statusMessage: String?
     var syncState: SyncState = .syncing
+    /// When the phone last wrote the application context; nil if never received.
+    var contextUpdatedAt: Date?
 
     private let locationManager = CLLocationManager()
     @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
@@ -324,9 +326,18 @@ private extension WatchViewModel {
         )
     }
 
+    func syncNow() {
+        if WCSession.default.isReachable {
+            requestCurrentStatus()
+        } else {
+            applyApplicationContext(WCSession.default.receivedApplicationContext)
+        }
+    }
+
     func requestCurrentStatus() {
         guard WCSession.default.isReachable else { return }
         syncState = .syncing
+        startSyncFallbackTimer()   // fresh fallback on every sync attempt
 
         WCSession.default.sendMessage(["action": "syncStatus"], replyHandler: { [weak self] reply in
             DispatchQueue.main.async {
@@ -375,6 +386,10 @@ private extension WatchViewModel {
         syncFallbackTask?.cancel()
         syncState = .cached
 
+        if let updatedAt = applicationContext["contextUpdatedAt"] as? TimeInterval {
+            contextUpdatedAt = Date(timeIntervalSince1970: updatedAt)
+        }
+
         if let parking = applicationContext["activeParking"] as? [String: Any],
            let latitude = parking["latitude"] as? Double,
            let longitude = parking["longitude"] as? Double,
@@ -390,7 +405,7 @@ private extension WatchViewModel {
                 timerExpiresAt: timerDate
             )
         } else {
-            // Do not keep stale watch-local state if the phone has no active parking.
+            // Context has no active parking — clear any stale local snapshot.
             activeParkingSnapshot = nil
         }
 
