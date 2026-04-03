@@ -232,6 +232,14 @@ import WidgetKit
         }
         return String(format: "%.1f mi", miles)
     }
+
+    func syncNow() {
+        if WCSession.default.isReachable {
+            requestCurrentStatus()
+        } else {
+            applyApplicationContext(WCSession.default.receivedApplicationContext)
+        }
+    }
 }
 
 extension WatchViewModel: CLLocationManagerDelegate {
@@ -325,14 +333,6 @@ private extension WatchViewModel {
             savedAt: Date(timeIntervalSince1970: savedAt),
             timerExpiresAt: timerDate
         )
-    }
-
-    func syncNow() {
-        if WCSession.default.isReachable {
-            requestCurrentStatus()
-        } else {
-            applyApplicationContext(WCSession.default.receivedApplicationContext)
-        }
     }
 
     func requestCurrentStatus() {
