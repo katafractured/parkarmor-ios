@@ -327,7 +327,6 @@ extension WatchViewModel: WCSessionDelegate {
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         DispatchQueue.main.async {
-            guard !(self.syncState == .syncing && session.isReachable) else { return }
             self.applyApplicationContext(applicationContext)
         }
     }

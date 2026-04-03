@@ -4,7 +4,7 @@ struct WatchRootView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     private var shouldShowSyncing: Bool {
-        viewModel.syncState == .syncing || (viewModel.isPhoneReachable && viewModel.syncState != .live)
+        viewModel.syncState == .syncing
     }
 
     var body: some View {
