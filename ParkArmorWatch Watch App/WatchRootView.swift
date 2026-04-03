@@ -3,9 +3,13 @@ import SwiftUI
 struct WatchRootView: View {
     @Environment(WatchViewModel.self) private var viewModel
 
+    private var shouldShowSyncing: Bool {
+        viewModel.syncState == .syncing || (viewModel.isPhoneReachable && viewModel.syncState != .live)
+    }
+
     var body: some View {
         Group {
-            if viewModel.syncState == .syncing {
+            if shouldShowSyncing {
                 WatchSyncingView()
             } else if let parking = viewModel.activeParkingSnapshot {
                 WatchActiveParkingView(parking: parking)
@@ -65,7 +69,7 @@ private struct WatchNoParkingView: View {
             Group {
                 if let statusMessage = viewModel.statusMessage {
                     WatchStatusRow(message: statusMessage)
-                } else if viewModel.syncState == .cached {
+                } else if viewModel.syncState == .cached && !viewModel.isPhoneReachable {
                     WatchCachedRow()
                 } else if viewModel.isSavingParking && viewModel.userLocation == nil {
                     watchHelperText("Getting location…")
@@ -155,7 +159,7 @@ private struct WatchActiveParkingView: View {
             Group {
                 if let statusMessage = viewModel.statusMessage {
                     WatchStatusRow(message: statusMessage)
-                } else if viewModel.syncState == .cached {
+                } else if viewModel.syncState == .cached && !viewModel.isPhoneReachable {
                     WatchCachedRow()
                 } else if !viewModel.isPhoneReachable {
                     watchHelperText("iPhone not in range")
@@ -207,11 +211,11 @@ private struct WatchCachedRow: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     private var ageText: String {
-        guard let updatedAt = viewModel.contextUpdatedAt else { return "Cached fallback" }
+        guard let updatedAt = viewModel.contextUpdatedAt else { return "Last synced from iPhone" }
         let minutes = Int(Date().timeIntervalSince(updatedAt) / 60)
-        if minutes < 1 { return "Cached fallback" }
-        if minutes < 60 { return "Cached · \(minutes)m old" }
-        return "Cached · \(minutes / 60)h old"
+        if minutes < 1 { return "Last synced from iPhone" }
+        if minutes < 60 { return "Last synced \(minutes)m ago" }
+        return "Last synced \(minutes / 60)h ago"
     }
 
     var body: some View {
