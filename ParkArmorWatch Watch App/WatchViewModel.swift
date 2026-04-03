@@ -145,7 +145,16 @@ import WidgetKit
                     if (reply["status"] as? String) != "ok" {
                         self?.saveError = reply["message"] as? String ?? "Unable to save parking"
                     } else {
+                        self?.syncState = .live
                         self?.saveError = nil
+                        self?.activeParkingSnapshot = WatchParkingSnapshot(
+                            latitude: location.coordinate.latitude,
+                            longitude: location.coordinate.longitude,
+                            address: address.isEmpty ? "Current location" : address,
+                            savedAt: Date(),
+                            timerExpiresAt: nil
+                        )
+                        self?.persistSharedState()
                         self?.showStatusMessage("Parking saved")
                     }
                 }
@@ -176,6 +185,7 @@ import WidgetKit
                     return
                 }
 
+                self?.syncState = .live
                 self?.endError = nil
                 self?.activeParkingSnapshot = nil
                 self?.persistSharedState()

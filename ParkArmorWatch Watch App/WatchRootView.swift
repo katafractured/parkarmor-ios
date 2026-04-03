@@ -111,12 +111,6 @@ private struct WatchActiveParkingView: View {
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 6) {
-                Text(parking.address)
-                    .font(.caption2.bold())
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-
                 HStack(spacing: 4) {
                     Image(systemName: "timer")
                         .font(.caption2)
@@ -128,6 +122,17 @@ private struct WatchActiveParkingView: View {
                 .padding(.vertical, 4)
                 .background(.black.opacity(0.38))
                 .clipShape(Capsule())
+
+                Text(parking.address)
+                    .font(.caption2.bold())
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .frame(maxWidth: .infinity)
+                    .background(.black.opacity(0.28))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
 
                 if let bearing = viewModel.bearingToParking {
                     WatchCompassView(bearing: bearing, headingDegrees: viewModel.heading?.trueHeading ?? 0)
@@ -176,7 +181,11 @@ private struct WatchActiveParkingView: View {
             }
             .disabled(viewModel.isEndingParking || !viewModel.isPhoneReachable)
             .buttonStyle(.borderedProminent)
-            .tint(.red)
+            .tint(Color(red: 0.82, green: 0.14, blue: 0.18))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(.white.opacity(0.3), lineWidth: 1)
+            }
 
             Spacer(minLength: 0)
         }
@@ -198,11 +207,11 @@ private struct WatchCachedRow: View {
     @Environment(WatchViewModel.self) private var viewModel
 
     private var ageText: String {
-        guard let updatedAt = viewModel.contextUpdatedAt else { return "Cached · waiting to sync" }
+        guard let updatedAt = viewModel.contextUpdatedAt else { return "Cached fallback" }
         let minutes = Int(Date().timeIntervalSince(updatedAt) / 60)
-        if minutes < 1 { return "Cached · just now" }
-        if minutes < 60 { return "Cached · \(minutes)m ago" }
-        return "Cached · \(minutes / 60)h ago"
+        if minutes < 1 { return "Cached fallback" }
+        if minutes < 60 { return "Cached · \(minutes)m old" }
+        return "Cached · \(minutes / 60)h old"
     }
 
     var body: some View {
