@@ -5,6 +5,11 @@ import WatchConnectivity
 import WidgetKit
 
 @Observable final class WatchViewModel: NSObject {
+    private enum SyncConstants {
+        static let maxLiveSyncAttempts = 3
+        static let retryDelay: Duration = .seconds(0.8)
+    }
+
     enum SyncState {
         case syncing
         case live
@@ -41,6 +46,7 @@ import WidgetKit
     @ObservationIgnored private var statusMessageTask: Task<Void, Never>?
     @ObservationIgnored private var pendingSaveAfterLocation = false
     @ObservationIgnored private var syncFallbackTask: Task<Void, Never>?
+    @ObservationIgnored private var syncAttemptCount = 0
 
     struct WatchParkingSnapshot {
         let latitude: Double
@@ -234,6 +240,7 @@ import WidgetKit
     }
 
     func syncNow() {
+        syncAttemptCount = 0
         if WCSession.default.isReachable {
             requestCurrentStatus()
         } else {
@@ -307,6 +314,7 @@ extension WatchViewModel: WCSessionDelegate {
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         DispatchQueue.main.async {
+            guard !(self.syncState == .syncing && session.isReachable) else { return }
             self.applyApplicationContext(applicationContext)
         }
     }
@@ -337,8 +345,9 @@ private extension WatchViewModel {
 
     func requestCurrentStatus() {
         guard WCSession.default.isReachable else { return }
+        syncAttemptCount += 1
         syncState = .syncing
-        startSyncFallbackTimer()   // fresh 1.2s fallback on every sync attempt
+        startSyncFallbackTimer()
 
         WCSession.default.sendMessage(["action": "syncStatus"], replyHandler: { [weak self] reply in
             DispatchQueue.main.async {
@@ -347,13 +356,14 @@ private extension WatchViewModel {
             }
         }, errorHandler: { [weak self] _ in
             DispatchQueue.main.async {
-                self?.applyApplicationContext(WCSession.default.receivedApplicationContext)
+                self?.handleLiveSyncFailure()
             }
         })
     }
 
     func applySyncReply(_ reply: [String: Any]) {
         syncFallbackTask?.cancel()
+        syncAttemptCount = 0
         syncState = .live
 
         guard (reply["status"] as? String) == "ok" else {
@@ -385,6 +395,7 @@ private extension WatchViewModel {
 
     func applyApplicationContext(_ applicationContext: [String: Any]) {
         syncFallbackTask?.cancel()
+        syncAttemptCount = 0
         syncState = .cached
 
         if let updatedAt = applicationContext["contextUpdatedAt"] as? TimeInterval {
@@ -416,13 +427,22 @@ private extension WatchViewModel {
     func startSyncFallbackTimer() {
         syncFallbackTask?.cancel()
         syncFallbackTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1.2))
+            try? await Task.sleep(for: SyncConstants.retryDelay)
             guard !Task.isCancelled else { return }
             await MainActor.run {
                 guard let self, self.syncState == .syncing else { return }
-                self.applyApplicationContext(WCSession.default.receivedApplicationContext)
+                self.handleLiveSyncFailure()
             }
         }
+    }
+
+    func handleLiveSyncFailure() {
+        if WCSession.default.isReachable, syncAttemptCount < SyncConstants.maxLiveSyncAttempts {
+            requestCurrentStatus()
+            return
+        }
+
+        applyApplicationContext(WCSession.default.receivedApplicationContext)
     }
 
     func persistSharedState() {
