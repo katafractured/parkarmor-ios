@@ -8,6 +8,7 @@ import WidgetKit
     private enum SyncConstants {
         static let maxLiveSyncAttempts = 3
         static let retryDelay: Duration = .seconds(0.8)
+        static let minimumSyncInterval: TimeInterval = 2
     }
 
     enum SyncState {
@@ -47,6 +48,8 @@ import WidgetKit
     @ObservationIgnored private var pendingSaveAfterLocation = false
     @ObservationIgnored private var syncFallbackTask: Task<Void, Never>?
     @ObservationIgnored private var syncAttemptCount = 0
+    @ObservationIgnored private var isSyncRequestInFlight = false
+    @ObservationIgnored private var lastSyncStartedAt: Date?
 
     struct WatchParkingSnapshot {
         let latitude: Double
@@ -88,7 +91,6 @@ import WidgetKit
         }
 
         loadPersistedSnapshot()
-        startSyncFallbackTimer()
     }
 
     func saveParking() {
@@ -240,6 +242,7 @@ import WidgetKit
     }
 
     func syncNow() {
+        guard shouldStartSyncCycle else { return }
         syncAttemptCount = 0
         if WCSession.default.isReachable {
             requestCurrentStatus()
@@ -296,7 +299,7 @@ extension WatchViewModel: WCSessionDelegate {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
             if session.isReachable {
-                self.requestCurrentStatus()
+                self.syncNow()
             } else {
                 self.applyApplicationContext(session.receivedApplicationContext)
             }
@@ -307,7 +310,7 @@ extension WatchViewModel: WCSessionDelegate {
         DispatchQueue.main.async {
             self.isPhoneReachable = session.isReachable
             if session.isReachable {
-                self.requestCurrentStatus()
+                self.syncNow()
             }
         }
     }
@@ -321,6 +324,12 @@ extension WatchViewModel: WCSessionDelegate {
 }
 
 private extension WatchViewModel {
+    var shouldStartSyncCycle: Bool {
+        guard !isSyncRequestInFlight else { return false }
+        guard let lastSyncStartedAt else { return true }
+        return Date().timeIntervalSince(lastSyncStartedAt) >= SyncConstants.minimumSyncInterval
+    }
+
     func distanceUnitFromDefaults() -> String {
         UserDefaults(suiteName: SharedKeys.suiteName)?.string(forKey: SharedKeys.distanceUnit) ?? "km"
     }
@@ -345,6 +354,9 @@ private extension WatchViewModel {
 
     func requestCurrentStatus() {
         guard WCSession.default.isReachable else { return }
+        guard !isSyncRequestInFlight else { return }
+        isSyncRequestInFlight = true
+        lastSyncStartedAt = Date()
         syncAttemptCount += 1
         syncState = .syncing
         startSyncFallbackTimer()
@@ -363,6 +375,7 @@ private extension WatchViewModel {
 
     func applySyncReply(_ reply: [String: Any]) {
         syncFallbackTask?.cancel()
+        isSyncRequestInFlight = false
         syncAttemptCount = 0
         syncState = .live
 
@@ -395,6 +408,7 @@ private extension WatchViewModel {
 
     func applyApplicationContext(_ applicationContext: [String: Any]) {
         syncFallbackTask?.cancel()
+        isSyncRequestInFlight = false
         syncAttemptCount = 0
         syncState = .cached
 
@@ -437,6 +451,7 @@ private extension WatchViewModel {
     }
 
     func handleLiveSyncFailure() {
+        isSyncRequestInFlight = false
         if WCSession.default.isReachable, syncAttemptCount < SyncConstants.maxLiveSyncAttempts {
             requestCurrentStatus()
             return
