@@ -16,8 +16,6 @@ struct MapScreenView: View {
             MapReader { proxy in
 
                 Map(position: $mapVM.cameraPosition) {
-                    UserAnnotation()
-
                     // Active parking — always show individually
                     ForEach(allLocations.filter(\.isActive)) { location in
                         Annotation(location.displayAddress, coordinate: location.coordinate) {
@@ -56,6 +54,13 @@ struct MapScreenView: View {
                                         .accessibilityLabel("\(cluster.count) past parking locations")
                                 }
                             }
+                        }
+                    }
+
+                    if let currentLocation = appViewModel.locationManager.currentLocation {
+                        Annotation("Current Location", coordinate: currentLocation.coordinate) {
+                            CurrentLocationPinView()
+                                .accessibilityLabel("Current location")
                         }
                     }
                 }
@@ -201,6 +206,25 @@ private struct ClusterPinView: View {
                 .foregroundStyle(.white)
         }
         .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
+    }
+}
+
+private struct CurrentLocationPinView: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(.white.opacity(0.95))
+                .frame(width: 24, height: 24)
+
+            Circle()
+                .fill(DesignTokens.parkCyan)
+                .frame(width: 12, height: 12)
+        }
+        .overlay(
+            Circle()
+                .strokeBorder(DesignTokens.parkNavy.opacity(0.18), lineWidth: 1)
+        )
+        .shadow(color: DesignTokens.parkCyan.opacity(0.35), radius: 8)
     }
 }
 
