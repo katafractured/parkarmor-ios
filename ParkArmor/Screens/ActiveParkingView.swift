@@ -343,7 +343,8 @@ struct ActiveParkingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
 
-            if ARWorldTrackingConfiguration.isSupported {
+            // TODO: Re-enable AR Walk-Back when feature is production-ready
+            if false, ARWorldTrackingConfiguration.isSupported {
                 NavigationLink {
                     ARWalkBackView(parking: parking)
                 } label: {

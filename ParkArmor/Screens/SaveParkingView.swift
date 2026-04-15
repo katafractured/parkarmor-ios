@@ -70,10 +70,11 @@ struct SaveParkingView: View {
             }
         }
         .task {
+            guard let repo = appViewModel.repository else { return }
             let vm = SaveParkingViewModel(
                 mapKitHelper: appViewModel.mapKitHelper,
                 photoManager: appViewModel.photoManager,
-                repository: appViewModel.repository!,
+                repository: repo,
                 notificationManager: appViewModel.notificationManager,
                 liveActivityManager: appViewModel.liveActivityManager,
                 preferences: appViewModel.preferences
@@ -288,6 +289,22 @@ struct SaveParkingView: View {
             }
 
             if vm.hasTimer {
+                // Quick duration chips
+                HStack(spacing: 8) {
+                    ForEach([15, 30, 60, 120], id: \.self) { minutes in
+                        Button {
+                            vm.timerDate = Date().addingTimeInterval(TimeInterval(minutes * 60))
+                        } label: {
+                            Text(minutes < 60 ? "+\(minutes)m" : "+\(minutes/60)h")
+                                .font(.subheadline.bold())
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(DesignTokens.parkCyan)
+                    }
+                }
+
                 DatePicker(
                     "Expires at",
                     selection: Binding(get: { vm.timerDate }, set: { vm.timerDate = $0 }),

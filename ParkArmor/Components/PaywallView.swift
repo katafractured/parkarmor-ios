@@ -7,13 +7,12 @@ struct PaywallView: View {
 
     private let freeFeatures = [
         ("checkmark.circle.fill", "Save parking location", true),
-        ("checkmark.circle.fill", "Walking directions", true),
         ("checkmark.circle.fill", "Parking meter timer", true),
+        ("checkmark.circle.fill", "Walking directions to car", true),
         ("xmark.circle.fill", "Full parking history", false),
-        ("xmark.circle.fill", "Search & nicknames", false),
-        ("xmark.circle.fill", "Parking sign photos", false),
+        ("xmark.circle.fill", "Search history", false),
+        ("xmark.circle.fill", "Spot nicknames", false),
         ("xmark.circle.fill", "Share parked location", false),
-        ("xmark.circle.fill", "Advanced timer alerts", false),
     ]
 
     var body: some View {
