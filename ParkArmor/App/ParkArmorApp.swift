@@ -1,13 +1,11 @@
 import SwiftData
 import SwiftUI
 import WidgetKit
-import CloudKit
 
 @main
 struct ParkArmorApp: App {
     // ModelContainer stored as a property so it's initialized once and shared.
     // Uses the App Group URL so the widget can read the same store.
-    // CloudKit sync is enabled via modelConfiguration with cloudKitDatabase: .automatic
     let container: ModelContainer = {
         let schema = Schema([
             ParkingLocation.self,
@@ -25,23 +23,12 @@ struct ParkArmorApp: App {
             storeURL = URL.applicationSupportDirectory.appendingPathComponent("parkarmor.store")
         }
 
-        let config = ModelConfiguration(
-            nil,
-            schema: schema,
-            url: storeURL,
-            cloudKitDatabase: .automatic
-        )
+        let config = ModelConfiguration(nil, schema: schema, url: storeURL)
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
             // If migration fails, wipe and start fresh (acceptable for local-only data).
-            let wipeConfig = ModelConfiguration(
-                nil,
-                schema: schema,
-                url: storeURL,
-                allowsSave: true,
-                cloudKitDatabase: .automatic
-            )
+            let wipeConfig = ModelConfiguration(nil, schema: schema, url: storeURL, allowsSave: true)
             return (try? ModelContainer(for: schema, configurations: [wipeConfig]))
                 ?? (try! ModelContainer(for: schema))
         }
