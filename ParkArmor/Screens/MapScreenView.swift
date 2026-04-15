@@ -71,7 +71,12 @@ struct MapScreenView: View {
                 }
                 .ignoresSafeArea()
                 .onMapCameraChange { context in
-                    mapSpan = context.region.span
+                    Task {
+                        try? await Task.sleep(nanoseconds: 150_000_000) // 150ms debounce
+                        await MainActor.run {
+                            mapSpan = context.region.span
+                        }
+                    }
                 }
             }
 

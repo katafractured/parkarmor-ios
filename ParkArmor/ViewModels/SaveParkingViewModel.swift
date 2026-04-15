@@ -61,7 +61,22 @@ import SwiftUI
 
     private func geocodeAddress(coordinate: CLLocationCoordinate2D) async {
         isGeocodingAddress = true
-        address = await mapKitHelper.reverseGeocode(coordinate: coordinate)
+        
+        // Try geocoding with 1.5s timeout
+        do {
+            let geocodeTask = Task {
+                await mapKitHelper.reverseGeocode(coordinate: coordinate)
+            }
+            
+            try await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+            address = await geocodeTask.value
+        } catch {
+            // Timeout or error — use coordinate fallback
+            if address.isEmpty {
+                address = String(format: "%.5f, %.5f", coordinate.latitude, coordinate.longitude)
+            }
+        }
+        
         isGeocodingAddress = false
     }
 
