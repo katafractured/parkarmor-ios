@@ -6,7 +6,5 @@
 	<array>
 		<string>group.com.katafract.ParkArmor</string>
 	</array>
-	<key>com.apple.developer.carplay-parking</key>
-	<true/>
 </dict>
 </plist>
