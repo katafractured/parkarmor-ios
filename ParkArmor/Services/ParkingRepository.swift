@@ -169,7 +169,6 @@ import Observation
             try context.save()
         }
     }
-}
 
     func extendTimer(on location: ParkingLocation, byMinutes minutes: Int) throws {
         guard let timer = location.timer else { return }
@@ -177,3 +176,4 @@ import Observation
         timer.expiresAt = newExpiresAt
         try context.save()
     }
+}

@@ -153,14 +153,16 @@ import Observation
             queue: .main
         ) { [weak self] notification in
             guard let self, let minutes = notification.userInfo?["minutes"] as? Int else { return }
-            self.handleExtendTimer(byMinutes: minutes)
+            Task {
+                await self.handleExtendTimer(byMinutes: minutes)
+            }
         }
         observerTokens.append(extendTimerToken)
     }
 
 
 
-    private func handleExtendTimer(byMinutes minutes: Int) {
+    private func handleExtendTimer(byMinutes minutes: Int) async {
         guard let repository, let parking = activeParking ?? (try? repository.fetchActive()) else { return }
         
         do {
