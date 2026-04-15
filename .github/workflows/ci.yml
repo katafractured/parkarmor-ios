@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
@@ -10,18 +11,22 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   # ── Privacy Lint ─────────────────────────────────────────────────────────────
   privacy-lint:
     name: Privacy Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Verify no unauthorized URLSession usage
         run: |
+          set -euo pipefail
           # Only the StoreKit manager is allowed to make network calls (App Store validation).
-          # Flag any URLSession usage outside that file.
           VIOLATIONS=$(grep -rl "URLSession\|URLRequest\|Network\.framework" \
             --include="*.swift" \
             ParkArmor/ ParkArmorWidgetExtension/ \
@@ -37,6 +42,7 @@ jobs:
 
       - name: Verify no analytics SDKs
         run: |
+          set -euo pipefail
           ANALYTICS_PATTERNS="Firebase|Mixpanel|Amplitude|Segment|AppsFlyer|Crashlytics|Sentry|Datadog"
           VIOLATIONS=$(grep -rl "$ANALYTICS_PATTERNS" \
             --include="*.swift" --include="Package.swift" --include="Podfile" \
@@ -50,6 +56,7 @@ jobs:
 
       - name: Verify no iCloud / CloudKit usage
         run: |
+          set -euo pipefail
           VIOLATIONS=$(grep -rl "CloudKit\|NSUbiquitousKeyValueStore\|NSPersistentCloudKitContainer" \
             --include="*.swift" \
             . || true)
@@ -62,90 +69,91 @@ jobs:
 
   # ── Build & Test ─────────────────────────────────────────────────────────────
   build-and-test:
-    name: Build & Test (iOS ${{ matrix.ios }})
-    runs-on: macos-15
-    strategy:
-      matrix:
-        ios: ["18.4"]
+    name: Build & Test
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+      - name: Select Xcode (latest stable)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Show build environment
         run: |
+          set -euo pipefail
           xcodebuild -version
-          xcrun simctl list devices available | grep -E "iPhone 1[6-9]|iPhone 2" | head -5
+          xcrun simctl list runtimes | grep -E "iOS" | head -5
+          xcrun simctl list devices available | grep -E "iPhone" | head -5
 
       - name: Resolve package dependencies
         run: |
+          set -euo pipefail
           xcodebuild -resolvePackageDependencies \
             -project ParkArmor.xcodeproj \
-            -scheme ParkArmor \
-            | grep -E "error:|warning:|Resolved" || true
+            -scheme ParkArmor
 
       - name: Build (no signing)
         run: |
+          set -euo pipefail
           xcodebuild build \
             -project ParkArmor.xcodeproj \
             -scheme ParkArmor \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            -destination "generic/platform=iOS Simulator" \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty --color || xcodebuild build \
-            -project ParkArmor.xcodeproj \
-            -scheme ParkArmor \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
-            CODE_SIGNING_ALLOWED=NO
+            -quiet
 
       - name: Run unit tests
         run: |
+          set -euo pipefail
+          # Pick the first available iPhone simulator with the latest iOS runtime.
+          DEVICE=$(xcrun simctl list devices available | grep -E "iPhone 1[5-9]|iPhone 2" | head -1 | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
+          echo "Testing on device: $DEVICE"
           xcodebuild test \
             -project ParkArmor.xcodeproj \
             -scheme ParkArmor \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
+            -destination "id=$DEVICE" \
             -only-testing:ParkArmorTests \
+            -resultBundlePath test-results.xcresult \
             CODE_SIGNING_ALLOWED=NO \
-            | xcpretty --color --report junit --output test-results.xml || \
-          xcodebuild test \
-            -project ParkArmor.xcodeproj \
-            -scheme ParkArmor \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=${{ matrix.ios }}" \
-            -only-testing:ParkArmorTests \
-            CODE_SIGNING_ALLOWED=NO
+            -quiet
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: test-results-ios-${{ matrix.ios }}
-          path: test-results.xml
+          name: test-results
+          path: test-results.xcresult
           retention-days: 14
 
-  # ── Archive (main branch only) ───────────────────────────────────────────────
+  # ── Archive (main branch + tags only) ────────────────────────────────────────
   archive:
     name: Archive
-    runs-on: macos-15
+    runs-on: macos-latest
     needs: [privacy-lint, build-and-test]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+      - name: Select Xcode (latest stable)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Archive (no signing)
         run: |
+          set -euo pipefail
           xcodebuild archive \
             -project ParkArmor.xcodeproj \
             -scheme ParkArmor \
             -destination "generic/platform=iOS" \
             -archivePath build/ParkArmor.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
-            SKIP_INSTALL=NO
+            SKIP_INSTALL=NO \
+            -quiet
 
       - name: Upload archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ParkArmor-archive
           path: build/ParkArmor.xcarchive
