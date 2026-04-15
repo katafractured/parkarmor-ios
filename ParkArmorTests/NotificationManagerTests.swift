@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import UserNotifications
 @testable import ParkArmor
 
 @Suite("NotificationManager — body copy")
