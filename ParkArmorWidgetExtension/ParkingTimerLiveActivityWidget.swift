@@ -1,3 +1,4 @@
+import AppIntents
 import ActivityKit
 import SwiftUI
 import WidgetKit
@@ -36,6 +37,13 @@ struct ParkingTimerLiveActivityWidget: Widget {
                                 .monospacedDigit()
                                 .font(.headline)
                         }
+
+                        Button(intent: ExtendTimerIntent()) {
+                            Label("+15 min", systemImage: "plus.circle")
+                                .font(.caption.bold())
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.orange)
 
                         Text("Tap to return to your car")
                             .font(.caption)
@@ -99,9 +107,12 @@ private struct ParkingTimerLockScreenView: View {
                 Text(context.attributes.savedAt, style: .time)
                     .font(.subheadline.weight(.semibold))
 
-                Text("Tap to open")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                Button(intent: ExtendTimerIntent()) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.headline)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.orange)
             }
         }
         .padding(.horizontal, 18)

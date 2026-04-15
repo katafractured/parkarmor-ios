@@ -170,3 +170,10 @@ import Observation
         }
     }
 }
+
+    func extendTimer(on location: ParkingLocation, byMinutes minutes: Int) throws {
+        guard let timer = location.timer else { return }
+        let newExpiresAt = timer.expiresAt.addingTimeInterval(Double(minutes) * 60)
+        timer.expiresAt = newExpiresAt
+        try context.save()
+    }

@@ -40,6 +40,23 @@ import SwiftUI
         self.notificationManager = notificationManager
         self.liveActivityManager = liveActivityManager
         self.preferences = preferences
+
+        setupCarPlayNotificationHandler()
+    }
+
+    private func setupCarPlayNotificationHandler() {
+        NotificationCenter.default.addObserver(
+            forName: .carPlayParkHere,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let location = notification.object as? CLLocation else { return }
+            self?.beginSave(coordinate: location.coordinate)
+            // Automatically save with minimal UI after a brief delay to let user confirm
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self?.confirmSave(onSuccess: { _ in })
+            }
+        }
     }
 
     func beginSave(coordinate: CLLocationCoordinate2D) {

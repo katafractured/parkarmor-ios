@@ -171,3 +171,9 @@ extension Notification.Name {
     static let notificationActionEndParking =
         Notification.Name("com.katafract.ParkArmor.notificationActionEndParking")
 }
+
+// MARK: - Extended timer action
+extension Notification.Name {
+    static let extendTimerFromWidget =
+        Notification.Name("com.katafract.ParkArmor.extendTimerFromWidget")
+}

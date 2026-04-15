@@ -146,6 +146,52 @@ import Observation
             self?.handleWatchEndParking()
         }
         observerTokens.append(endToken)
+
+        let extendTimerToken = NotificationCenter.default.addObserver(
+            forName: .extendTimerFromWidget,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self, let minutes = notification.userInfo?["minutes"] as? Int else { return }
+            self.handleExtendTimer(byMinutes: minutes)
+        }
+        observerTokens.append(extendTimerToken)
+    }
+
+
+
+    private func handleExtendTimer(byMinutes minutes: Int) {
+        guard let repository, let parking = activeParking ?? (try? repository.fetchActive()) else { return }
+        
+        do {
+            // Extend the timer expiration time
+            try repository.extendTimer(on: parking, byMinutes: minutes)
+            
+            // Reschedule notifications with new expiry time
+            let parkingId = parking.id
+            let newExpiresAt = parking.timer?.expiresAt ?? Date().addingTimeInterval(Double(minutes) * 60)
+            
+            // Cancel old notifications
+            if let oldIdentifier = parking.timer?.notificationIdentifier, !oldIdentifier.isEmpty {
+                notificationManager.cancelNotification(identifier: oldIdentifier)
+            }
+            
+            // Schedule new notifications from the updated expiry time
+            let alertMode = preferences.timerAlertMode
+            let newIdentifier = try await notificationManager.scheduleNotification(
+                expiresAt: newExpiresAt,
+                locationName: parking.displayAddress,
+                parkingId: parkingId,
+                alertMode: alertMode
+            )
+            
+            try repository.addTimer(to: parking, expiresAt: newExpiresAt, notificationId: newIdentifier)
+            
+            // Refresh UI and live activity
+            refreshActiveParking()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     private func handleWatchSaveParking(latitude: Double, longitude: Double, address: String) {
