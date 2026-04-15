@@ -7,19 +7,19 @@ import Testing
 @Suite("TimerAlertMode")
 struct TimerAlertModeTests {
     @Test func atExpirationHasOneOffset() {
-        #expect(TimerAlertMode.atExpiration.offsets == [0])
+        #expect(TimerAlertMode.atExpiration.offsets == [TimeInterval(0)])
     }
 
     @Test func fifteenMinutesBeforeHasOneOffset() {
         let offsets = TimerAlertMode.fifteenMinutesBefore.offsets
-        #expect(offsets == [15 * 60])
+        #expect(offsets == [TimeInterval(15 * 60)])
     }
 
     @Test func fifteenMinutesAndExpirationHasTwoOffsets() {
         let offsets = TimerAlertMode.fifteenMinutesAndExpiration.offsets
         #expect(offsets.count == 2)
-        #expect(offsets.contains(0))
-        #expect(offsets.contains(15 * 60))
+        #expect(offsets.contains(TimeInterval(0)))
+        #expect(offsets.contains(TimeInterval(15 * 60)))
     }
 
     @Test func allCasesHaveNonEmptyTitle() {
