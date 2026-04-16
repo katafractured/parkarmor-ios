@@ -193,6 +193,7 @@ jobs:
             -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            -allowProvisioningUpdates \
             CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=2SGGP65W6C \
             -quiet
