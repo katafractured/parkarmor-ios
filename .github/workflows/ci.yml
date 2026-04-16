@@ -67,6 +67,22 @@ jobs:
           fi
           echo "✅ No CloudKit usage detected."
 
+      - name: Validate PrivacyInfo.xcprivacy files
+        run: |
+          set -euo pipefail
+          VALID_TYPES="NSPrivacyAccessedAPICategoryFileTimestamp|NSPrivacyAccessedAPICategorySystemBootTime|NSPrivacyAccessedAPICategoryDiskSpace|NSPrivacyAccessedAPICategoryUserDefaults"
+          VIOLATIONS=0
+          while IFS= read -r -d '' file; do
+            INVALID=$(grep -o "NSPrivacyAccessedAPICategory[A-Za-z]*" "$file" | grep -vE "^($VALID_TYPES)$" || true)
+            if [ -n "$INVALID" ]; then
+              echo "❌ $file contains invalid NSPrivacyAccessedAPIType categories:"
+              echo "$INVALID"
+              VIOLATIONS=$((VIOLATIONS + 1))
+            fi
+          done < <(find . -name "PrivacyInfo.xcprivacy" -print0)
+          if [ "$VIOLATIONS" -gt 0 ]; then exit 1; fi
+          echo "✅ All PrivacyInfo.xcprivacy files use valid API categories."
+
   # ── Build & Test ─────────────────────────────────────────────────────────────
   build-and-test:
     name: Build & Test
@@ -106,7 +122,6 @@ jobs:
       - name: Run unit tests
         run: |
           set -euo pipefail
-          # Pick the first available iPhone simulator with the latest iOS runtime.
           DEVICE=$(xcrun simctl list devices available | grep -E "iPhone 1[5-9]|iPhone 2" | head -1 | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
           echo "Testing on device: $DEVICE"
           xcodebuild test \
@@ -126,12 +141,16 @@ jobs:
           path: test-results.xcresult
           retention-days: 14
 
-  # ── Archive (main branch + tags only) ────────────────────────────────────────
-  archive:
-    name: Archive
+  # ── Upload to TestFlight (main branch + tags only) ────────────────────────────
+  upload:
+    name: Upload to TestFlight
     runs-on: macos-latest
     needs: [privacy-lint, build-and-test]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v5
 
@@ -140,7 +159,30 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Archive (no signing)
+      - name: Install Python deps
+        run: pip3 install PyJWT requests --quiet
+
+      - name: Compute next build number
+        run: |
+          set -euo pipefail
+          BUILD_NUMBER=$(python3 ci_scripts/next_build.py 6760988040)
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_ENV"
+          echo "Build number: $BUILD_NUMBER"
+
+      - name: Set build number in project
+        run: |
+          set -euo pipefail
+          find . -name "project.pbxproj" -exec \
+            sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" {} +
+          echo "Set CURRENT_PROJECT_VERSION = $BUILD_NUMBER"
+
+      - name: Write ASC API key
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "$ASC_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          chmod 600 ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+      - name: Archive (signed)
         run: |
           set -euo pipefail
           xcodebuild archive \
@@ -148,13 +190,24 @@ jobs:
             -scheme ParkArmor \
             -destination "generic/platform=iOS" \
             -archivePath build/ParkArmor.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            SKIP_INSTALL=NO \
+            -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=2SGGP65W6C \
             -quiet
 
-      - name: Upload archive
-        uses: actions/upload-artifact@v5
-        with:
-          name: ParkArmor-archive
-          path: build/ParkArmor.xcarchive
-          retention-days: 30
+      - name: Export and upload to TestFlight
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath build/ParkArmor.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist \
+            -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      - name: Cleanup API key
+        if: always()
+        run: rm -f ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8

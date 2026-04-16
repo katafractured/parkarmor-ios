@@ -22,8 +22,6 @@ Podfile.lock
 "PNG image.png"
 PNG\ image.png
 
-# Distribution config (contains signing identity — keep local)
-ExportOptions.plist
 
 # Icon generation scripts (dev tooling, not part of app source)
 generate_icon.swift
