@@ -12,7 +12,6 @@
 		BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D952F74BC5E00772D5A /* WidgetKit.framework */; };
 		BCA03D982F74BC5F00772D5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D972F74BC5F00772D5A /* SwiftUI.framework */; };
 		BCA03DA52F74BC6400772D5A /* ParkArmorWatchComplicationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		5F4BCBEA0407260104B71862 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 87A627B6C26DC93925514CB9 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -514,7 +513,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F4BCBEA0407260104B71862 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
