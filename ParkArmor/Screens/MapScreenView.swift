@@ -57,11 +57,9 @@ struct MapScreenView: View {
                         }
                     }
 
-                    if let currentLocation = appViewModel.locationManager.currentLocation {
-                        Annotation("Current Location", coordinate: currentLocation.coordinate) {
-                            CurrentLocationPinView()
-                                .accessibilityLabel("Current location")
-                        }
+                    UserAnnotation {
+                        CurrentLocationPinView()
+                            .accessibilityLabel("Current location")
                     }
                 }
                 .mapControls {
