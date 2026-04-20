@@ -217,6 +217,18 @@ struct SettingsScreenView: View {
     private var aboutSection: some View {
         Section("About") {
             settingsLinkRow(
+                title: "Send Feedback",
+                systemImage: "envelope.fill",
+                urlString: "mailto:feedback@katafract.com?subject=ParkArmor%20feedback"
+            )
+
+            settingsLinkRow(
+                title: "Support",
+                systemImage: "questionmark.circle",
+                urlString: "https://katafract.com/support/parkarmor"
+            )
+
+            settingsLinkRow(
                 title: "Privacy Policy",
                 systemImage: "lock.shield",
                 urlString: "https://katafract.com/privacy/parkarmor"
