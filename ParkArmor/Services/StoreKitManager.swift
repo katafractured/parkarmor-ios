@@ -105,6 +105,13 @@ import StoreKit
     }
 
     func verifyEntitlement(reason: String = "manual check") async {
+        // Check platform unlock first (Enclave/Sovereign token via App Group)
+        if PlatformEntitlement.isPlatformUnlocked {
+            isPro = true
+            Self.logger.notice("[StoreKit-Debug] Entitlement rebuild (\(reason, privacy: .public)) resolved isPro=true via platform token")
+            return
+        }
+
         var hasPro = false
         for await result in Transaction.currentEntitlements {
             switch result {
