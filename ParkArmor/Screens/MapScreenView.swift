@@ -81,6 +81,7 @@ struct MapScreenView: View {
             // FAB — park here
             if appViewModel.activeParking == nil {
                 Button {
+                    KataHaptic.tap.fire()
                     if appViewModel.locationManager.isAuthorized {
                         showingSaveParking = true
                     } else {
@@ -91,6 +92,7 @@ struct MapScreenView: View {
                         Image(systemName: "car.fill")
                             .font(.system(size: 18, weight: .bold))
                         Text("Park Here")
+                            .accessibilityLabel("Park at current location")
                             .font(.headline)
                     }
                     .padding(.horizontal, 28)

@@ -76,6 +76,7 @@ struct HistoryScreenView: View {
                 titleVisibility: .visible
             ) {
                 Button("Clear History", role: .destructive) {
+                        KataHaptic.destructive.fire()
                     viewModel?.clearHistory()
                 }
             } message: {
@@ -378,8 +379,9 @@ private struct HistoryRowView: View {
         .background(DesignTokens.parkSurface)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button(role: .destructive, action: onDelete) {
+            Button(role: .destructive, action: { KataHaptic.destructive.fire(); onDelete() }) {
                 Label("Delete", systemImage: "trash")
+                    .accessibilityLabel("Delete this parking location")
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {

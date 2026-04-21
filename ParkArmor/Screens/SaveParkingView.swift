@@ -293,6 +293,7 @@ struct SaveParkingView: View {
                 HStack(spacing: 8) {
                     ForEach([15, 30, 60, 120], id: \.self) { minutes in
                         Button {
+                            KataHaptic.tap.fire()
                             vm.timerDate = Date().addingTimeInterval(TimeInterval(minutes * 60))
                         } label: {
                             Text(minutes < 60 ? "+\(minutes)m" : "+\(minutes/60)h")
@@ -324,6 +325,7 @@ struct SaveParkingView: View {
     private func saveButton(vm: SaveParkingViewModel) -> some View {
         Button {
             vm.confirmSave(nickname: nickname.trimmingCharacters(in: .whitespaces)) { saved in
+                KataHaptic.saved.fire()
                 onSaved(saved)
             }
         } label: {
@@ -336,6 +338,7 @@ struct SaveParkingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             } else {
                 Text("Save Parking")
+                    .accessibilityLabel("Save parking location")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)

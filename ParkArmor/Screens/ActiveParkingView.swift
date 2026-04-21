@@ -83,7 +83,7 @@ struct ActiveParkingView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { onDismiss() }
+                    Button("Done") { KataHaptic.tap.fire(); onDismiss() }
                         .foregroundStyle(DesignTokens.parkCyan)
                 }
             }
@@ -108,6 +108,7 @@ struct ActiveParkingView: View {
             titleVisibility: .visible
         ) {
             Button("End Parking", role: .destructive) {
+                KataHaptic.destructive.fire()
                 try? viewModel?.endParking(parking: parking)
                 Task { await appViewModel.liveActivityManager.endCurrentActivity() }
                 onDismiss()
@@ -292,6 +293,7 @@ struct ActiveParkingView: View {
 
                     HStack {
                         Button("Set Timer") {
+                                    KataHaptic.tap.fire()
                             Task {
                                 do {
                                     let id = try await appViewModel.notificationManager.scheduleNotification(
