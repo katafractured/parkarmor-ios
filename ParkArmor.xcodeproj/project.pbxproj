@@ -655,7 +655,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
@@ -817,7 +817,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWidgetExtension/ParkArmorWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -848,7 +848,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWidgetExtension/ParkArmorWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "ParkArmorWidgetExtension-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -880,7 +880,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ParkArmorWatch Watch App/ParkArmorWatch.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
@@ -916,7 +916,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ParkArmorWatch Watch App/ParkArmorWatch.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
@@ -1043,7 +1043,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWatchComplication/ParkArmorWatchComplication.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ParkArmorWatchComplication/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatchComplication;
@@ -1078,7 +1078,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmorWatchComplication/ParkArmorWatchComplication.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ParkArmorWatchComplication/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmorWatchComplication;
@@ -1113,7 +1113,7 @@
 				CODE_SIGN_ENTITLEMENTS = ParkArmor/ParkArmor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 71;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ParkArmor;
