@@ -1,4 +1,5 @@
 import StoreKit
+import KatafractStyle
 import SwiftUI
 
 struct PaywallView: View {
@@ -75,7 +76,7 @@ struct PaywallView: View {
                     } label: {
                         HStack {
                             if storeKit.isLoading {
-                                ProgressView()
+                                KataProgressRing(size: 28)
                                     .tint(DesignTokens.parkAccentForeground)
                             } else {
                                 Text("Get ParkArmor Pro")
