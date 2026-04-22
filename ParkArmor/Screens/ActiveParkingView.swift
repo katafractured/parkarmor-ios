@@ -1,4 +1,5 @@
 import ARKit
+import KatafractStyle
 import SwiftUI
 
 struct ActiveParkingView: View {
@@ -74,7 +75,7 @@ struct ActiveParkingView: View {
                         .padding(.bottom, 40)
                     }
                 } else {
-                    ProgressView().tint(DesignTokens.parkCyan)
+                    KataProgressRing(size: 36)
                 }
             }
             .navigationTitle("My Car")
@@ -263,13 +264,17 @@ struct ActiveParkingView: View {
 
             if let timer = parking.timer {
                 if timer.isExpired {
-                    Text("Meter expired")
-                        .foregroundStyle(DesignTokens.parkDestructive)
-                        .font(.subheadline.bold())
+                    VStack(spacing: 8) {
+                        Text("0:00")
+                            .font(.kataDisplay(64))
+                            .foregroundStyle(Color.kataChampagne)
+                            .monospacedDigit()
+                        Text("expired")
+                            .font(.kataMono(12))
+                            .foregroundStyle(Color.kataGold.opacity(0.6))
+                    }
                 } else {
-                    Text(timer.expiresAt.timeRemainingString())
-                        .foregroundStyle(DesignTokens.parkTextPrimary)
-                        .font(.subheadline)
+                    BrandedCountdown(expiresAt: timer.expiresAt)
 
                     Button("Cancel Timer") {
                         try? appViewModel.repository?.clearTimer(from: parking)

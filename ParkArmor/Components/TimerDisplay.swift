@@ -1,3 +1,4 @@
+import KatafractStyle
 import SwiftUI
 
 struct TimerDisplay: View {
@@ -49,7 +50,7 @@ struct CompactCountdownDisplay: View {
             let remaining = max(0, expiresAt.timeIntervalSince(context.date))
             TimerDisplay(elapsedSeconds: remaining, style: .compact)
                 .foregroundStyle(remaining < 5 * 60
-                    ? DesignTokens.parkDestructive
+                    ? Color.kataChampagne
                     : DesignTokens.parkCyan)
         }
     }
