@@ -1,3 +1,4 @@
+import KatafractStyle
 import SwiftUI
 import MapKit
 
@@ -91,18 +92,25 @@ struct MapScreenView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "car.fill")
                             .font(.system(size: 18, weight: .bold))
-                        Text("Park Here")
-                            .accessibilityLabel("Park at current location")
-                            .font(.headline)
+                        Text("Pin current location")
+                            .accessibilityLabel("Pin current location")
+                            .font(.kataHeadline(16))
                     }
                     .padding(.horizontal, 28)
                     .frame(height: 54)
-                    .background(DesignTokens.parkCyan)
-                    .foregroundStyle(DesignTokens.parkAccentForeground)
+                    .background(Color.kataSapphire)
+                    .foregroundStyle(Color.kataIce)
                     .clipShape(Capsule())
-                    .shadow(color: DesignTokens.parkCyan.opacity(0.4), radius: 12, y: 4)
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.kataGold.opacity(0.5), lineWidth: 0.5)
+                    )
+                    .shadow(color: Color.kataSapphire.opacity(0.4), radius: 12, y: 4)
                 }
                 .padding(.bottom, 40)
+            } else if allLocations.isEmpty {
+                // Empty state — shown only when no park recorded yet (edge case guard)
+                EmptyView()
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
@@ -113,6 +121,15 @@ struct MapScreenView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if appViewModel.activeParking == nil && allLocations.isEmpty {
+                ParkEmptyState()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 110)
             }
         }
         .navigationTitle("ParkArmor")

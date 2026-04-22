@@ -1,3 +1,4 @@
+import KatafractStyle
 import SwiftData
 import SwiftUI
 import WidgetKit
@@ -35,11 +36,20 @@ struct ParkArmorApp: App {
     }()
 
     @State private var appViewModel = AppViewModel()
+    @State private var showingSplash = true
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(appViewModel)
+            ZStack {
+                RootView()
+                    .environment(appViewModel)
+                    .tint(KataAccent.gold)
+
+                if showingSplash {
+                    LaunchSplashView(isShowing: $showingSplash)
+                        .zIndex(1)
+                }
+            }
         }
         .modelContainer(container)
     }

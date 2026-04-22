@@ -1,3 +1,4 @@
+import KatafractStyle
 import SwiftUI
 import PhotosUI
 import UIKit
@@ -15,6 +16,8 @@ struct SaveParkingView: View {
     @State private var showingPhotoLibrary = false
     @State private var showingCamera = false
     @State private var nickname: String = ""
+    @State private var savedParking: ParkingLocation?
+    @State private var showingSuccess = false
 
     var body: some View {
         NavigationStack {
@@ -54,8 +57,7 @@ struct SaveParkingView: View {
                         .padding(.bottom, 40)
                     }
                 } else {
-                    ProgressView()
-                        .tint(DesignTokens.parkCyan)
+                    KataProgressRing(size: 24)
                 }
             }
             .navigationTitle("Save Parking")
@@ -109,6 +111,17 @@ struct SaveParkingView: View {
                 viewModel?.capturedPhotoData.append(compressed)
             }
         }
+        .fullScreenCover(isPresented: $showingSuccess) {
+            if let saved = savedParking {
+                ParkedSuccessView(
+                    address: saved.displayAddress,
+                    savedAt: saved.savedAt
+                ) {
+                    showingSuccess = false
+                    onSaved(saved)
+                }
+            }
+        }
     }
 
     @ViewBuilder
@@ -120,8 +133,7 @@ struct SaveParkingView: View {
 
             if vm.isGeocodingAddress {
                 HStack {
-                    ProgressView()
-                        .tint(DesignTokens.parkCyan)
+                    KataProgressRing(size: 24)
                     Text("Finding address…")
                         .foregroundStyle(DesignTokens.parkTextSecondary)
                 }
@@ -325,16 +337,15 @@ struct SaveParkingView: View {
     private func saveButton(vm: SaveParkingViewModel) -> some View {
         Button {
             vm.confirmSave(nickname: nickname.trimmingCharacters(in: .whitespaces)) { saved in
-                KataHaptic.saved.fire()
-                onSaved(saved)
+                savedParking = saved
+                showingSuccess = true
             }
         } label: {
             if vm.isSaving {
-                ProgressView()
-                    .tint(DesignTokens.parkAccentForeground)
+                KataProgressRing(size: 28)
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
-                    .background(DesignTokens.parkCyan)
+                    .background(Color.kataSapphire)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             } else {
                 Text("Save Parking")

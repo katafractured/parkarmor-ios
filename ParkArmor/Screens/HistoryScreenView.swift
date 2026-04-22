@@ -1,4 +1,5 @@
 import CoreLocation
+import KatafractStyle
 import SwiftUI
 
 struct HistoryScreenView: View {
@@ -25,7 +26,7 @@ struct HistoryScreenView: View {
                             historyContent(vm: vm)
                         }
                     } else {
-                        ProgressView().tint(DesignTokens.parkCyan)
+                        KataProgressRing(size: 36)
                     }
                 }
             }
