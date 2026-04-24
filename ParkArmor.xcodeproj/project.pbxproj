@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = KATA0002KATA0002KATA0002 /* KatafractStyle */; };
+		61CD270C9B638152B7E0FFCA /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = BE384E8FD459F8C39F89662E /* KatafractStyle */; };
 		AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03C912F74B6D900772D5A /* ParkArmorWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D952F74BC5E00772D5A /* WidgetKit.framework */; };
@@ -200,7 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */,
+				61CD270C9B638152B7E0FFCA /* KatafractStyle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +443,7 @@
 			);
 			name = ParkArmor;
 			packageProductDependencies = (
-				KATA0002KATA0002KATA0002 /* KatafractStyle */,
+				BE384E8FD459F8C39F89662E /* KatafractStyle */,
 			);
 			productName = ParkArmor;
 			productReference = F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */;
@@ -543,7 +543,7 @@
 				Base,
 			);
 			packageReferences = (
-				KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
+				283FDFAFE18E349513B0BDF5 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
 			);
 			mainGroup = 8A5F370D17764FEC93F77EF3;
 			minimizedProjectReferenceProxies = 1;
@@ -1394,7 +1394,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
+		283FDFAFE18E349513B0BDF5 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/katafract-io/KatafractStyle";
 			requirement = {
@@ -1405,9 +1405,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		KATA0002KATA0002KATA0002 /* KatafractStyle */ = {
+		BE384E8FD459F8C39F89662E /* KatafractStyle */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
+			package = 283FDFAFE18E349513B0BDF5 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
 			productName = KatafractStyle;
 		};
 /* End XCSwiftPackageProductDependency section */
