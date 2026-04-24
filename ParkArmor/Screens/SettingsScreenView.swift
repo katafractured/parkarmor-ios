@@ -248,6 +248,15 @@ struct SettingsScreenView: View {
                     .font(.caption)
                     .foregroundStyle(DesignTokens.parkTextSecondary)
             }
+
+            NavigationLink {
+                AppGroupDiagnosticsView()
+            } label: {
+                HStack(spacing: 12) {
+                    Label("App Group Diagnostics", systemImage: "checklist")
+                        .foregroundStyle(DesignTokens.parkTextPrimary)
+                }
+            }
         }
         .listRowBackground(DesignTokens.parkSurface)
     }
