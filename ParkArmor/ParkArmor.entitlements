@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.katafract.ParkArmor</string>
 		<string>group.com.katafract.enclave</string>
+		<string>group.com.katafract.parkarmor</string>
 	</array>
 </dict>
 </plist>
