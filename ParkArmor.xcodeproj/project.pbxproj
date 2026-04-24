@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = KATA0002KATA0002KATA0002 /* KatafractStyle */; };
-		AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D35F66020B3826515C4DE77D /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = AE9A0B55BC70BAA1DE416147 /* KatafractStyle */; };
+		8DE8C3B87154C002A650401F /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9AB83CF9CADAEB711224E537 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03C912F74B6D900772D5A /* ParkArmorWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D952F74BC5E00772D5A /* WidgetKit.framework */; };
 		BCA03D982F74BC5F00772D5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D972F74BC5F00772D5A /* SwiftUI.framework */; };
@@ -16,11 +16,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		AA00000AAA00000AAA00000A /* PBXContainerItemProxy */ = {
+		9A77B0CF718F0CEBE531C80A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AA000009AA000009AA000009;
+			remoteGlobalIDString = 176FE6D6EFBCBCBD2BE52201;
 			remoteInfo = ParkArmorWidgetExtension;
 		};
 		BCA03C7E2F74B6D900772D5A /* PBXContainerItemProxy */ = {
@@ -68,13 +68,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AA000008AA000008AA000008 /* Embed Foundation Extensions */ = {
+		A37D29219FB2886CA16EE801 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */,
+				8DE8C3B87154C002A650401F /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,7 +104,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AB83CF9CADAEB711224E537 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ParkArmorWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,7 +189,7 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AA000005AA000005AA000005 /* Frameworks */ = {
+		B154B8180827316C894F1FEC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -200,7 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */,
+				D35F66020B3826515C4DE77D /* KatafractStyle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,7 +257,7 @@
 				F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */,
 				F0000001F0000001F0000001 /* ParkArmorTests.xctest */,
 				CCCC0001CCCC0001CCCC0001 /* ParkArmorUITests.xctest */,
-				AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */,
+				9AB83CF9CADAEB711224E537 /* ParkArmorWidgetExtension.appex */,
 				BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */,
 				BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */,
 				BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */,
@@ -305,12 +305,12 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA000009AA000009AA000009 /* ParkArmorWidgetExtension */ = {
+		176FE6D6EFBCBCBD2BE52201 /* ParkArmorWidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
 			buildPhases = (
 				AA000007AA000007AA000007 /* Sources */,
-				AA000005AA000005AA000005 /* Frameworks */,
+				B154B8180827316C894F1FEC /* Frameworks */,
 				AA000006AA000006AA000006 /* Resources */,
 			);
 			buildRules = (
@@ -327,7 +327,7 @@
 			packageProductDependencies = (
 			);
 			productName = ParkArmorWidgetExtension;
-			productReference = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */;
+			productReference = 9AB83CF9CADAEB711224E537 /* ParkArmorWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */ = {
@@ -429,7 +429,7 @@
 				1B531F0D3EC24E9ABE8166E6 /* Sources */,
 				BBA1907E3AE04C8B9CC5C41F /* Frameworks */,
 				1A3C90841736490D85B6D31F /* Resources */,
-				AA000008AA000008AA000008 /* Embed Foundation Extensions */,
+				A37D29219FB2886CA16EE801 /* Embed Foundation Extensions */,
 				BCA03C922F74B6D900772D5A /* Embed Watch Content */,
 			);
 			buildRules = (
@@ -443,7 +443,7 @@
 			);
 			name = ParkArmor;
 			packageProductDependencies = (
-				KATA0002KATA0002KATA0002 /* KatafractStyle */,
+				AE9A0B55BC70BAA1DE416147 /* KatafractStyle */,
 			);
 			productName = ParkArmor;
 			productReference = F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */;
@@ -505,7 +505,7 @@
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
-					AA000009AA000009AA000009 = {
+					176FE6D6EFBCBCBD2BE52201 = {
 						CreatedOnToolsVersion = 26.3;
 					};
 					BCA03C702F74B6D600772D5A = {
@@ -543,7 +543,7 @@
 				Base,
 			);
 			packageReferences = (
-				KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
+				35FAB9C665B6F858E8F607C8 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
 			);
 			mainGroup = 8A5F370D17764FEC93F77EF3;
 			minimizedProjectReferenceProxies = 1;
@@ -555,7 +555,7 @@
 				E82BEB1FFB51493EAF25C3E2 /* ParkArmor */,
 				F0000006F0000006F0000006 /* ParkArmorTests */,
 				CCCC0005CCCC0005CCCC0005 /* ParkArmorUITests */,
-				AA000009AA000009AA000009 /* ParkArmorWidgetExtension */,
+				176FE6D6EFBCBCBD2BE52201 /* ParkArmorWidgetExtension */,
 				BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */,
 				BCA03C7C2F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
 				BCA03C862F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
@@ -685,8 +685,8 @@
 /* Begin PBXTargetDependency section */
 		AA00000BAA00000BAA00000B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA000009AA000009AA000009 /* ParkArmorWidgetExtension */;
-			targetProxy = AA00000AAA00000AAA00000A /* PBXContainerItemProxy */;
+			target = 176FE6D6EFBCBCBD2BE52201 /* ParkArmorWidgetExtension */;
+			targetProxy = 9A77B0CF718F0CEBE531C80A /* PBXContainerItemProxy */;
 		};
 		BCA03C7F2F74B6D900772D5A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1394,7 +1394,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
+		35FAB9C665B6F858E8F607C8 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/katafract-io/KatafractStyle";
 			requirement = {
@@ -1405,9 +1405,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		KATA0002KATA0002KATA0002 /* KatafractStyle */ = {
+		AE9A0B55BC70BAA1DE416147 /* KatafractStyle */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
+			package = 35FAB9C665B6F858E8F607C8 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
 			productName = KatafractStyle;
 		};
 /* End XCSwiftPackageProductDependency section */
