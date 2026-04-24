@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = KATA0002KATA0002KATA0002 /* KatafractStyle */; };
-		AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B8154E50B153A13700051169 /* KatafractStyle in Frameworks */ = {isa = PBXBuildFile; productRef = C927FB454E6E611416438DB9 /* KatafractStyle */; };
+		1B0498A92E4086EE862423B8 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A58818A0D8A608B288C1DDBD /* ParkArmorWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03C912F74B6D900772D5A /* ParkArmorWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BCA03D962F74BC5F00772D5A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D952F74BC5E00772D5A /* WidgetKit.framework */; };
 		BCA03D982F74BC5F00772D5A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCA03D972F74BC5F00772D5A /* SwiftUI.framework */; };
@@ -16,11 +16,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		AA00000AAA00000AAA00000A /* PBXContainerItemProxy */ = {
+		DFA65BC3D83C6C5AC2B741C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AA000009AA000009AA000009;
+			remoteGlobalIDString = 8E5DD3A37871DB54C5DE8BA7;
 			remoteInfo = ParkArmorWidgetExtension;
 		};
 		BCA03C7E2F74B6D900772D5A /* PBXContainerItemProxy */ = {
@@ -51,14 +51,14 @@
 			remoteGlobalIDString = BCA03D922F74BC5E00772D5A;
 			remoteInfo = ParkArmorWatchComplicationExtension;
 		};
-		F0000007F0000007F0000007 /* PBXContainerItemProxy */ = {
+		088EE454F397227BE58DB890 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E82BEB1FFB51493EAF25C3E2;
 			remoteInfo = ParkArmor;
 		};
-		CCCC0002CCCC0002CCCC0002 /* PBXContainerItemProxy */ = {
+		061E2C99CB7D6728B31DB4A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 889A105F62CC481E94597C1E /* Project object */;
 			proxyType = 1;
@@ -68,13 +68,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AA000008AA000008AA000008 /* Embed Foundation Extensions */ = {
+		9C206E03DF2CF64D1FAFC8E1 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AA000001AA000001AA000001 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */,
+				1B0498A92E4086EE862423B8 /* ParkArmorWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,15 +104,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A58818A0D8A608B288C1DDBD /* ParkArmorWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ParkArmorWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ParkArmorWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03D932F74BC5E00772D5A /* ParkArmorWatchComplicationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ParkArmorWatchComplicationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCA03D952F74BC5E00772D5A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		BCA03D972F74BC5F00772D5A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		F0000001F0000001F0000001 /* ParkArmorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkArmorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CCCC0001CCCC0001CCCC0001 /* ParkArmorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkArmorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5D6058545945553C4BE9065 /* ParkArmorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkArmorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25B141A6E1D8DFDD2195BC0 /* ParkArmorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkArmorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkArmor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87A627B6C26DC93925514CB9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ParkArmor/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,22 +133,22 @@
 			path = ParkArmor;
 			sourceTree = "<group>";
 		};
-		6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */ = {
+		56D795B4F2A5AB701721B614 /* ParkArmor/Extensions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmor/Extensions;
 			sourceTree = "<group>";
 		};
-		6E7F10026E7F10026E7F1002 /* ParkArmor/Models */ = {
+		67C6E40A9488ECF0E5D57E23 /* ParkArmor/Models */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmor/Models;
 			sourceTree = "<group>";
 		};
-		AA000003AA000003AA000003 /* ParkArmorWidgetExtension */ = {
+		F889EC96D01D31183D4AEE97 /* ParkArmorWidgetExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmorWidgetExtension;
 			sourceTree = "<group>";
 		};
-		AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */ = {
+		088E421B176B849DD2164BAE /* ParkArmor/ParkArmorShared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmor/ParkArmorShared;
 			sourceTree = "<group>";
@@ -176,12 +176,12 @@
 			path = ParkArmorWatchComplication;
 			sourceTree = "<group>";
 		};
-		F0000005F0000005F0000005 /* ParkArmorTests */ = {
+		3DFE06D3FB2E8D905356CC72 /* ParkArmorTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmorTests;
 			sourceTree = "<group>";
 		};
-		CCCC0003CCCC0003CCCC0003 /* ParkArmorUITests */ = {
+		17444DB03A68B2D77BACB9A9 /* ParkArmorUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmorUITests;
 			sourceTree = "<group>";
@@ -189,7 +189,7 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AA000005AA000005AA000005 /* Frameworks */ = {
+		55DFC9F92EE93503AF4BBA18 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -200,7 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				KATA0003KATA0003KATA0003 /* KatafractStyle in Frameworks */,
+				B8154E50B153A13700051169 /* KatafractStyle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,14 +234,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F0000003F0000003F0000003 /* Frameworks */ = {
+		B21016E0B1E3EF9EF3205EC8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CCCC0004CCCC0004CCCC0004 /* Frameworks */ = {
+		D48A6B7A9BD8E27AB6025873 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,9 +255,9 @@
 			isa = PBXGroup;
 			children = (
 				F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */,
-				F0000001F0000001F0000001 /* ParkArmorTests.xctest */,
-				CCCC0001CCCC0001CCCC0001 /* ParkArmorUITests.xctest */,
-				AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */,
+				C5D6058545945553C4BE9065 /* ParkArmorTests.xctest */,
+				E25B141A6E1D8DFDD2195BC0 /* ParkArmorUITests.xctest */,
+				A58818A0D8A608B288C1DDBD /* ParkArmorWidgetExtension.appex */,
 				BCA03C712F74B6D600772D5A /* ParkArmorWatch Watch App.app */,
 				BCA03C7D2F74B6D900772D5A /* ParkArmorWatch Watch AppTests.xctest */,
 				BCA03C872F74B6D900772D5A /* ParkArmorWatch Watch AppUITests.xctest */,
@@ -270,9 +270,9 @@
 			isa = PBXGroup;
 			children = (
 				60D6A5FEC4EA4D5CB65BD72B /* ParkArmor */,
-				F0000005F0000005F0000005 /* ParkArmorTests */,
-				CCCC0003CCCC0003CCCC0003 /* ParkArmorUITests */,
-				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
+				3DFE06D3FB2E8D905356CC72 /* ParkArmorTests */,
+				17444DB03A68B2D77BACB9A9 /* ParkArmorUITests */,
+				F889EC96D01D31183D4AEE97 /* ParkArmorWidgetExtension */,
 				BCA03C722F74B6D600772D5A /* ParkArmorWatch Watch App */,
 				BCA03C802F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
 				BCA03C8A2F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
@@ -286,9 +286,9 @@
 		BC380CC92F7259AA00CE6623 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
-				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
-				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
+				088E421B176B849DD2164BAE /* ParkArmor/ParkArmorShared */,
+				56D795B4F2A5AB701721B614 /* ParkArmor/Extensions */,
+				67C6E40A9488ECF0E5D57E23 /* ParkArmor/Models */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -305,29 +305,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA000009AA000009AA000009 /* ParkArmorWidgetExtension */ = {
+		8E5DD3A37871DB54C5DE8BA7 /* ParkArmorWidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
+			buildConfigurationList = 0CA34BAF600CAFE0C93562FE /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */;
 			buildPhases = (
-				AA000007AA000007AA000007 /* Sources */,
-				AA000005AA000005AA000005 /* Frameworks */,
-				AA000006AA000006AA000006 /* Resources */,
+				287042BE19EDC0F525739CC8 /* Sources */,
+				55DFC9F92EE93503AF4BBA18 /* Frameworks */,
+				B461A5D9DA8752B54E904858 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
-				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
-				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
-				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
+				56D795B4F2A5AB701721B614 /* ParkArmor/Extensions */,
+				67C6E40A9488ECF0E5D57E23 /* ParkArmor/Models */,
+				F889EC96D01D31183D4AEE97 /* ParkArmorWidgetExtension */,
+				088E421B176B849DD2164BAE /* ParkArmor/ParkArmorShared */,
 			);
 			name = ParkArmorWidgetExtension;
 			packageProductDependencies = (
 			);
 			productName = ParkArmorWidgetExtension;
-			productReference = AA000002AA000002AA000002 /* ParkArmorWidgetExtension.appex */;
+			productReference = A58818A0D8A608B288C1DDBD /* ParkArmorWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */ = {
@@ -429,13 +429,13 @@
 				1B531F0D3EC24E9ABE8166E6 /* Sources */,
 				BBA1907E3AE04C8B9CC5C41F /* Frameworks */,
 				1A3C90841736490D85B6D31F /* Resources */,
-				AA000008AA000008AA000008 /* Embed Foundation Extensions */,
+				9C206E03DF2CF64D1FAFC8E1 /* Embed Foundation Extensions */,
 				BCA03C922F74B6D900772D5A /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AA00000BAA00000BAA00000B /* PBXTargetDependency */,
+				27D25A06540728EDDDBFBE16 /* PBXTargetDependency */,
 				BCA03C902F74B6D900772D5A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -443,56 +443,56 @@
 			);
 			name = ParkArmor;
 			packageProductDependencies = (
-				KATA0002KATA0002KATA0002 /* KatafractStyle */,
+				C927FB454E6E611416438DB9 /* KatafractStyle */,
 			);
 			productName = ParkArmor;
 			productReference = F8AEE13FBE0F46F1BF6BE4E4 /* ParkArmor.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F0000006F0000006F0000006 /* ParkArmorTests */ = {
+		3013B97DE852DAEB604BA898 /* ParkArmorTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F000000BF000000BF000000B /* Build configuration list for PBXNativeTarget "ParkArmorTests" */;
+			buildConfigurationList = 5844C51AD891A0AAE6FF4DB8 /* Build configuration list for PBXNativeTarget "ParkArmorTests" */;
 			buildPhases = (
-				F0000002F0000002F0000002 /* Sources */,
-				F0000003F0000003F0000003 /* Frameworks */,
-				F0000004F0000004F0000004 /* Resources */,
+				DA28B603515375FEE385A578 /* Sources */,
+				B21016E0B1E3EF9EF3205EC8 /* Frameworks */,
+				5011C60BAD7D38CC8779AC38 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F0000008F0000008F0000008 /* PBXTargetDependency */,
+				4F34CF8F3384BD7D37B5C975 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				F0000005F0000005F0000005 /* ParkArmorTests */,
+				3DFE06D3FB2E8D905356CC72 /* ParkArmorTests */,
 			);
 			name = ParkArmorTests;
 			packageProductDependencies = (
 			);
 			productName = ParkArmorTests;
-			productReference = F0000001F0000001F0000001 /* ParkArmorTests.xctest */;
+			productReference = C5D6058545945553C4BE9065 /* ParkArmorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		CCCC0005CCCC0005CCCC0005 /* ParkArmorUITests */ = {
+		CC2601B6FBD95340B7CE99C1 /* ParkArmorUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CCCC0006CCCC0006CCCC0006 /* Build configuration list for PBXNativeTarget "ParkArmorUITests" */;
+			buildConfigurationList = C629B5D9A0794A69A8638577 /* Build configuration list for PBXNativeTarget "ParkArmorUITests" */;
 			buildPhases = (
-				CCCC0007CCCC0007CCCC0007 /* Sources */,
-				CCCC0004CCCC0004CCCC0004 /* Frameworks */,
-				CCCC0008CCCC0008CCCC0008 /* Resources */,
+				4CE8E5E00799897F816633F0 /* Sources */,
+				D48A6B7A9BD8E27AB6025873 /* Frameworks */,
+				51C8341277CA69E5A1CE4BD2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CCCC0002CCCC0002CCCC0002 /* PBXTargetDependency */,
+				061E2C99CB7D6728B31DB4A7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				CCCC0003CCCC0003CCCC0003 /* ParkArmorUITests */,
+				17444DB03A68B2D77BACB9A9 /* ParkArmorUITests */,
 			);
 			name = ParkArmorUITests;
 			packageProductDependencies = (
 			);
 			productName = ParkArmorUITests;
-			productReference = CCCC0001CCCC0001CCCC0001 /* ParkArmorUITests.xctest */;
+			productReference = E25B141A6E1D8DFDD2195BC0 /* ParkArmorUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -505,7 +505,7 @@
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
-					AA000009AA000009AA000009 = {
+					8E5DD3A37871DB54C5DE8BA7 = {
 						CreatedOnToolsVersion = 26.3;
 					};
 					BCA03C702F74B6D600772D5A = {
@@ -525,11 +525,11 @@
 					E82BEB1FFB51493EAF25C3E2 = {
 						CreatedOnToolsVersion = 26.3;
 					};
-					F0000006F0000006F0000006 = {
+					3013B97DE852DAEB604BA898 = {
 						CreatedOnToolsVersion = 26.4;
 						TestTargetID = E82BEB1FFB51493EAF25C3E2;
 					};
-					CCCC0005CCCC0005CCCC0005 = {
+					CC2601B6FBD95340B7CE99C1 = {
 						CreatedOnToolsVersion = 26.4;
 						TestTargetID = E82BEB1FFB51493EAF25C3E2;
 					};
@@ -543,7 +543,7 @@
 				Base,
 			);
 			packageReferences = (
-				KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
+				B97DC7DEABF64AD6184A1F06 /* XCRemoteSwiftPackageReference "KatafractStyle" */,
 			);
 			mainGroup = 8A5F370D17764FEC93F77EF3;
 			minimizedProjectReferenceProxies = 1;
@@ -553,9 +553,9 @@
 			projectRoot = "";
 			targets = (
 				E82BEB1FFB51493EAF25C3E2 /* ParkArmor */,
-				F0000006F0000006F0000006 /* ParkArmorTests */,
-				CCCC0005CCCC0005CCCC0005 /* ParkArmorUITests */,
-				AA000009AA000009AA000009 /* ParkArmorWidgetExtension */,
+				3013B97DE852DAEB604BA898 /* ParkArmorTests */,
+				CC2601B6FBD95340B7CE99C1 /* ParkArmorUITests */,
+				8E5DD3A37871DB54C5DE8BA7 /* ParkArmorWidgetExtension */,
 				BCA03C702F74B6D600772D5A /* ParkArmorWatch Watch App */,
 				BCA03C7C2F74B6D900772D5A /* ParkArmorWatch Watch AppTests */,
 				BCA03C862F74B6D900772D5A /* ParkArmorWatch Watch AppUITests */,
@@ -572,7 +572,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA000006AA000006AA000006 /* Resources */ = {
+		B461A5D9DA8752B54E904858 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -607,14 +607,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F0000004F0000004F0000004 /* Resources */ = {
+		5011C60BAD7D38CC8779AC38 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CCCC0008CCCC0008CCCC0008 /* Resources */ = {
+		51C8341277CA69E5A1CE4BD2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -631,7 +631,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA000007AA000007AA000007 /* Sources */ = {
+		287042BE19EDC0F525739CC8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -666,14 +666,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F0000002F0000002F0000002 /* Sources */ = {
+		DA28B603515375FEE385A578 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CCCC0007CCCC0007CCCC0007 /* Sources */ = {
+		4CE8E5E00799897F816633F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -683,10 +683,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		AA00000BAA00000BAA00000B /* PBXTargetDependency */ = {
+		27D25A06540728EDDDBFBE16 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA000009AA000009AA000009 /* ParkArmorWidgetExtension */;
-			targetProxy = AA00000AAA00000AAA00000A /* PBXContainerItemProxy */;
+			target = 8E5DD3A37871DB54C5DE8BA7 /* ParkArmorWidgetExtension */;
+			targetProxy = DFA65BC3D83C6C5AC2B741C7 /* PBXContainerItemProxy */;
 		};
 		BCA03C7F2F74B6D900772D5A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -708,15 +708,15 @@
 			target = BCA03D922F74BC5E00772D5A /* ParkArmorWatchComplicationExtension */;
 			targetProxy = BCA03DA32F74BC6400772D5A /* PBXContainerItemProxy */;
 		};
-		F0000008F0000008F0000008 /* PBXTargetDependency */ = {
+		4F34CF8F3384BD7D37B5C975 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E82BEB1FFB51493EAF25C3E2 /* ParkArmor */;
-			targetProxy = F0000007F0000007F0000007 /* PBXContainerItemProxy */;
+			targetProxy = 088EE454F397227BE58DB890 /* PBXContainerItemProxy */;
 		};
-		CCCC0002CCCC0002CCCC0002 /* PBXTargetDependency */ = {
+		061E2C99CB7D6728B31DB4A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E82BEB1FFB51493EAF25C3E2 /* ParkArmor */;
-			targetProxy = CCCC0002CCCC0002CCCC0002 /* PBXContainerItemProxy */;
+			targetProxy = 061E2C99CB7D6728B31DB4A7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -885,7 +885,7 @@
 			};
 			name = Debug;
 		};
-		AA00000CAA00000CAA00000C /* Debug */ = {
+		0EDA5FCABBA910644369E671 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -916,7 +916,7 @@
 			};
 			name = Debug;
 		};
-		AA00000DAA00000DAA00000D /* Release */ = {
+		9F87A519EC0E46F1B5D866AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -1221,7 +1221,7 @@
 			};
 			name = Debug;
 		};
-		F0000009F0000009F0000009 /* Debug */ = {
+		490C0545C92FCFDFE640414C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1245,7 +1245,7 @@
 			};
 			name = Debug;
 		};
-		F000000AF000000AF000000A /* Release */ = {
+		67604EAAEAC44988A434815A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1270,7 +1270,7 @@
 			};
 			name = Release;
 		};
-		CCCC0009CCCC0009CCCC0009 /* Debug */ = {
+		E270F49A430FB27FAB37E45A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -1288,7 +1288,7 @@
 			};
 			name = Debug;
 		};
-		CCCC000ACCCC000ACCCC000A /* Release */ = {
+		A16F395F14AD8ECDEFB8A5E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1310,11 +1310,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AA00000EAA00000EAA00000E /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */ = {
+		0CA34BAF600CAFE0C93562FE /* Build configuration list for PBXNativeTarget "ParkArmorWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA00000CAA00000CAA00000C /* Debug */,
-				AA00000DAA00000DAA00000D /* Release */,
+				0EDA5FCABBA910644369E671 /* Debug */,
+				9F87A519EC0E46F1B5D866AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1373,20 +1373,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F000000BF000000BF000000B /* Build configuration list for PBXNativeTarget "ParkArmorTests" */ = {
+		5844C51AD891A0AAE6FF4DB8 /* Build configuration list for PBXNativeTarget "ParkArmorTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F0000009F0000009F0000009 /* Debug */,
-				F000000AF000000AF000000A /* Release */,
+				490C0545C92FCFDFE640414C /* Debug */,
+				67604EAAEAC44988A434815A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CCCC0006CCCC0006CCCC0006 /* Build configuration list for PBXNativeTarget "ParkArmorUITests" */ = {
+		C629B5D9A0794A69A8638577 /* Build configuration list for PBXNativeTarget "ParkArmorUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CCCC0009CCCC0009CCCC0009 /* Debug */,
-				CCCC000ACCCC000ACCCC000A /* Release */,
+				E270F49A430FB27FAB37E45A /* Debug */,
+				A16F395F14AD8ECDEFB8A5E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1394,7 +1394,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
+		B97DC7DEABF64AD6184A1F06 /* XCRemoteSwiftPackageReference "KatafractStyle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/katafract-io/KatafractStyle";
 			requirement = {
@@ -1405,9 +1405,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		KATA0002KATA0002KATA0002 /* KatafractStyle */ = {
+		C927FB454E6E611416438DB9 /* KatafractStyle */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = KATA0001KATA0001KATA0001 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
+			package = B97DC7DEABF64AD6184A1F06 /* XCRemoteSwiftPackageReference "KatafractStyle" */;
 			productName = KatafractStyle;
 		};
 /* End XCSwiftPackageProductDependency section */
