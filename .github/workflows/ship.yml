@@ -264,7 +264,7 @@ jobs:
     name: Retry on transient failure
     needs: [archive-and-upload]
     runs-on: ubuntu-latest
-    if: failure() && github.run_attempt < 2
+    if: "failure() && github.run_attempt < 2"
     permissions:
       actions: write
       contents: read
