@@ -133,24 +133,9 @@
 			path = ParkArmor;
 			sourceTree = "<group>";
 		};
-		6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ParkArmor/Extensions;
-			sourceTree = "<group>";
-		};
-		6E7F10026E7F10026E7F1002 /* ParkArmor/Models */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ParkArmor/Models;
-			sourceTree = "<group>";
-		};
 		AA000003AA000003AA000003 /* ParkArmorWidgetExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ParkArmorWidgetExtension;
-			sourceTree = "<group>";
-		};
-		AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ParkArmor/ParkArmorShared;
 			sourceTree = "<group>";
 		};
 		BCA03C722F74B6D600772D5A /* ParkArmorWatch Watch App */ = {
@@ -279,18 +264,7 @@
 				BCA03D992F74BC5F00772D5A /* ParkArmorWatchComplication */,
 				BCA03D942F74BC5E00772D5A /* Frameworks */,
 				40B17B783B7240E29058D7D7 /* Products */,
-				BC380CC92F7259AA00CE6623 /* Recovered References */,
 			);
-			sourceTree = "<group>";
-		};
-		BC380CC92F7259AA00CE6623 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
-				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
-				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		BCA03D942F74BC5E00772D5A /* Frameworks */ = {
@@ -318,10 +292,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6E7F10016E7F10016E7F1001 /* ParkArmor/Extensions */,
-				6E7F10026E7F10026E7F1002 /* ParkArmor/Models */,
 				AA000003AA000003AA000003 /* ParkArmorWidgetExtension */,
-				AA000004AA000004AA000004 /* ParkArmor/ParkArmorShared */,
 			);
 			name = ParkArmorWidgetExtension;
 			packageProductDependencies = (
