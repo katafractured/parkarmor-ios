@@ -1,5 +1,4 @@
 import ARKit
-import KatafractStyle
 import SwiftUI
 
 struct ActiveParkingView: View {

@@ -1,5 +1,4 @@
 import SwiftUI
-import KatafractStyle
 
 /// Full-screen ceremonial "Parked." state shown after user saves a parking location.
 struct ParkedSuccessView: View {

@@ -1,5 +1,4 @@
 import SwiftUI
-import KatafractStyle
 
 /// Branded large-format parking meter countdown.
 /// kataIce when > 5 min, kataChampagne when ≤ 5 min.

@@ -1,5 +1,4 @@
 import SwiftUI
-import KatafractStyle
 
 /// Branded empty state — shown before the first park is recorded.
 struct ParkEmptyState: View {

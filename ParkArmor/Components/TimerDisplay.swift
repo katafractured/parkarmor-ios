@@ -1,4 +1,3 @@
-import KatafractStyle
 import SwiftUI
 
 struct TimerDisplay: View {

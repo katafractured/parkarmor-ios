@@ -1,4 +1,3 @@
-import KatafractStyle
 import SwiftData
 import SwiftUI
 import WidgetKit

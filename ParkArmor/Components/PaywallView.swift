@@ -1,5 +1,4 @@
 import StoreKit
-import KatafractStyle
 import SwiftUI
 
 struct PaywallView: View {

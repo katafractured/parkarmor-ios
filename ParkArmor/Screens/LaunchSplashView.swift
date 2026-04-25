@@ -1,5 +1,4 @@
 import SwiftUI
-import KatafractStyle
 
 struct LaunchSplashView: View {
     @Binding var isShowing: Bool

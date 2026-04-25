@@ -1,5 +1,4 @@
 import CoreLocation
-import KatafractStyle
 import SwiftUI
 
 struct HistoryScreenView: View {
