@@ -8,6 +8,8 @@ extension Color {
     static let kataGold = Color(red: 0.776, green: 0.596, blue: 0.220)
     static let kataIce = Color(red: 0.780, green: 0.900, blue: 0.950)
     static let kataChampagne = Color(red: 0.950, green: 0.870, blue: 0.730)
+    static let kataMidnight = Color(red: 0.047, green: 0.063, blue: 0.122)
+    static let kataSapphire = Color(red: 0.078, green: 0.141, blue: 0.294)
 }
 
 enum KataAccent {
