@@ -483,7 +483,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				CCCC0002CCCC0002CCCC0002 /* PBXTargetDependency */,
+				CCCC0010CCCC0010CCCC0010 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CCCC0003CCCC0003CCCC0003 /* ParkArmorUITests */,
@@ -713,7 +713,7 @@
 			target = E82BEB1FFB51493EAF25C3E2 /* ParkArmor */;
 			targetProxy = F0000007F0000007F0000007 /* PBXContainerItemProxy */;
 		};
-		CCCC0002CCCC0002CCCC0002 /* PBXTargetDependency */ = {
+		CCCC0010CCCC0010CCCC0010 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E82BEB1FFB51493EAF25C3E2 /* ParkArmor */;
 			targetProxy = CCCC0002CCCC0002CCCC0002 /* PBXContainerItemProxy */;
