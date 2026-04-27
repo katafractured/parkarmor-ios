@@ -185,7 +185,14 @@ jobs:
             echo "::error::IPA at $IPA is $IPA_AGE seconds old (stale) — refusing to upload"; exit 1
           fi
           # Verify IPA's main bundle CFBundleVersion matches BUILD_NUM
-          IPA_VERSION=$(unzip -p "$IPA" 'Payload/*.app/Info.plist' 2>/dev/null | plutil -extract CFBundleVersion raw -o - - 2>/dev/null || echo "")
+          TMPD=$(mktemp -d)
+          unzip -q "$IPA" -d "$TMPD"
+          APPDIR=$(ls -d "$TMPD/Payload"/*.app 2>/dev/null | head -1)
+          if [ -z "$APPDIR" ] || [ ! -f "$APPDIR/Info.plist" ]; then
+            echo "::error::IPA structure unexpected — no Payload/*.app/Info.plist"; rm -rf "$TMPD"; exit 1
+          fi
+          IPA_VERSION=$(plutil -extract CFBundleVersion raw -o - "$APPDIR/Info.plist" 2>/dev/null || echo "")
+          rm -rf "$TMPD"
           if [ "$IPA_VERSION" != "$BUILD_NUM" ]; then
             echo "::error::IPA main bundle CFBundleVersion=$IPA_VERSION does not match BUILD_NUM=$BUILD_NUM"; exit 1
           fi
