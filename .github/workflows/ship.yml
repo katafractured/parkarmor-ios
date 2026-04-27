@@ -123,6 +123,11 @@ jobs:
       - name: Clean
         run: xcodebuild -project ParkArmor.xcodeproj -scheme ParkArmor -destination "generic/platform=iOS" clean
 
+      - name: Clean export dir (prevent stale IPA upload)
+        run: |
+          rm -rf "$EXPORT_PATH"
+          mkdir -p "$EXPORT_PATH"
+
       - name: Archive
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -161,10 +166,30 @@ jobs:
 
       - name: Export IPA
         run: |
+          set -o pipefail
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist "$EXPORT_OPTIONS" \
-            -exportPath "$EXPORT_PATH" 2>&1 | grep -E "error:|\*\* " | tail -10
+            -exportPath "$EXPORT_PATH" 2>&1 | tee /tmp/export.log
+          # Fail loudly if export didn't produce an IPA or the log says EXPORT FAILED
+          if grep -q "EXPORT FAILED" /tmp/export.log; then
+            echo "::error::Export IPA failed — see log above"; exit 1
+          fi
+          IPA=$(ls "$EXPORT_PATH"/*.ipa 2>/dev/null | head -1)
+          if [ -z "$IPA" ]; then
+            echo "::error::No IPA produced at $EXPORT_PATH"; exit 1
+          fi
+          # Verify IPA was just produced (mtime within last 10 minutes)
+          IPA_AGE=$(( $(date +%s) - $(stat -f %m "$IPA") ))
+          if [ "$IPA_AGE" -gt 600 ]; then
+            echo "::error::IPA at $IPA is $IPA_AGE seconds old (stale) — refusing to upload"; exit 1
+          fi
+          # Verify IPA's main bundle CFBundleVersion matches BUILD_NUM
+          IPA_VERSION=$(unzip -p "$IPA" 'Payload/*.app/Info.plist' 2>/dev/null | plutil -extract CFBundleVersion raw -o - - 2>/dev/null || echo "")
+          if [ "$IPA_VERSION" != "$BUILD_NUM" ]; then
+            echo "::error::IPA main bundle CFBundleVersion=$IPA_VERSION does not match BUILD_NUM=$BUILD_NUM"; exit 1
+          fi
+          echo "✓ IPA at $IPA, version $IPA_VERSION, age ${IPA_AGE}s"
           ls -la "$EXPORT_PATH"
 
       - name: Notify Matrix - Archive succeeded
