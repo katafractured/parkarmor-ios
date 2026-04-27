@@ -116,24 +116,7 @@ jobs:
             echo "asc_max=$ASC_MAX run_based=$RUN_BUILD using=$BUILD_NUM"
           fi
 
-          find . -name project.pbxproj -not -path "*/.git/*" -exec sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9][0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUM/g" {} +
-
-          BUMPED=0
-          while IFS= read -r f; do
-            OLD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$f" 2>/dev/null) || continue
-            if /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUM" "$f" 2>/dev/null; then
-              NEW=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$f" 2>/dev/null)
-              if [ "$NEW" = "$BUILD_NUM" ]; then
-                echo "  bumped $f: $OLD -> $NEW"
-                BUMPED=$((BUMPED+1))
-              fi
-            fi
-          done < <(find . -name "*.plist" -not -path "*/build/*" -not -path "*/.build/*" -not -path "*/.git/*")
-          echo "Total plists bumped: $BUMPED"
-          if [ "$BUMPED" -eq 0 ]; then
-            echo "::error::No CFBundleVersion plists were bumped — check Info.plist path and contents"
-            exit 1
-          fi
+          xcrun agvtool new-version -all $BUILD_NUM
 
           echo "BUILD_NUM=$BUILD_NUM" >> "$GITHUB_ENV"
 
