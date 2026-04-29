@@ -3,11 +3,11 @@
 project("./ParkArmor.xcodeproj")
 
 devices([
-  "iPhone 16 Pro Max",
-  "iPad Pro 13-inch (M4)"
+  "iPhone 17 Pro Max",
+  "iPad Pro 13-inch (M5)"
 ])
 
-ios_version("18.5")
+ios_version("26.4")
 
 languages(["en-US"])
 
